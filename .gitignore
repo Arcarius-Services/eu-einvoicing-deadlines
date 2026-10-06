@@ -1,0 +1,21 @@
+node_modules/
+.astro/
+
+# Astro's build output only. Anchored deliberately: an unanchored `dist/` also
+# matches `dataset/dist/`, which is Ledger's published artifact and the input the
+# site and the API are built from. It must stay tracked.
+/dist/
+
+.claude/
+
+# The key database. Hashes, not plaintext — but it is customer data and it is
+# per-environment, so it never belongs in the repo.
+api/data/
+
+.env
+.env.*
+!.env.example
+
+.DS_Store
+*.log
+__pycache__/
