@@ -1,0 +1,126 @@
+---
+// Peppol access-point comparison. One rest route covers the index (slug
+// undefined) and one page per provider, so when Scout's dataset is absent
+// getStaticPaths returns [] and the whole section simply does not exist —
+// no empty table, no placeholder vendors.
+import Base from '../../layouts/Base.astro'
+import { loadProviders, priceLabel, yesNo } from '../../data/providers.js'
+import { BRAND } from '../../brand.mjs'
+import { fmtDate } from '../../data/obligations.js'
+
+export function getStaticPaths() {
+  const { providers } = loadProviders()
+  if (providers.length === 0) return []
+
+  return [
+    { params: { slug: undefined }, props: { provider: null, providers } },
+    ...providers.map((provider) => ({
+      params: { slug: provider.provider_id },
+      props: { provider, providers },
+    })),
+  ]
+}
+
+const { provider, providers } = Astro.props
+const base = import.meta.env.BASE_URL
+
+const selfServe = providers.filter((p) => p.self_serve_signup === true).length
+const withFree = providers.filter((p) => p.free_tier === true).length
+---
+{provider ? (
+  <Base
+    title={`${provider.name} Peppol access point: pricing and API | ${BRAND}`}
+    description={`What ${provider.name} charges to send and receive Peppol documents, whether there is a free tier and a public API, and the pricing page we read it from on ${fmtDate(provider.verified_on)}.`}
+  >
+    <p class="muted"><a href={`${base}providers/`}>Peppol providers</a> &rsaquo; {provider.name}</p>
+
+    <h1>{provider.name}</h1>
+    <p class="lede">{priceLabel(provider)}</p>
+
+    <table>
+      <tbody>
+        <tr><th>Pricing model</th><td>{provider.pricing_model ?? 'Not published'}</td></tr>
+        <tr><th>Entry price</th><td>{priceLabel(provider)}</td></tr>
+        {provider.price_per_document_eur != null && (
+          <tr><th>Per document</th><td>€{provider.price_per_document_eur}</td></tr>
+        )}
+        {provider.included_documents != null && (
+          <tr><th>Documents included</th><td>{provider.included_documents.toLocaleString('en-GB')}</td></tr>
+        )}
+        {provider.setup_fee_eur != null && (
+          <tr><th>Setup fee</th><td>€{provider.setup_fee_eur.toLocaleString('en-GB')}</td></tr>
+        )}
+        <tr><th>Free tier</th><td>{yesNo(provider.free_tier)}{provider.free_tier_note ? ` — ${provider.free_tier_note}` : ''}</td></tr>
+        <tr><th>Self-serve signup</th><td>{yesNo(provider.self_serve_signup)}</td></tr>
+        <tr><th>Public API</th><td>
+          {yesNo(provider.has_api)}
+          {provider.api_docs_url && <> &middot; <a href={provider.api_docs_url} rel="nofollow noopener">docs</a></>}
+        </td></tr>
+        <tr><th>Sandbox</th><td>{yesNo(provider.sandbox)}</td></tr>
+        <tr><th>Peppol roles</th><td>{provider.peppol_roles?.length ? provider.peppol_roles.join(', ') : 'Not published'}</td></tr>
+        <tr><th>Countries supported</th><td>{provider.countries_supported?.length ? provider.countries_supported.join(', ') : 'Not published'}</td></tr>
+        <tr><th>Headquarters</th><td>{provider.hq_country ?? 'Not published'}</td></tr>
+      </tbody>
+    </table>
+
+    {provider.price_as_published && provider.currency_as_published && (
+      <p class="muted">
+        Published as <strong>{provider.price_as_published}</strong> in
+        {' '}{provider.currency_as_published}. Any euro figure above is our conversion, not theirs.
+      </p>
+    )}
+
+    {provider.notes && <p>{provider.notes}</p>}
+
+    <p class="muted">
+      <a href={provider.source_url} rel="nofollow noopener">Pricing page we read</a> &middot;
+      last verified {fmtDate(provider.verified_on)} &middot;
+      <span class={`badge ${provider.confidence ?? 'unknown'}`}>{provider.confidence ?? 'unknown'}</span>
+      {provider.homepage_url && <> &middot; <a href={provider.homepage_url} rel="nofollow noopener">{provider.name} homepage</a></>}
+    </p>
+
+    <p><a href={`${base}providers/`}>&larr; Compare all {providers.length} providers</a></p>
+  </Base>
+) : (
+  <Base
+    title={`Peppol access point pricing compared: ${providers.length} providers | ${BRAND}`}
+    description={`What ${providers.length} Peppol access point providers actually charge, which have a free tier, which have a public API and which let a developer sign up without talking to sales. Every price links to the pricing page we read it from.`}
+  >
+    <h1>Peppol access point pricing, compared</h1>
+    <p class="lede">
+      {providers.length} providers. {withFree} have a free tier, {selfServe} let you sign up
+      without talking to sales. Every price on this page links to the provider&rsquo;s own pricing
+      page and the date we read it.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Provider</th><th>Entry price</th><th>Model</th>
+          <th>Free tier</th><th>API</th><th>Self-serve</th><th>Verified</th>
+        </tr>
+      </thead>
+      <tbody>
+        {providers.map((p) => (
+          <tr>
+            <td><a href={`${base}providers/${p.provider_id}/`}>{p.name}</a></td>
+            <td>{priceLabel(p)}</td>
+            <td>{p.pricing_model ?? <span class="muted">not published</span>}</td>
+            <td>{yesNo(p.free_tier)}</td>
+            <td>{yesNo(p.has_api)}</td>
+            <td>{yesNo(p.self_serve_signup)}</td>
+            <td><a href={p.source_url} rel="nofollow noopener">{fmtDate(p.verified_on)}</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    <h2>How to read this table</h2>
+    <ul>
+      <li><strong>&ldquo;Not published&rdquo; means not published.</strong> Where a provider does not state a price publicly we leave the cell empty rather than estimate it.</li>
+      <li><strong>Entry price is the cheapest paid plan</strong> a normal company can buy, not the headline enterprise tier.</li>
+      <li><strong>Self-serve</strong> means a developer can get sending without a sales call. It is the column most people are actually looking for.</li>
+      <li><strong>Verified</strong> links to the pricing page we read and the day we read it. Prices move; check ours against theirs.</li>
+    </ul>
+  </Base>
+)}

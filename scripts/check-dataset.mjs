@@ -40,6 +40,36 @@ for (const r of rows) {
   }
 }
 
+// Scout's provider dataset (ARC-7) is optional — the comparison section simply
+// does not exist until it lands. But once it does exist, it gets the same
+// provenance rule as the obligations: no source URL or no verified-on date, no
+// publish. A comparison table of unsourced vendor prices is a lawsuit.
+const PROVIDERS = 'dataset/dist/providers.json'
+let providerCount = 0
+
+if (existsSync(PROVIDERS)) {
+  const pPayload = JSON.parse(readFileSync(PROVIDERS, 'utf8'))
+  const providers = pPayload.providers ?? []
+  providerCount = providers.length
+
+  if (providers.length === 0) problems.push(`${PROVIDERS} exists but contains zero providers`)
+
+  for (const p of providers) {
+    const id = p.provider_id ?? p.name ?? '<no provider_id>'
+    if (!p.provider_id) problems.push(`provider ${id}: no provider_id`)
+    if (!p.name) problems.push(`provider ${id}: no name`)
+    if (!p.source_url) problems.push(`provider ${id}: no source_url`)
+    if (!p.verified_on) problems.push(`provider ${id}: no verified_on`)
+    if (p.verified_on && p.verified_on > SKEW_LIMIT) {
+      problems.push(`provider ${id}: verified_on ${p.verified_on} is more than a day ahead of this machine's clock (${TODAY})`)
+    }
+  }
+
+  const ids = providers.map((p) => p.provider_id).filter(Boolean)
+  const dupes = ids.filter((id, i) => ids.indexOf(id) !== i)
+  if (dupes.length > 0) problems.push(`duplicate provider_id(s): ${[...new Set(dupes)].join(', ')}`)
+}
+
 if (problems.length > 0) {
   console.error(`FAIL ${problems.length} row problem(s) — refusing to publish:`)
   for (const p of problems) console.error(`      - ${p}`)
@@ -47,3 +77,8 @@ if (problems.length > 0) {
 }
 
 console.log(`OK   ${rows.length} rows, schema ${payload.schema_version}, every row has a source, a checked-on date and a confidence.`)
+console.log(
+  providerCount > 0
+    ? `OK   ${providerCount} providers, every one with a source URL and a verified-on date.`
+    : `--   no ${PROVIDERS} yet (Scout, ARC-7); the comparison section is not generated.`
+)
