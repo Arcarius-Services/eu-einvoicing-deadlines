@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro'
 import { loadDataset, contextRows } from '../data/obligations.js'
+import { BRAND, DISCLAIMER } from '../brand.mjs'
 
 const { schemaVersion, rowCount } = loadDataset()
 const excluded = contextRows()
@@ -23,7 +24,7 @@ const columns = [
 ]
 ---
 <Base
-  title="API docs | EU E-Invoicing Deadlines"
+  title={`API docs | ${BRAND}`}
   description="One keyed JSON endpoint over the EU e-invoicing obligation dataset. Key in an X-API-Key header, per-key daily rate limits, documented row schema."
 >
   <h1>API</h1>
@@ -41,6 +42,27 @@ const columns = [
   </p>
   <pre><code>{`curl -H "X-API-Key: $KEY" https://api.example/v1/obligations?jurisdiction=BE`}</code></pre>
 
+  <h2>Response envelope</h2>
+  <p>
+    Every successful data response is wrapped in the same envelope. The
+    <code>disclaimer</code> is there on purpose: it travels with the rows into whatever you build,
+    so the caveat does not get lost between our page and your users.
+  </p>
+  <pre><code>{`{
+  "source": "${BRAND}",
+  "disclaimer": "${DISCLAIMER}",
+  "schema_version": "${schemaVersion}",
+  "total": 3,
+  "limit": 100,
+  "offset": 0,
+  "rows": [ /* obligation rows */ ]
+}`}</code></pre>
+  <p>
+    <strong>Every row carries its own provenance.</strong> <code>source_url</code> is the primary
+    source and <code>checked_on</code> is the date a human last read it. A row that has neither is
+    not served and cannot be published &mdash; the deploy guard fails the build instead.
+  </p>
+
   <h2>Endpoints</h2>
   <table>
     <thead><tr><th>Method</th><th>Path</th><th>What it does</th></tr></thead>
@@ -49,6 +71,7 @@ const columns = [
       <tr><td>GET</td><td><code>/v1/obligations</code></td><td>Query rows. Filters: <code>jurisdiction</code>, <code>direction</code>, <code>regime</code>, <code>confidence</code>, <code>limit</code>, <code>offset</code>.</td></tr>
       <tr><td>GET</td><td><code>/v1/obligations/:obligation_id</code></td><td>One row by its stable id.</td></tr>
       <tr><td>GET</td><td><code>/v1/meta</code></td><td>Schema version, row count, and your key&rsquo;s current quota usage.</td></tr>
+      <tr><td>POST</td><td><code>/v1/access-requests</code></td><td>Ask for a key. The only write route, and the only one that needs no key.</td></tr>
     </tbody>
   </table>
 

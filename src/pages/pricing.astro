@@ -1,6 +1,12 @@
 ---
 import Base from '../layouts/Base.astro'
+import { BRAND } from '../brand.mjs'
 const base = import.meta.env.BASE_URL
+
+// Where the request-access form posts. Unset until the API has a host (open
+// question for Odysseus on ARC-4) — with no origin the form is not rendered at
+// all, because a form that silently fails is worse than no form.
+const apiOrigin = import.meta.env.PUBLIC_API_ORIGIN ?? ''
 
 // Price points are Odysseus's (ARC-1 plan). Copy is a placeholder for Hermes.
 const plans = [
@@ -31,7 +37,7 @@ const plans = [
 ]
 ---
 <Base
-  title="Pricing | EU E-Invoicing Deadlines API"
+  title={`Pricing | ${BRAND} e-invoicing deadline API`}
   description="Free tier with 100 requests a day. €39/month for 10,000 a day with change alerts, €99/month for 100,000 a day with webhooks. No card needed to start."
 >
   <h1>Pricing</h1>
@@ -53,12 +59,52 @@ const plans = [
     ))}
   </ul>
 
-  <div class="note">
-    <strong>Self-serve signup is not open yet.</strong> The API, the keys and the rate limits are
-    built and running; the payment account is the one piece still missing, so there is no checkout
-    button here rather than a button that does not work. Free-tier keys are issued on request in
-    the meantime.
-  </div>
+  {apiOrigin ? (
+    <section class="request" id="request-access">
+      <h2>Request access</h2>
+      <p>
+        Self-serve checkout is not open yet, so this is how you get a key: tell us where to send
+        it. No card, and we will tell you plainly if the dataset does not yet cover the countries
+        you need.
+      </p>
+
+      <form id="access-form" novalidate>
+        <label for="email">Email <span class="req">required</span></label>
+        <input type="email" id="email" name="email" required autocomplete="email"
+               placeholder="you@company.com" />
+
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" autocomplete="organization" />
+
+        <label for="plan_interest">Which plan are you weighing up?</label>
+        <select id="plan_interest" name="plan_interest">
+          <option value="undecided">Not sure yet</option>
+          <option value="free">Free &mdash; just trying it</option>
+          <option value="starter">Starter &mdash; &euro;39/month</option>
+          <option value="vendor">Vendor &mdash; &euro;99/month</option>
+        </select>
+
+        <label for="use_case">What would you use it for?</label>
+        <textarea id="use_case" name="use_case" rows="3"
+                  placeholder="e.g. we ship invoicing for ~400 EU SMEs and need to warn them before each mandate date"></textarea>
+
+        <button type="submit">Request a key</button>
+      </form>
+
+      <p class="form-status" id="access-status" role="status" aria-live="polite"></p>
+
+      <p class="muted">
+        We use your address to send you a key and to ask what you thought. Nothing else, and no
+        list we sell on.
+      </p>
+    </section>
+  ) : (
+    <div class="note">
+      <strong>Signup is not open yet.</strong> The API, the keys and the rate limits are built and
+      running, and the dataset is real. The one piece missing is a public host for the API, so
+      rather than show you a form that posts into nowhere, there is nothing here yet.
+    </div>
+  )}
 
   <h2>What counts as a request</h2>
   <p>
@@ -72,7 +118,60 @@ const plans = [
     <li><strong>How current is it?</strong> Every row carries a <code>checked_on</code> date. Look at it before you buy.</li>
     <li><strong>What happens when a date moves?</strong> It becomes a dated entry in the changelog, and on paid plans a webhook. The diff is the product.</li>
     <li><strong>Can I see it first?</strong> Yes. The free tier returns full rows, not a teaser.</li>
+    <li><strong>What are you not?</strong> Not a compliance product. We publish what the law says and where we read it; acting on it is your decision and your advisers&rsquo;.</li>
   </ul>
 
   <p><a href={`${base}docs/`}>Read the API docs &rarr;</a></p>
 </Base>
+
+{apiOrigin && (
+  <script is:inline define:vars={{ apiOrigin }}>
+    const form = document.getElementById('access-form')
+    const status = document.getElementById('access-status')
+    const button = form.querySelector('button[type="submit"]')
+    // The status line lives outside the form so the confirmation survives
+    // hiding the form on success.
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      const email = form.email.value.trim()
+      if (!email) {
+        status.textContent = 'An email address is the one field we need.'
+        status.className = 'form-status error'
+        return
+      }
+
+      button.disabled = true
+      status.textContent = 'Sending…'
+      status.className = 'form-status'
+
+      try {
+        const response = await fetch(`${apiOrigin}/v1/access-requests`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            company: form.company.value.trim() || null,
+            plan_interest: form.plan_interest.value,
+            use_case: form.use_case.value.trim() || null,
+          }),
+        })
+        const body = await response.json().catch(() => ({}))
+
+        if (response.ok) {
+          form.hidden = true
+          status.textContent = body.message ?? 'Thanks — we have your request.'
+          status.className = 'form-status ok'
+        } else {
+          status.textContent = body.error?.message ?? 'That did not go through. Try again in a moment.'
+          status.className = 'form-status error'
+          button.disabled = false
+        }
+      } catch {
+        status.textContent = 'We could not reach the server. Try again in a moment.'
+        status.className = 'form-status error'
+        button.disabled = false
+      }
+    })
+  </script>
+)}

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro'
 import { buildCheckerPages, BANDS, DIRECTIONS } from '../../data/obligations.js'
+import { BRAND } from '../../brand.mjs'
 
 const pages = buildCheckerPages()
 const base = import.meta.env.BASE_URL
@@ -14,7 +15,7 @@ for (const p of pages) {
 const entries = [...byCountry.values()].sort((a, b) => a.country.name.localeCompare(b.country.name))
 ---
 <Base
-  title="EU e-invoicing obligations by country | EU E-Invoicing Deadlines"
+  title={`EU e-invoicing obligations by country | ${BRAND}`}
   description="Every jurisdiction in our dataset, with its issuing, receiving and reporting obligations broken out by company size band."
 >
   <h1>Every country we cover</h1>

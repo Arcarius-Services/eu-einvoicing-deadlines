@@ -2,6 +2,7 @@
 import Base from '../../../../layouts/Base.astro'
 import ObligationTable from '../../../../components/ObligationTable.astro'
 import { buildCheckerPages, BANDS, fmtDate, fmtThreshold } from '../../../../data/obligations.js'
+import { BRAND } from '../../../../brand.mjs'
 
 export function getStaticPaths() {
   return buildCheckerPages().map((p) => ({
@@ -18,7 +19,7 @@ const base = import.meta.env.BASE_URL
 const splitAnswer = !answer && partial.length > 0
 
 // Unique per page: country x direction x band appears in both title and description.
-const title = `${country.name} e-invoicing: when must a ${band.label.toLowerCase()} business ${direction.verb}? | EU E-Invoicing Deadlines`
+const title = `${country.name} e-invoicing: when must a ${band.label.toLowerCase()} business ${direction.verb}? | ${BRAND}`
 
 const description = answer
   ? `${band.label} businesses (${band.blurb}) must ${direction.verb} electronic invoices in ${country.name} from ${fmtDate(answer.mandatory_from)}. Source, legal instrument and last-checked date on the page.`

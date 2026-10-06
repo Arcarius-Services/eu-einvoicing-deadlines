@@ -1,16 +1,23 @@
 ---
 import '../styles/global.css'
 import { loadDataset } from '../data/obligations.js'
+import { loadProviders } from '../data/providers.js'
+import { BRAND, DISCLAIMER } from '../brand.mjs'
 
 const { title, description, noindexReason } = Astro.props
 const { isFixture, schemaVersion, rowCount } = loadDataset()
 
+// Scout's provider dataset (ARC-7) is not published yet. No rows, no nav link —
+// we do not advertise a section that would render an empty table.
+const hasProviders = loadProviders().providers.length > 0
+
 // One canonical per page, absolute, trailing slash, base path included.
 const canonical = new URL(Astro.url.pathname, Astro.site).href
 
-// Two reasons to refuse indexing: a fixture row is not a fact, and we do not want
-// search engines learning a working title that Odysseus has not signed off.
-// Flip SITE_INDEXABLE=true once the brand and domain are settled.
+// A fixture row is not a fact, so a fixture build is never indexable. The brand
+// is settled (Rulefeed), so the remaining reason to hold indexing is the domain:
+// flip SITE_INDEXABLE=true once rulefeed.eu is serving, so we never have to
+// migrate search engines off the Pages URL.
 const indexable = process.env.SITE_INDEXABLE === 'true'
 const noindex = isFixture || !indexable || Boolean(noindexReason)
 const base = import.meta.env.BASE_URL
@@ -40,9 +47,10 @@ const base = import.meta.env.BASE_URL
     )}
 
     <header class="site">
-      <a class="wordmark" href={base}>EU E-Invoicing Deadlines</a>
+      <a class="wordmark" href={base}>{BRAND}</a>
       <nav>
         <a href={`${base}countries/`}>Countries</a>
+        {hasProviders && <a href={`${base}providers/`}>Peppol providers</a>}
         <a href={`${base}pricing/`}>Pricing</a>
         <a href={`${base}docs/`}>API docs</a>
       </nav>
@@ -56,10 +64,8 @@ const base = import.meta.env.BASE_URL
         to the primary source it was read from. We publish the source, the date we last checked it,
         and our confidence in it — so you can check our work.
       </p>
-      <p class="muted">
-        Working title pending brand sign-off. Not legal advice; it is a dated citation of a
-        published obligation.
-      </p>
+      <p class="disclaimer">{DISCLAIMER}</p>
+      <p class="muted">{BRAND} is a maintained reference dataset of published regulatory timelines.</p>
     </footer>
   </body>
 </html>

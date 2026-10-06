@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro'
 import { listCountries, buildCheckerPages, loadDataset } from '../data/obligations.js'
+import { BRAND } from '../brand.mjs'
 
 const countries = listCountries()
 const pageCount = buildCheckerPages().length
@@ -8,7 +9,7 @@ const { rowCount } = loadDataset()
 const base = import.meta.env.BASE_URL
 ---
 <Base
-  title="EU e-invoicing deadlines, by country and company size"
+  title={`${BRAND} — EU e-invoicing deadlines by country and company size`}
   description="When does each EU member state oblige your company to issue or receive electronic invoices? One answer per country and size band, with the primary source and the date we last checked it."
 >
   <h1>When does your company have to send electronic invoices?</h1>

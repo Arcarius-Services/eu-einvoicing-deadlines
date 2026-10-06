@@ -43,9 +43,13 @@ jobs:
         env:
           SITE_URL: ${{ vars.SITE_URL || 'https://arcarius-services.github.io' }}
           SITE_BASE: ${{ vars.SITE_BASE || '/eu-einvoicing-deadlines' }}
-          # Stays unset until the brand and domain are signed off, which keeps
-          # every page noindex and robots.txt Disallow.
+          # Stays unset until rulefeed.eu is serving, which keeps every page
+          # noindex and robots.txt Disallow.
           SITE_INDEXABLE: ${{ vars.SITE_INDEXABLE }}
+          # Public origin of the JSON API. Not a secret — it is baked into the
+          # static page. Unset means the pricing page renders no form at all
+          # rather than one that posts into nowhere.
+          PUBLIC_API_ORIGIN: ${{ vars.PUBLIC_API_ORIGIN }}
         run: npm run build
 
       - uses: actions/upload-pages-artifact@v3
