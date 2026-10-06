@@ -1,0 +1,137 @@
+jurisdiction: BE
+jurisdiction_name: Belgium
+obligations:
+
+  - obligation_id: BE-e-invoicing-b2b-issue-all
+    jurisdiction: BE
+    jurisdiction_name: Belgium
+    regime: e-invoicing-b2b
+    regime_label: Domestic B2B structured electronic invoicing
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Taxable persons established in Belgium supplying goods or services to another
+      VAT-identified taxable person. Excluded by the law itself: taxable persons subject to the
+      flat-rate scheme of Article 56 of the VAT Code, and bankrupt taxable persons.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test. The obligation binds every established taxable person in scope regardless of
+      turnover or headcount, which makes Belgium the strictest of the 2026 cohort for small
+      companies — there is no small-company deferral to wait for.
+    format_name: Peppol BIS Billing (UBL), default standard
+    format_version: 3.0.21 mandatory on the Peppol network from 2026-08-17
+    format_note: >-
+      The law requires a structured electronic form permitting automatic processing and compliant
+      with EN 16931-1 and CEN/TS 16931-2. The implementing royal decree sets Peppol BIS Billing in
+      UBL syntax, transmitted over the Peppol network, as the default standard; parties may agree
+      an alternative format provided it still complies with the European standard. The version
+      figure is the OpenPeppol release calendar, verified separately at
+      docs.peppol.eu/poacc/billing/3.0/release-notes/ — Peppol BIS Billing 3.0.21 was published
+      2026-05-20 and became mandatory 2026-08-17, superseding 3.0.20. Belgian law does not itself
+      name a Peppol version, so the version moves on OpenPeppol's schedule, not Belgium's.
+    mandatory_from: '2026-01-01'
+    tolerance_ends: '2026-03-31'
+    tolerance_note: >-
+      Penalty tolerance only — not a postponement of the obligation. FPS Finance will not apply
+      penalties for offences relating to the new e-invoicing obligation during the first three
+      months of 2026 where the enterprise can show it took reasonable steps to comply, including
+      where it lacks the technical means to send structured electronic invoices or its software
+      cannot yet issue a valid one. FPS Finance states explicitly that "under no circumstances"
+      will a general postponement be granted.
+    legal_instrument: >-
+      Loi du 6 février 2024 modifiant le Code de la taxe sur la valeur ajoutée et le Code des
+      impôts sur les revenus 1992 en ce qui concerne l'introduction de l'obligation de facturation
+      électronique, amending Article 53 of the VAT Code (Moniteur belge, 20 February 2024,
+      numac 2024001635).
+    source_url: https://www.ejustice.just.fgov.be/cgi/article_body.pl?language=fr&pub_date=2024-02-20&caller=summary&numac=2024001635
+    source_title: >-
+      Loi du 6 février 2024 — consolidated text as published in the Moniteur belge of
+      20 February 2024 (numac 2024001635), ejustice.just.fgov.be
+    source_type: official_gazette
+    secondary_source_urls:
+      - https://einvoice.belgium.be/en/news/period-tolerance-during-first-three-months-2026
+      - https://einvoice.belgium.be/en
+      - https://docs.peppol.eu/poacc/billing/3.0/release-notes/
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Gazette text read directly on 2026-10-07: the 1 January 2026 entry into force, the Article
+      56 and bankruptcy exclusions, the Article 44 and Article 135(1) scope carve-outs, and the
+      EN 16931-1 / CEN/TS 16931-2 standard reference. The tolerance window and its penalties-only
+      character were read the same day on the official einvoice.belgium.be portal (FPS Finance /
+      BOSA). finances.belgium.be served a CAPTCHA to this host and was not used.
+    unknowns:
+      - >-
+        The implementing royal decree that designates Peppol BIS Billing (UBL) as the default
+        standard was not read directly; the format designation here is taken from the gazette's
+        standard reference plus secondary description of the decree. The decree's own text, and
+        whether it pins a Peppol BIS version, is unconfirmed.
+      - >-
+        Treatment of non-established taxable persons merely VAT-registered in Belgium is not
+        recorded. The law binds persons "established in Belgium"; whether a foreign-established
+        but Belgian-VAT-registered supplier is in or out is not established here.
+    notes: >-
+      Entry into force was conditional on EU Council authorisation under Article 395 of Directive
+      2006/112/EC. Out of scope per the law: supplies exempt under Article 44 of the VAT Code, and
+      certain cross-border supplies under Article 135(1)(a)-(g) of Directive 2006/112/EC. VAT
+      units are subject to different rules.
+
+  - obligation_id: BE-e-invoicing-b2b-receive-all
+    jurisdiction: BE
+    jurisdiction_name: Belgium
+    regime: e-invoicing-b2b
+    regime_label: Domestic B2B structured electronic invoicing
+    direction: receive
+    counterparty_scope: b2b
+    bound_party: >-
+      Taxable persons established in Belgium receiving B2B supplies, excluding those subject to the
+      flat-rate scheme of Article 56 of the VAT Code and bankrupt taxable persons.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: No size test; applies regardless of turnover or headcount.
+    format_name: Peppol BIS Billing (UBL), default standard
+    format_version: 3.0.21 mandatory on the Peppol network from 2026-08-17
+    format_note: >-
+      Must be able to receive an EN 16931-compliant structured invoice. Peppol BIS Billing (UBL)
+      over the Peppol network is the default standard; an alternative EN 16931-compliant format may
+      be agreed between the parties.
+    mandatory_from: '2026-01-01'
+    tolerance_ends: '2026-03-31'
+    tolerance_note: >-
+      Same penalty tolerance as the issuing duty. FPS Finance names inability to receive structured
+      electronic invoices as a covered offence for the first three months of 2026. The obligation
+      itself is not postponed.
+    legal_instrument: >-
+      Loi du 6 février 2024 modifiant le Code de la taxe sur la valeur ajoutée et le Code des
+      impôts sur les revenus 1992 (Moniteur belge, 20 February 2024, numac 2024001635).
+    source_url: https://www.ejustice.just.fgov.be/cgi/article_body.pl?language=fr&pub_date=2024-02-20&caller=summary&numac=2024001635
+    source_title: >-
+      Loi du 6 février 2024 — consolidated text as published in the Moniteur belge of
+      20 February 2024 (numac 2024001635), ejustice.just.fgov.be
+    source_type: official_gazette
+    secondary_source_urls:
+      - https://einvoice.belgium.be/en/news/period-tolerance-during-first-three-months-2026
+      - https://einvoice.belgium.be/en
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Gazette text read directly on 2026-10-07; tolerance read the same day on the official
+      einvoice.belgium.be portal, which explicitly lists inability to receive among the tolerated
+      offences.
+    unknowns:
+      - >-
+        Whether a recipient may refuse a compliant structured invoice, or must accept one sent in
+        an agreed alternative format, is not recorded.
+    notes: >-
+      Recorded separately from the issuing duty because "must I be able to receive yet?" is a
+      different question from "must I issue yet?", even where the dates coincide. Same scope
+      exclusions as BE-e-invoicing-b2b-issue-all.

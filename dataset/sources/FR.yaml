@@ -1,0 +1,198 @@
+jurisdiction: FR
+jurisdiction_name: France
+obligations:
+
+  - obligation_id: FR-e-invoicing-b2b-receive-all
+    jurisdiction: FR
+    jurisdiction_name: France
+    regime: e-invoicing-b2b
+    regime_label: Facturation électronique — domestic B2B e-invoicing reform
+    direction: receive
+    counterparty_scope: b2b
+    bound_party: >-
+      All companies within the scope of the reform, regardless of size. DGFiP: "toutes les
+      entreprises concernées par la réforme doivent avoir la capacité de recevoir des factures
+      électroniques dès le 1er septembre 2026."
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test on the receiving duty. This is the fact most French SMEs get wrong: the
+      widely-quoted "September 2027 for SMEs" date is the ISSUING date only. A micro-entreprise
+      must be able to receive a year earlier, because large enterprises and ETI start issuing to
+      it on 1 September 2026.
+    format_name: Factur-X, UBL or CII
+    format_version: null
+    format_note: >-
+      Three structured formats are permitted under the reform — Factur-X, UBL and CII. The DGFiP
+      practical guide read for this row names the reform's framework but does not state version
+      numbers, and the "spécifications externes" document that carries them was not retrieved.
+      Format versions are an open unknown on this row, not an omission.
+    mandatory_from: '2026-09-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Ordonnance n° 2021-1190 du 15 septembre 2021 relative à la généralisation de la facturation
+      électronique, as amended; calendar as stated by DGFiP in its July 2026 practical guide.
+    source_url: https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/guide_pratique_facturation_electronique.pdf
+    source_title: >-
+      DGFiP, "Facturation électronique : guide pratique de démarrage au 1er septembre 2026",
+      Direction générale des Finances publiques, July 2026 (impots.gouv.fr)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/fiche-3_tpe_a-partir-de-quand-mon-entreprise-doit-etre-prete.pdf
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      DGFiP guide PDF retrieved and read in full on 2026-10-07. It states the 1 September 2026
+      reception date for all companies in scope, and confirms the statutory calendar is being
+      maintained ("le maintien du calendrier légal"). Reception runs through an approved platform
+      (Plateforme Agréée).
+    unknowns:
+      - >-
+        Permitted format versions (Factur-X, UBL, CII) are not stated in the DGFiP guide read; the
+        "spécifications externes" document carrying them was not retrieved.
+      - >-
+        The ordonnance article numbers were not read on Legifrance this cycle. The dates come from
+        DGFiP, a primary tax-authority source, but the statutory citation should be confirmed
+        before it is quoted to a customer as a legal reference.
+      - >-
+        The e-reporting (transmission de données de transaction) obligation that accompanies the
+        reform is not yet recorded as its own row.
+    notes: >-
+      impots.gouv.fr/facturation-electronique 302-redirects to collectivites-locales.gouv.fr and
+      economie.gouv.fr returned HTTP 403 to this host, so the DGFiP guide PDF was the usable
+      primary source.
+
+  - obligation_id: FR-e-invoicing-b2b-issue-grandes-entreprises-et-eti
+    jurisdiction: FR
+    jurisdiction_name: France
+    regime: e-invoicing-b2b
+    regime_label: Facturation électronique — domestic B2B e-invoicing reform
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Grandes entreprises and entreprises de taille intermédiaire (ETI), plus any company that
+      opted into the reform early. DGFiP: "À compter du 1er septembre 2026, les grandes
+      entreprises et les entreprises de taille intermédiaire..."
+    threshold_type: headcount
+    threshold_value: 250
+    threshold_currency: null
+    threshold_operator: gte
+    threshold_basis: >-
+      Headcount leg of the PME test in article 3 of décret n° 2008-1354; must be read together
+      with threshold_definition, because the real boundary is composite.
+    threshold_period: >-
+      the last closed accounting year, per the company-size categories of décret n° 2008-1354
+    threshold_definition: >-
+      In scope if the company is NOT a PME within the meaning of article 3 of décret
+      n° 2008-1354. A PME employs fewer than 250 persons AND has either annual turnover not
+      exceeding EUR 50 million or a balance-sheet total not exceeding EUR 43 million. So this row
+      applies if the company employs 250 or more persons, OR employs fewer than 250 but exceeds
+      both EUR 50 million turnover and EUR 43 million balance-sheet total. The headcount and
+      financial tests are cumulative within the PME definition; the two financial criteria are
+      alternatives to each other. Encoding this as a bare "250 employees" rule would wrongly
+      exempt a 200-person company with EUR 60m turnover and a EUR 50m balance sheet.
+    format_name: Factur-X, UBL or CII
+    format_version: null
+    format_note: >-
+      Factur-X, UBL and CII are the permitted structured formats; versions are not stated in the
+      DGFiP guide read for this row. See unknowns.
+    mandatory_from: '2026-09-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Ordonnance n° 2021-1190 du 15 septembre 2021, as amended; company-size categories per
+      article 3 of décret n° 2008-1354 du 18 décembre 2008.
+    source_url: https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/guide_pratique_facturation_electronique.pdf
+    source_title: >-
+      DGFiP, "Facturation électronique : guide pratique de démarrage au 1er septembre 2026",
+      July 2026 (impots.gouv.fr)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://www.legifrance.gouv.fr/loda/id/JORFTEXT000019961059/
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Two primary sources read on 2026-10-07. Dates from the DGFiP July 2026 practical guide.
+      Size categories from article 3 of décret n° 2008-1354 on Legifrance, including the "moins de
+      250 personnes", "50 millions d'euros" and "43 millions d'euros" figures and the fact that
+      the financial criteria are alternatives.
+    unknowns:
+      - >-
+        Permitted format versions (Factur-X, UBL, CII) not stated in the source read.
+      - >-
+        Whether company size is assessed at group or at legal-entity level for this reform is not
+        established. Décret n° 2008-1354 defines categories; which consolidation perimeter DGFiP
+        applies for e-invoicing scope was not found.
+      - >-
+        The accompanying e-reporting duty for this cohort is not yet recorded as its own row.
+    notes: >-
+      threshold_value 250 is the headcount leg only. Any consumer rendering this row must show
+      threshold_definition alongside it, or it will give a wrong answer to mid-sized companies.
+      The ETI upper bound (fewer than 5,000 persons, turnover up to EUR 1,500m or balance-sheet
+      total up to EUR 2,000m) does not affect scope here, because grandes entreprises are caught
+      on the same date.
+
+  - obligation_id: FR-e-invoicing-b2b-issue-pme-tpe-micro
+    jurisdiction: FR
+    jurisdiction_name: France
+    regime: e-invoicing-b2b
+    regime_label: Facturation électronique — domestic B2B e-invoicing reform
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      PME, TPE and micro-entreprises that did not opt into the reform early. DGFiP: "Pour les PME,
+      TPE et micro-entreprises, cette obligation d'émission s'applique à compter du
+      1er septembre 2027."
+    threshold_type: headcount
+    threshold_value: 250
+    threshold_currency: null
+    threshold_operator: lt
+    threshold_basis: >-
+      Headcount leg of the PME test in article 3 of décret n° 2008-1354; read with
+      threshold_definition.
+    threshold_period: >-
+      the last closed accounting year, per the company-size categories of décret n° 2008-1354
+    threshold_definition: >-
+      In scope if the company IS a PME within the meaning of article 3 of décret n° 2008-1354:
+      fewer than 250 persons employed AND either annual turnover not exceeding EUR 50 million or a
+      balance-sheet total not exceeding EUR 43 million. Micro-entreprise, a subset: fewer than 10
+      persons and turnover or balance-sheet total not exceeding EUR 2 million.
+    format_name: Factur-X, UBL or CII
+    format_version: null
+    format_note: >-
+      Factur-X, UBL and CII are the permitted structured formats; versions are not stated in the
+      DGFiP guide read for this row. See unknowns.
+    mandatory_from: '2027-09-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Ordonnance n° 2021-1190 du 15 septembre 2021, as amended; company-size categories per
+      article 3 of décret n° 2008-1354 du 18 décembre 2008.
+    source_url: https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/guide_pratique_facturation_electronique.pdf
+    source_title: >-
+      DGFiP, "Facturation électronique : guide pratique de démarrage au 1er septembre 2026",
+      July 2026 (impots.gouv.fr)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://www.legifrance.gouv.fr/loda/id/JORFTEXT000019961059/
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      DGFiP guide read on 2026-10-07, which states the 1 September 2027 issuing date for PME, TPE
+      and micro-entreprises and confirms such a company may opt in early. Size categories read the
+      same day in article 3 of décret n° 2008-1354 on Legifrance.
+    unknowns:
+      - >-
+        Permitted format versions (Factur-X, UBL, CII) not stated in the source read.
+      - >-
+        No tolerance or penalty-grace window for this cohort was found in the guide. Absence of a
+        found tolerance is not proof none exists.
+    notes: >-
+      This cohort is still bound to RECEIVE from 1 September 2026 — see
+      FR-e-invoicing-b2b-receive-all. A consumer that renders only this row for a small French
+      company will understate its 2026 obligation by a full year.

@@ -1,0 +1,144 @@
+jurisdiction: DE
+jurisdiction_name: Germany
+obligations:
+- obligation_id: DE-e-invoicing-b2b-receive-all
+  jurisdiction: DE
+  jurisdiction_name: Germany
+  regime: e-invoicing-b2b
+  regime_label: Domestic B2B electronic invoicing (E-Rechnung)
+  direction: receive
+  counterparty_scope: b2b
+  bound_party: Every domestic entrepreneur (inländischer Unternehmer, § 2 UStG) acting in a business capacity,
+    including small businesses (Kleinunternehmer), freelancers, and persons making only exempt supplies
+    such as residential landlords and doctors.
+  threshold_type: none
+  threshold_value: null
+  threshold_currency: null
+  threshold_operator: null
+  threshold_basis: null
+  threshold_period: null
+  threshold_definition: 'No size, turnover or headcount threshold. BMF FAQ Q12: "Es sind keine Ausnahmen
+    vorgesehen" — no exemptions are provided. Kleinunternehmer are exempt from issuing e-invoices but
+    must still be able to receive them.'
+  format_name: EN 16931-compliant structured electronic invoice
+  format_version: EN 16931
+  format_note: 'No specific transmission channel is prescribed. BMF FAQ Q8 and Q12: holding an e-mail
+    inbox is sufficient to satisfy the receiving obligation ("Dazu reicht bereits ein E-Mail-Postfach
+    aus").'
+  mandatory_from: '2025-01-01'
+  tolerance_ends: null
+  tolerance_note: No transition period applies to receiving. The 1 Jan 2025 – 31 Dec 2026 tolerance in
+    § 27 Abs. 38 UStG covers the issuing of invoices only, not their receipt (BMF FAQ Q11, Q12).
+  legal_instrument: '§ 14 Abs. 1 and Abs. 2 Nr. 1 UStG as recast by the Wachstumschancengesetz, for supplies
+    carried out after 31 December 2024. Administrative interpretation: BMF-Schreiben of 15 October 2024
+    (BStBl I S. 1320) and 15 October 2025.'
+  source_url: https://www.bundesfinanzministerium.de/Content/DE/FAQ/e-rechnung.html
+  source_title: 'Bundesministerium der Finanzen — Fragen und Antworten zur Einführung der obligatorischen
+    E-Rechnung zum 1. Januar 2025 (Stand: März 2026)'
+  source_type: tax_authority
+  secondary_source_urls:
+  - https://www.gesetze-im-internet.de/ustg_1980/__14.html
+  checked_on: '2026-10-07'
+  confidence: verified
+  confidence_note: 'BMF FAQ read directly on 2026-10-07; page carries "Stand: März 2026" and is dated
+    23.03.2026. Questions 8 and 12 state the receiving obligation and the absence of exemptions. Statutory
+    definition cross-read in § 14 Abs. 1 UStG.'
+  unknowns: []
+  notes: 'This is the row most German small vendors get wrong: they are not obliged to issue until 2027
+    or 2028, but they have been obliged to be able to receive since 1 January 2025, with no grace period.'
+- obligation_id: DE-e-invoicing-b2b-issue-turnover-gt-800k
+  jurisdiction: DE
+  jurisdiction_name: Germany
+  regime: e-invoicing-b2b
+  regime_label: Domestic B2B electronic invoicing (E-Rechnung)
+  direction: issue
+  counterparty_scope: b2b
+  bound_party: Domestic entrepreneurs issuing an invoice for a supply to another domestic entrepreneur's
+    business, whose total turnover (Gesamtumsatz, § 19 Abs. 2 UStG) in the preceding calendar year exceeded
+    EUR 800,000.
+  threshold_type: turnover
+  threshold_value: 800000
+  threshold_currency: EUR
+  threshold_operator: gt
+  threshold_basis: Gesamtumsatz as defined in § 19 Abs. 2 UStG, of the entrepreneur issuing the invoice.
+  threshold_period: preceding calendar year (vorangegangenes Kalenderjahr)
+  threshold_definition: § 27 Abs. 38 UStG extends the tolerance to 31 December 2027 only "wenn der Gesamtumsatz
+    (§ 19 Absatz 2) des die Rechnung ausstellenden Unternehmers im vorangegangenen Kalenderjahr nicht
+    mehr als 800 000 Euro" betragen hat. This row is the cohort that fails that test, i.e. prior-year
+    turnover above EUR 800,000, for whom the tolerance ends a year earlier.
+  format_name: XRechnung, or ZUGFeRD (EN 16931-compliant profiles)
+  format_version: ZUGFeRD 2.0.1 or later; XRechnung (current published version)
+  format_note: 'BMF FAQ Q7: XRechnung and ZUGFeRD from version 2.0.1 satisfy the VAT requirements, excluding
+    the MINIMUM and BASIC-WL profiles. Another format may be agreed between the parties if the UStG-required
+    data can be extracted correctly and completely from it, which keeps EDI procedures such as EDIFACT
+    usable.'
+  mandatory_from: '2027-01-01'
+  tolerance_ends: '2026-12-31'
+  tolerance_note: From 1 Jan 2025 to 31 Dec 2026 any issuer may issue a "sonstige Rechnung" instead of
+    an e-invoice. Paper is always permitted; another electronic format such as a PDF by e-mail requires
+    the recipient's consent. Separately, a non-conforming EDI procedure may be used until 31 December
+    2027 even by this cohort (BMF FAQ Q11).
+  legal_instrument: § 14 Abs. 2 Nr. 1 UStG; transitional rule § 27 Abs. 38 UStG (Wachstumschancengesetz).
+  source_url: https://www.gesetze-im-internet.de/ustg_1980/__27.html
+  source_title: § 27 Abs. 38 Umsatzsteuergesetz — consolidated text, gesetze-im-internet.de (BMJ / Bundesanzeiger
+    Verlag)
+  source_type: statute
+  secondary_source_urls:
+  - https://www.gesetze-im-internet.de/ustg_1980/__14.html
+  - https://www.bundesfinanzministerium.de/Content/DE/FAQ/e-rechnung.html
+  checked_on: '2026-10-07'
+  confidence: verified
+  confidence_note: Statutory text of § 27 Abs. 38 UStG read directly on 2026-10-07, including the EUR
+    800,000 figure and the "vorangegangenes Kalenderjahr" measurement period. Cross-checked against BMF
+    FAQ (Stand März 2026) Q11, which states the same dates in plain language.
+  unknowns: []
+  notes: 'Date is driven by when the supply is carried out (Zeitpunkt des Umsatzes), not when the invoice
+    is raised: § 27 Abs. 38 UStG frames the tolerance as applying to a supply "nach dem 31. Dezember 2024
+    und vor dem 1. Januar 2027 ausgeführten Umsatz".'
+- obligation_id: DE-e-invoicing-b2b-issue-turnover-lte-800k
+  jurisdiction: DE
+  jurisdiction_name: Germany
+  regime: e-invoicing-b2b
+  regime_label: Domestic B2B electronic invoicing (E-Rechnung)
+  direction: issue
+  counterparty_scope: b2b
+  bound_party: Domestic entrepreneurs issuing an invoice for a supply to another domestic entrepreneur's
+    business, whose total turnover (Gesamtumsatz, § 19 Abs. 2 UStG) in the preceding calendar year was
+    EUR 800,000 or less.
+  threshold_type: turnover
+  threshold_value: 800000
+  threshold_currency: EUR
+  threshold_operator: lte
+  threshold_basis: Gesamtumsatz as defined in § 19 Abs. 2 UStG, of the entrepreneur issuing the invoice.
+  threshold_period: preceding calendar year (vorangegangenes Kalenderjahr)
+  threshold_definition: '§ 27 Abs. 38 UStG: the tolerance runs to 31 December 2027 "wenn der Gesamtumsatz
+    (§ 19 Absatz 2) des die Rechnung ausstellenden Unternehmers im vorangegangenen Kalenderjahr nicht
+    mehr als 800 000 Euro" betragen hat. Tested per year, so an entrepreneur crossing EUR 800,000 in 2026
+    loses the extra year for 2027 supplies.'
+  format_name: XRechnung, or ZUGFeRD (EN 16931-compliant profiles)
+  format_version: ZUGFeRD 2.0.1 or later; XRechnung (current published version)
+  format_note: 'Same format set as the above-threshold cohort. BMF FAQ Q7: XRechnung and ZUGFeRD from
+    version 2.0.1, excluding the MINIMUM and BASIC-WL profiles.'
+  mandatory_from: '2028-01-01'
+  tolerance_ends: '2027-12-31'
+  tolerance_note: 'BMF FAQ Q11: "Bei einem Vorjahresumsatz des Rechnungsausstellers bis 800.000 Euro verlängert
+    sich diese Frist noch bis zum Ablauf des Jahres 2027." Until then a sonstige Rechnung may be issued;
+    paper always, other electronic formats with the recipient''s consent.'
+  legal_instrument: § 14 Abs. 2 Nr. 1 UStG; transitional rule § 27 Abs. 38 UStG (Wachstumschancengesetz).
+  source_url: https://www.gesetze-im-internet.de/ustg_1980/__27.html
+  source_title: § 27 Abs. 38 Umsatzsteuergesetz — consolidated text, gesetze-im-internet.de (BMJ / Bundesanzeiger
+    Verlag)
+  source_type: statute
+  secondary_source_urls:
+  - https://www.bundesfinanzministerium.de/Content/DE/FAQ/e-rechnung.html
+  checked_on: '2026-10-07'
+  confidence: verified
+  confidence_note: Statutory text read directly on 2026-10-07 ("bis zum 31. Dezember 2027 für einen nach
+    dem 31. Dezember 2026 und vor dem 1. Januar 2028" ausgeführten Umsatz, conditional on the EUR 800,000
+    test). Cross-checked against BMF FAQ Q11.
+  unknowns:
+  - Kleinunternehmer (§ 19 UStG) are exempt from the issuing obligation entirely per BMF FAQ Q4 and Q12,
+    not merely deferred to 2028. That exemption is a separate row not yet recorded; until it exists, this
+    row over-states the obligation for Kleinunternehmer.
+  notes: 'Recorded alongside the above-threshold row deliberately: a threshold captured from only one
+    side is a half-row and misleads anyone sitting near the boundary.'

@@ -1,0 +1,205 @@
+jurisdiction: ES
+jurisdiction_name: Spain
+obligations:
+
+  # The Spanish clock started on 2026-10-06, one day before this file was written. Orden
+  # HAC/1028/2026 was published in the BOE of 2026-10-05 and enters into force the day after
+  # publication, which is the event the RD 238/2026 phase-in periods are counted from. Until
+  # 2026-10-06 the Spanish dates were genuinely unknowable; they are now computable, but the
+  # computation is ours, not the source's, so both rows are `reported` rather than `verified`.
+  - obligation_id: ES-e-invoicing-b2b-issue-turnover-gt-8m-eur
+    jurisdiction: ES
+    jurisdiction_name: Spain
+    regime: e-invoicing-b2b
+    regime_label: Facturación electrónica obligatoria entre empresarios y profesionales
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Empresarios y profesionales whose volume of operations exceeded EUR 8,000,000 in the
+      immediately preceding calendar year.
+    threshold_type: turnover
+    threshold_value: 8000000
+    threshold_currency: EUR
+    threshold_operator: gt
+    threshold_basis: >-
+      Volumen de operaciones calculated in accordance with article 121 of Ley 37/1992 (the Spanish
+      VAT Act)
+    threshold_period: el año natural inmediato anterior — the immediately preceding calendar year
+    threshold_definition: >-
+      Disposición final cuarta of Real Decreto 238/2026 phases the regime from the entry into force
+      of the ministerial order developing the public invoicing solution: 12 months for empresarios
+      y profesionales whose volume of operations, calculated per article 121 of Ley 37/1992,
+      exceeded EUR 8,000,000 in the immediately preceding calendar year; 24 months for everyone
+      else. Unlike Poland's fixed 2024 reference year, this is a rolling prior-year test.
+    format_name: UBL (reference syntax for the public solution)
+    format_version: null
+    format_note: >-
+      Real Decreto 238/2026 permits CII, UBL, EDIFACT and Facturae. For the public invoicing
+      solution specifically, UBL is the reference syntax: Anexo I of Orden HAC/1028/2026 is titled
+      "Contenido y estructura de los campos de la factura electrónica conforme al modelo UBL y la
+      EN 16931". No UBL version number is stated in the order's Anexo I heading as read, so the
+      version is an open unknown rather than an omission.
+    mandatory_from: '2027-10-06'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Ley 18/2022, de 28 de septiembre, de creación y crecimiento de empresas, art. 12 (amending
+      art. 2 bis of Ley 56/2007); Real Decreto 238/2026, de 25 de marzo (BOE-A-2026-7295),
+      disposición final cuarta; Orden HAC/1028/2026, de 2 de octubre (BOE-A-2026-20587),
+      disposición final única.
+    source_url: https://www.boe.es/boe/dias/2026/10/05/pdfs/BOE-A-2026-20587.pdf
+    source_title: >-
+      Orden HAC/1028/2026, de 2 de octubre, por la que se regula la solución pública de
+      facturación electrónica — BOE núm. 247, 5 October 2026, disposición núm. 20587 (boe.es)
+    source_type: official_gazette
+    secondary_source_urls:
+      - https://www.boe.es/buscar/act.php?id=BOE-A-2026-7295
+      - https://www.boe.es/buscar/act.php?id=BOE-A-2022-15818
+      - https://sede.agenciatributaria.gob.es/Sede/iva/novedades-iva/novedades-normativa-2026/real-decreto-238-2026-25-marzo.html
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      Two primary sources read on 2026-10-07. Orden HAC/1028/2026 retrieved as the BOE PDF and its
+      text extracted: disposición final única states the order "entrará en vigor el día siguiente
+      al de su publicación en el Boletín Oficial del Estado, dándose inicio al cómputo de los
+      plazos previstos en la disposición final octava de la Ley 18/2022 ... y en las disposiciones
+      transitorias primera a tercera y disposición final cuarta, del Real Decreto 238/2026".
+      Published 5 October 2026, so in force 6 October 2026. Real Decreto 238/2026 read on boe.es
+      for the 12/24-month periods, the EUR 8,000,000 threshold and the article 121 Ley 37/1992
+      basis. The row is `reported` and not `verified` because mandatory_from is OUR arithmetic
+      (6 October 2026 + 12 months), not a date either instrument prints.
+    unknowns:
+      - >-
+        Whether the 12-month period expires on 2027-10-06 or 2027-10-05 depends on how article 30
+        of Ley 39/2015 computes a period expressed in months from the date of entry into force.
+        This is a legal-interpretation question, not a sourcing question — escalated to Odysseus.
+        The date here is the later of the two readings.
+      - >-
+        No UBL version number was found in Anexo I of the order as read.
+      - >-
+        Whether the receiving obligation starts on the same dates as issuing is not established —
+        see ES-e-invoicing-b2b-receive-all.
+    notes: >-
+      Commercially the freshest row in the dataset: before 6 October 2026 the Spanish dates could
+      not be computed at all, because the phase-in was expressed as a period running from a
+      ministerial order that had not been published. Any competitor snapshot taken before
+      5 October 2026 still shows Spain as undated.
+
+  - obligation_id: ES-e-invoicing-b2b-issue-turnover-lte-8m-eur
+    jurisdiction: ES
+    jurisdiction_name: Spain
+    regime: e-invoicing-b2b
+    regime_label: Facturación electrónica obligatoria entre empresarios y profesionales
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      All remaining empresarios y profesionales — those whose volume of operations did not exceed
+      EUR 8,000,000 in the immediately preceding calendar year.
+    threshold_type: turnover
+    threshold_value: 8000000
+    threshold_currency: EUR
+    threshold_operator: lte
+    threshold_basis: >-
+      Volumen de operaciones calculated in accordance with article 121 of Ley 37/1992
+    threshold_period: el año natural inmediato anterior — the immediately preceding calendar year
+    threshold_definition: >-
+      The residual cohort under disposición final cuarta of Real Decreto 238/2026: "a los
+      veinticuatro meses de la entrada en vigor de la orden, para el resto de los empresarios y
+      profesionales."
+    format_name: UBL (reference syntax for the public solution)
+    format_version: null
+    format_note: >-
+      CII, UBL, EDIFACT and Facturae are permitted under RD 238/2026; UBL is the reference syntax
+      for the public solution per Anexo I of Orden HAC/1028/2026, which references the UBL model
+      and EN 16931. No version number stated in the text read.
+    mandatory_from: '2028-10-06'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Ley 18/2022, de 28 de septiembre, art. 12; Real Decreto 238/2026, de 25 de marzo
+      (BOE-A-2026-7295), disposición final cuarta; Orden HAC/1028/2026, de 2 de octubre
+      (BOE-A-2026-20587), disposición final única.
+    source_url: https://www.boe.es/boe/dias/2026/10/05/pdfs/BOE-A-2026-20587.pdf
+    source_title: >-
+      Orden HAC/1028/2026, de 2 de octubre — BOE núm. 247, 5 October 2026, disposición núm. 20587
+      (boe.es)
+    source_type: official_gazette
+    secondary_source_urls:
+      - https://www.boe.es/buscar/act.php?id=BOE-A-2026-7295
+      - https://sede.agenciatributaria.gob.es/Sede/todas-noticias/2026/marzo/31/facturacion-electronica-obligatoria.html
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      Same two primary sources read on 2026-10-07 as the >EUR 8m row. `reported` rather than
+      `verified` because mandatory_from is our arithmetic on the order's entry into force
+      (6 October 2026 + 24 months), not a date printed in either instrument.
+    unknowns:
+      - >-
+        Exact expiry day of the 24-month period under article 30 of Ley 39/2015 — same
+        interpretation question as the 12-month cohort. Escalated to Odysseus.
+      - >-
+        No UBL version number found in Anexo I of the order as read.
+    notes: >-
+      RD 238/2026 also requires the public invoicing solution to be available to obliged
+      businesses at least two months before the regime's first effective application, which
+      implies an AEAT readiness date around August 2027. That is a derived expectation, not an
+      obligation on taxpayers, so it is not a row.
+
+  - obligation_id: ES-e-invoicing-b2b-receive-all
+    jurisdiction: ES
+    jurisdiction_name: Spain
+    regime: e-invoicing-b2b
+    regime_label: Facturación electrónica obligatoria entre empresarios y profesionales
+    direction: receive
+    counterparty_scope: b2b
+    bound_party: >-
+      Empresarios y profesionales obliged to receive electronic invoices under art. 2 bis of
+      Ley 56/2007 as amended by Ley 18/2022. The commencement date for the receiving leg
+      specifically is not established.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      Ley 18/2022 art. 12 obliges empresarios y profesionales to "expedir, remitir y recibir"
+      electronic invoices, and Orden HAC/1028/2026 refers to those "obligados a emitir y recibir
+      facturas electrónicas". Whether the receiving duty commences on the same 12/24-month phased
+      dates as issuing, or earlier and uniformly for everyone, is not stated in the provisions read.
+    format_name: UBL (reference syntax for the public solution)
+    format_version: null
+    format_note: >-
+      Expected to mirror the issuing formats (CII, UBL, EDIFACT, Facturae; UBL for the public
+      solution), but not separately established for the receiving leg.
+    mandatory_from: null
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Ley 18/2022, de 28 de septiembre, art. 12 (amending art. 2 bis of Ley 56/2007); Real Decreto
+      238/2026, de 25 de marzo; Orden HAC/1028/2026, de 2 de octubre.
+    source_url: https://www.boe.es/buscar/act.php?id=BOE-A-2026-7295
+    source_title: >-
+      Real Decreto 238/2026, de 25 de marzo — consolidated text, BOE-A-2026-7295 (boe.es)
+    source_type: official_gazette
+    secondary_source_urls:
+      - https://www.boe.es/boe/dias/2026/10/05/pdfs/BOE-A-2026-20587.pdf
+      - https://www.boe.es/buscar/act.php?id=BOE-A-2022-15818
+    checked_on: '2026-10-07'
+    confidence: unknown
+    confidence_note: >-
+      Recorded as unknown deliberately. RD 238/2026 and Orden HAC/1028/2026 were both read on
+      2026-10-07 and neither, in the provisions read, separates a commencement date for the
+      receiving obligation from the phased issuing dates. Poland and France both run receiving
+      ahead of small-company issuing, so assuming Spain mirrors its own issuing phases would be a
+      guess dressed as a fact.
+    unknowns:
+      - >-
+        Commencement date of the receiving obligation. Needs disposiciones transitorias primera a
+        tercera of RD 238/2026 read in full, which was not done this cycle.
+      - >-
+        Whether a small company must be able to receive from the large-company date
+        (2027-10-06) — the pattern in Poland and France — or only from its own issuing date.
+    notes: >-
+      This is the highest-value unresolved row in the dataset. It is the single question a Spanish
+      SME will ask first, and the honest answer today is that the instruments read do not say.

@@ -1,0 +1,161 @@
+jurisdiction: PL
+jurisdiction_name: Poland
+obligations:
+
+  - obligation_id: PL-e-invoicing-b2b-receive-all
+    jurisdiction: PL
+    jurisdiction_name: Poland
+    regime: e-invoicing-b2b
+    regime_label: National e-Invoice System (KSeF — Krajowy System e-Faktur)
+    direction: receive
+    counterparty_scope: b2b
+    bound_party: All VAT taxpayers in Poland, regardless of size.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test. The Ministry of Finance states receiving via KSeF is mandatory from
+      1 February 2026 "regardless of company size", which is two months before the small-taxpayer
+      issuing duty starts.
+    format_name: FA (KSeF structured invoice schema)
+    format_version: FA(3)
+    format_note: >-
+      FA(3) is the logical structure for standard invoices. A separate FA_RR(1) structure applies
+      to agricultural invoices from April 2026.
+    mandatory_from: '2026-02-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Ustawa z dnia 5 sierpnia 2025 r. o zmianie ustawy o podatku od towarów i usług
+      (Dz. U. 2025 poz. 1203), amending the Polish VAT Act.
+    source_url: https://ksef.podatki.gov.pl/informacje-ogolne-ksef-20/zakres-obowiazkowego-ksef/
+    source_title: >-
+      "Zakres obowiązkowego KSeF" — scope of the mandatory KSeF obligation, Ministry of Finance
+      KSeF portal (ksef.podatki.gov.pl)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://ksef.podatki.gov.pl/informacje-ogolne-ksef-20/podstawy-prawne-oraz-kluczowe-terminy/
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Read directly on 2026-10-07 on the Ministry of Finance KSeF portal, which states
+      "Receiving invoices using KSeF will be mandatory already from 1 February 2026" for all VAT
+      taxpayers, and names FA(3) as the current logical structure.
+    unknowns:
+      - >-
+        Whether a taxpayer relying on the PLN 10,000/month small-invoice transition for ISSUING
+        is nonetheless obliged to receive via KSeF from 1 February 2026 is not stated in terms.
+        Read literally the receiving duty is unconditional, but the interaction is not spelled out
+        on the portal.
+    notes: >-
+      The asymmetry here is the commercially important fact: a small Polish company is in scope
+      for receiving on 1 February 2026, two months before the headline "April 2026" issuing date
+      that most summaries lead with.
+
+  - obligation_id: PL-e-invoicing-b2b-issue-turnover-gt-200m-pln
+    jurisdiction: PL
+    jurisdiction_name: Poland
+    regime: e-invoicing-b2b
+    regime_label: National e-Invoice System (KSeF — Krajowy System e-Faktur)
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      VAT taxpayers whose sales value including the tax amount exceeded PLN 200,000,000 in 2024.
+    threshold_type: turnover
+    threshold_value: 200000000
+    threshold_currency: PLN
+    threshold_operator: gt
+    threshold_basis: Sales value including the tax amount (wartość sprzedaży wraz z kwotą podatku)
+    threshold_period: calendar year 2024 — a fixed historical year, not a rolling period
+    threshold_definition: >-
+      The portal gates the first phase on sales exceeding "200 mln zł" in 2024. Because the
+      reference year is fixed at 2024, a company cannot fall out of this phase by shrinking in
+      2025: whoever was above the line in 2024 is in the February cohort permanently.
+    format_name: FA (KSeF structured invoice schema)
+    format_version: FA(3)
+    format_note: FA_RR(1) applies to agricultural invoices from April 2026.
+    mandatory_from: '2026-02-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Ustawa z dnia 5 sierpnia 2025 r. o zmianie ustawy o podatku od towarów i usług
+      (Dz. U. 2025 poz. 1203).
+    source_url: https://ksef.podatki.gov.pl/informacje-ogolne-ksef-20/podstawy-prawne-oraz-kluczowe-terminy/
+    source_title: >-
+      "Podstawy prawne oraz kluczowe terminy" — legal basis and key dates, Ministry of Finance
+      KSeF portal (ksef.podatki.gov.pl)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://ksef.podatki.gov.pl/informacje-ogolne-ksef-20/zakres-obowiazkowego-ksef/
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Read directly on 2026-10-07: the 1 February 2026 date, the PLN 200 million threshold, the
+      2024 reference year, and the citing act Dz. U. 2025 poz. 1203.
+    unknowns:
+      - >-
+        Whether the PLN 200m test is measured on taxable sales only or on total sales including
+        exempt supplies is not specified on the portal page read.
+    notes: >-
+      The February cohort is small in number but includes most large Polish groups and their
+      suppliers' counterparties, so it drives supplier readiness well ahead of April.
+
+  - obligation_id: PL-e-invoicing-b2b-issue-turnover-lte-200m-pln
+    jurisdiction: PL
+    jurisdiction_name: Poland
+    regime: e-invoicing-b2b
+    regime_label: National e-Invoice System (KSeF — Krajowy System e-Faktur)
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      All remaining VAT taxpayers — those whose 2024 sales value including the tax amount did not
+      exceed PLN 200,000,000.
+    threshold_type: turnover
+    threshold_value: 200000000
+    threshold_currency: PLN
+    threshold_operator: lte
+    threshold_basis: Sales value including the tax amount (wartość sprzedaży wraz z kwotą podatku)
+    threshold_period: calendar year 2024 — a fixed historical year, not a rolling period
+    threshold_definition: >-
+      The residual cohort: everyone not caught by the PLN 200 million 2024 test. The portal
+      describes this phase as "all remaining entrepreneurs" from 1 April 2026, subject to the
+      PLN 10,000/month small-invoice transition recorded in tolerance_ends.
+    format_name: FA (KSeF structured invoice schema)
+    format_version: FA(3)
+    format_note: FA_RR(1) applies to agricultural invoices from April 2026.
+    mandatory_from: '2026-04-01'
+    tolerance_ends: '2026-12-31'
+    tolerance_note: >-
+      Small-invoice transition running to 31 December 2026. A taxpayer otherwise obliged to issue
+      structured invoices may still issue electronic or paper invoices in a given month where the
+      total value of sales including tax documented by those invoices is PLN 10,000 or less. Cash
+      registers and fiscal receipts bearing the purchaser's NIP — treated as simplified invoices,
+      up to PLN 450 or EUR 100 — also remain usable to 31 December 2026, as does the deferral of
+      the duty to quote KSeF numbers in B2B payments.
+    legal_instrument: >-
+      Ustawa z dnia 5 sierpnia 2025 r. o zmianie ustawy o podatku od towarów i usług
+      (Dz. U. 2025 poz. 1203).
+    source_url: https://ksef.podatki.gov.pl/informacje-ogolne-ksef-20/podstawy-prawne-oraz-kluczowe-terminy/
+    source_title: >-
+      "Podstawy prawne oraz kluczowe terminy" — legal basis and key dates, Ministry of Finance
+      KSeF portal (ksef.podatki.gov.pl)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://ksef.podatki.gov.pl/informacje-ogolne-ksef-20/zakres-obowiazkowego-ksef/
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Read directly on 2026-10-07: the 1 April 2026 date for remaining taxpayers, and the
+      PLN 10,000 monthly small-invoice transition expiring at the end of 2026.
+    unknowns:
+      - >-
+        Whether the PLN 10,000 monthly test is applied per month independently (so a taxpayer can
+        move in and out of the transition month to month) or is forfeited permanently once
+        breached is not stated on the portal page read.
+    notes: >-
+      Out of scope per the portal: B2C invoices (voluntary), foreign entities with no Polish seat
+      or fixed establishment, invoices under OSS, IOSS and the SME exemption, certain transport and
+      toll services, and self-invoicing where a party lacks a Polish NIP.

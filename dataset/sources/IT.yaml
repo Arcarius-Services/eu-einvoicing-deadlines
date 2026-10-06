@@ -1,0 +1,62 @@
+jurisdiction: IT
+jurisdiction_name: Italy
+obligations:
+- obligation_id: IT-e-invoicing-b2b-issue-forfetario-residual
+  jurisdiction: IT
+  jurisdiction_name: Italy
+  regime: e-invoicing-b2b
+  regime_label: Electronic invoicing via the Sistema di Interscambio (SdI)
+  direction: issue
+  counterparty_scope: b2b-and-b2c
+  bound_party: Taxpayers applying the Italian flat-rate regime (regime forfetario, L. 190/2014 art. 1
+    cc. 54–89) who were not already required to issue electronic invoices from 1 July 2022 — i.e. those
+    whose revenue or fees in the preceding year, pro-rated to a full year, did not exceed EUR 25,000.
+  threshold_type: revenue_or_fees
+  threshold_value: 25000
+  threshold_currency: EUR
+  threshold_operator: lte
+  threshold_basis: Ricavi conseguiti ovvero compensi percepiti, ragguagliati ad anno (revenue earned or
+    fees received, pro-rated to a full year).
+  threshold_period: the year preceding the relevant commencement date
+  threshold_definition: DL 36/2022 art. 18 c. 3 brought the obligation forward to 1 July 2022 for forfetario
+    taxpayers who "nell'anno precedente abbiano conseguito ricavi ovvero percepito compensi, ragguagliati
+    ad anno, superiori a euro 25.000". This row is the residual cohort at or below that figure, for whom
+    the obligation runs from 1 January 2024 "a prescindere dall'entità dei ricavi conseguiti o compensi
+    percepiti" — irrespective of revenue. So the threshold selects the commencement date, and from 1 January
+    2024 it no longer screens anyone out.
+  format_name: FatturaPA XML, transmitted through the Sistema di Interscambio (SdI)
+  format_version: '1.9'
+  format_note: National format, not EN 16931. Technical specifications v1.9 usable from 1 April 2025;
+    v1.9.1 usable from 15 May 2026. Agenzia delle Entrate has published no date on which v1.9 ceases to
+    be accepted by the SdI, so v1.9 is recorded as the current floor rather than v1.9.1.
+  mandatory_from: '2024-01-01'
+  tolerance_ends: null
+  tolerance_note: null
+  legal_instrument: 'DL 30 aprile 2022 n. 36, art. 18 cc. 2–3, which repealed the exemption in art. 1
+    c. 3 of D.Lgs. 5 agosto 2015 n. 127. Administrative interpretation: Agenzia delle Entrate Circolare
+    n. 32/E of 5 December 2023.'
+  source_url: https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto:2022-04-30;36~art18!vig
+  source_title: Decreto-legge 30 aprile 2022 n. 36, art. 18 — consolidated text in force, Normattiva (Istituto
+    Poligrafico e Zecca dello Stato)
+  source_type: statute
+  secondary_source_urls:
+  - https://www.agenziaentrate.gov.it/portale/documents/20143/5718712/Circolare_n_32_Regime+forfetario_05_12_2023.pdf/23d1370d-6bba-0eb7-70b8-d1d24d5a1c0f
+  - https://www.agenziaentrate.gov.it/portale/specifiche-tecniche-versione-1.9
+  - https://www.agenziaentrate.gov.it/portale/specifiche-tecniche-versione-1.9.1-%C2%A0-utilizzabili-dal-15-maggio-2026-
+  checked_on: '2026-10-07'
+  confidence: verified
+  confidence_note: Commi 2 and 3 of DL 36/2022 art. 18 read directly from the Normattiva consolidated
+    "vigente" text on 2026-10-07, confirming both dates and the EUR 25,000 / ragguagliati ad anno wording.
+    FatturaPA version dates read directly from the two Agenzia delle Entrate specification pages on 2026-10-07.
+  unknowns:
+  - Whether any penalty-free grace period applied to the 1 January 2024 cohort. The 1 July 2022 cohort
+    had one under DL 36/2022 art. 18 c. 3 for the third quarter of 2022; no equivalent for 2024 was located
+    in this pass.
+  - The 'contribuenti minimi' (DL 98/2011 art. 27) and amateur sports bodies were covered by the same
+    repealed exemption in art. 1 c. 3 D.Lgs. 127/2015, but were not separately verified here and have
+    no row yet.
+  - The date on which FatturaPA specification v1.9 stops being accepted by the SdI. Agenzia delle Entrate
+    states only that v1.9.1 is 'utilizzabile' from 15 May 2026.
+  notes: Italy's general SdI mandate dates from 1 January 2019; this row records only the final extension
+    that pulled the smallest flat-rate taxpayers in. The 2019 general row and the 1 July 2022 cohort row
+    are not yet recorded.
