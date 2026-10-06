@@ -1,0 +1,153 @@
+---
+import Base from '../../../../layouts/Base.astro'
+import ObligationTable from '../../../../components/ObligationTable.astro'
+import { buildCheckerPages, BANDS, fmtDate, fmtThreshold } from '../../../../data/obligations.js'
+
+export function getStaticPaths() {
+  return buildCheckerPages().map((p) => ({
+    params: { country: p.country.slug, direction: p.direction.slug, band: p.band.slug },
+    props: p,
+  }))
+}
+
+const { country, direction, band, binding, partial, unresolved, answer, all } = Astro.props
+const base = import.meta.env.BASE_URL
+
+// The national threshold cuts through this band, so there is more than one answer
+// inside it. We give every one of them with the turnover range it applies to.
+const splitAnswer = !answer && partial.length > 0
+
+// Unique per page: country x direction x band appears in both title and description.
+const title = `${country.name} e-invoicing: when must a ${band.label.toLowerCase()} business ${direction.verb}? | EU E-Invoicing Deadlines`
+
+const description = answer
+  ? `${band.label} businesses (${band.blurb}) must ${direction.verb} electronic invoices in ${country.name} from ${fmtDate(answer.mandatory_from)}. Source, legal instrument and last-checked date on the page.`
+  : splitAnswer
+    ? `${country.name} splits this obligation inside the ${band.label.toLowerCase()} band (${band.blurb}). ${partial.length} different start dates apply depending on your turnover — each one with its primary source.`
+    : `What we know about the ${direction.verb} obligation for ${band.label.toLowerCase()} businesses (${band.blurb}) in ${country.name}, with the primary source for every claim.`
+
+const other = Object.values(BANDS)
+---
+<Base title={title} description={description}>
+  <p class="muted">
+    <a href={`${base}countries/`}>Countries</a> &rsaquo; {country.name} &rsaquo; {direction.label}
+  </p>
+
+  <h1>{country.name}: when must a {band.label.toLowerCase()} business {direction.verb} electronic invoices?</h1>
+  <p class="lede">{band.label} = {band.blurb}, per EU Recommendation 2003/361.</p>
+
+  {answer ? (
+    <div class="answer">
+      <span class="date">{fmtDate(answer.mandatory_from)}</span>
+      <p>
+        From this date, {answer.bound_party} must {direction.verb} electronic invoices
+        {answer.format_name && <> in <strong>{answer.format_name} {answer.format_version}</strong></>}.
+        {' '}<span class={`badge ${answer.confidence}`}>{answer.confidence}</span>
+      </p>
+      {answer.tolerance_ends && (
+        <p class="muted">
+          A published tolerance window runs to {fmtDate(answer.tolerance_ends)}.
+          {answer.tolerance_note ? ` ${answer.tolerance_note}` : ' A tolerance suspends penalties, not the obligation itself.'}
+        </p>
+      )}
+      <p class="muted">
+        {answer.legal_instrument} &middot;
+        <a href={answer.source_url} rel="nofollow noopener">primary source</a> &middot;
+        last checked {fmtDate(answer.checked_on)}
+      </p>
+    </div>
+  ) : splitAnswer ? (
+    <div class="answer">
+      <p style="margin-top:0">
+        <strong>{country.name} splits this obligation inside the {band.label.toLowerCase()} band.</strong>
+        {' '}The national threshold does not line up with the EU size bands, so your date depends on
+        where your turnover actually sits:
+      </p>
+      <table>
+        <thead><tr><th>If your&hellip;</th><th>You must {direction.verb} from</th><th>Format</th><th>Proof</th></tr></thead>
+        <tbody>
+          {partial.map(({ row, range }) => (
+            <tr>
+              <td>{range.label}</td>
+              <td><strong>{fmtDate(row.mandatory_from) ?? 'not published'}</strong></td>
+              <td>{row.format_name ? `${row.format_name} ${row.format_version}` : <span class="muted">not specified</span>}</td>
+              <td><a href={row.source_url} rel="nofollow noopener">source</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="muted">
+        Measured against {(partial[0].row.threshold_basis ?? 'the basis named in the source').replace(/\.\s*$/, '')}.
+      </p>
+    </div>
+  ) : (
+    <div class="answer unknown">
+      <span class="date">No dated obligation</span>
+      <p>
+        Our dataset holds no obligation with a published start date that binds every
+        {' '}{band.label.toLowerCase()} business ({band.blurb}) {direction.verb === 'report' ? 'reporting' : `${direction.verb}ing`} in {country.name}.
+        {unresolved.length > 0
+          ? ' There are rows below that may apply to you — they are sized against something we cannot read off a turnover band.'
+          : ' That is a statement about what is published, not a guarantee that nothing applies to you.'}
+      </p>
+    </div>
+  )}
+
+  {binding.length > 1 && (
+    <>
+      <h2>Everything that binds a {band.label.toLowerCase()} business here</h2>
+      <ObligationTable rows={binding} />
+    </>
+  )}
+
+  {unresolved.length > 0 && (
+    <>
+      <h2>May apply &mdash; we will not guess these</h2>
+      <div class="note">
+        Each row below is sized against something we cannot derive from a turnover band: a
+        non-euro threshold with no exchange rate attached, or a test on headcount, balance sheet
+        or invoice value. The threshold is printed in the source&rsquo;s own terms so you can
+        check it against your own accounts rather than trust our arithmetic.
+      </div>
+      <table>
+        <thead>
+          <tr><th>Who it binds</th><th>Threshold</th><th>Measured against</th><th>From</th><th>Source</th></tr>
+        </thead>
+        <tbody>
+          {unresolved.map((r) => (
+            <tr>
+              <td>{r.bound_party}</td>
+              <td>{fmtThreshold(r)}</td>
+              <td>{r.threshold_basis ?? <span class="muted">not published</span>}</td>
+              <td>{fmtDate(r.mandatory_from) ?? <span class="muted">not published</span>}</td>
+              <td><a href={r.source_url} rel="nofollow noopener">source</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  )}
+
+  <h2>Other company sizes in {country.name}</h2>
+  <ul class="bands">
+    {other.map((b) => (
+      <li>
+        <a
+          href={`${base}e-invoicing/${country.slug}/${direction.slug}/${b.slug}/`}
+          aria-current={b.slug === band.slug ? 'page' : undefined}
+        >{b.label}</a>
+      </li>
+    ))}
+  </ul>
+
+  <h2>All {direction.label.toLowerCase()} obligations in {country.name}, every size</h2>
+  <ObligationTable rows={all} />
+
+  <h2>Get this as JSON</h2>
+  <p>
+    The same rows behind this page are available over an API, keyed and rate limited.
+    See the <a href={`${base}docs/`}>API docs</a> and <a href={`${base}pricing/`}>pricing</a>.
+  </p>
+  <pre><code>{`GET /v1/obligations?jurisdiction=${country.iso2}&direction=${direction.slug}
+X-API-Key: <your key>`}</code></pre>
+</Base>

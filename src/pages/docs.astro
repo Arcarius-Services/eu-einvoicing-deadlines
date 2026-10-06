@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro'
+import { loadDataset, contextRows } from '../data/obligations.js'
+
+const { schemaVersion, rowCount } = loadDataset()
+const excluded = contextRows()
+const base = import.meta.env.BASE_URL
+
+const columns = [
+  ['obligation_id', 'Stable primary key. Never reused, never renamed.'],
+  ['jurisdiction / jurisdiction_name', 'ISO 3166-1 alpha-2, plus the English name. EU for Union-level instruments, XX for standards bodies.'],
+  ['regime', 'e-invoicing-b2b, e-invoicing-b2g, e-invoicing-b2c, e-reporting, format-version.'],
+  ['bound_party', "Who the duty binds, in the source's own words."],
+  ['threshold_type / _value / _currency / _operator / _basis', 'The size test, and what period it is measured over. A threshold without its basis is not a threshold.'],
+  ['direction', 'issue, receive or report. One direction per row — these are separate duties.'],
+  ['format_name / format_version', 'The required format. Version is always present when a format is named.'],
+  ['mandatory_from', 'First date the duty bites. Null only when confidence is unknown.'],
+  ['tolerance_ends / tolerance_note', 'A published grace window. Distinct from mandatory_from: a tolerance suspends penalties, not the obligation.'],
+  ['legal_instrument', 'The named act or decree, with its gazette reference where there is one.'],
+  ['source_url / source_type', 'No row ships without a source URL.'],
+  ['checked_on', 'The date a human last read that URL and confirmed the row.'],
+  ['confidence', 'verified (primary source), reported (credible secondary), unknown (we looked and it is not published).'],
+]
+---
+<Base
+  title="API docs | EU E-Invoicing Deadlines"
+  description="One keyed JSON endpoint over the EU e-invoicing obligation dataset. Key in an X-API-Key header, per-key daily rate limits, documented row schema."
+>
+  <h1>API</h1>
+  <p class="lede">
+    One endpoint, one header, flat rows. Schema <code>{schemaVersion}</code>, {rowCount} rows.
+  </p>
+
+  <h2>Authentication</h2>
+  <p>
+    Send your key in the <code>X-API-Key</code> header. Keys are
+    <strong>never accepted in a query string</strong> &mdash; a key in a URL ends up in browser
+    history, proxy logs and referrer headers, so we reject it outright rather than let you leak it
+    by accident. We store only a hash of your key: if you lose it we can revoke it, we cannot tell
+    you what it was.
+  </p>
+  <pre><code>{`curl -H "X-API-Key: $KEY" https://api.example/v1/obligations?jurisdiction=BE`}</code></pre>
+
+  <h2>Endpoints</h2>
+  <table>
+    <thead><tr><th>Method</th><th>Path</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>GET</td><td><code>/v1/health</code></td><td>Liveness. No key needed, not counted.</td></tr>
+      <tr><td>GET</td><td><code>/v1/obligations</code></td><td>Query rows. Filters: <code>jurisdiction</code>, <code>direction</code>, <code>regime</code>, <code>confidence</code>, <code>limit</code>, <code>offset</code>.</td></tr>
+      <tr><td>GET</td><td><code>/v1/obligations/:obligation_id</code></td><td>One row by its stable id.</td></tr>
+      <tr><td>GET</td><td><code>/v1/meta</code></td><td>Schema version, row count, and your key&rsquo;s current quota usage.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Rate limits</h2>
+  <p>
+    Enforced per key, per rolling 24 hours. Every response carries your position:
+  </p>
+  <pre><code>{`X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 97
+X-RateLimit-Reset: 1760000000`}</code></pre>
+  <p>
+    Over the limit you get <code>429</code> with <code>Retry-After</code> in seconds. See
+    {' '}<a href={`${base}pricing/`}>pricing</a> for the limit on each plan.
+  </p>
+
+  <h2>Errors</h2>
+  <table>
+    <thead><tr><th>Status</th><th>Code</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>400</td><td><code>key_in_query_string</code></td><td>You put the key in the URL. Move it to the header and rotate the key.</td></tr>
+      <tr><td>401</td><td><code>missing_key</code> / <code>invalid_key</code></td><td>No <code>X-API-Key</code> header, or no live key matches it.</td></tr>
+      <tr><td>403</td><td><code>insufficient_scope</code></td><td>Your key is not scoped to this endpoint.</td></tr>
+      <tr><td>404</td><td><code>not_found</code></td><td>No such obligation id or route.</td></tr>
+      <tr><td>429</td><td><code>rate_limited</code></td><td>Daily quota spent. <code>Retry-After</code> tells you when it resets.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Row schema</h2>
+  <table>
+    <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+    <tbody>{columns.map(([f, m]) => <tr><td><code>{f}</code></td><td>{m}</td></tr>)}</tbody>
+  </table>
+
+  <h2>What the checker pages leave out</h2>
+  <p>
+    The public pages only show duties that bind a company in a specific country. The API also
+    returns Union-level instruments (<code>jurisdiction: EU</code>) and the standards-body release
+    calendar (<code>regime: format-version</code>), which are context rather than an obligation
+    anyone owes. {excluded.length} such rows are in the dataset now.
+  </p>
+
+  <h2>Stability promise</h2>
+  <ul>
+    <li><code>obligation_id</code> is never reused and never renamed.</li>
+    <li>New columns and new rows are a minor version bump with no migration.</li>
+    <li>A rename or deletion is a major bump with a dated migration note.</li>
+    <li>Every change to a row already published gets a dated changelog entry.</li>
+  </ul>
+</Base>

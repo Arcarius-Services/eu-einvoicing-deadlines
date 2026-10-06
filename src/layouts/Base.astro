@@ -1,0 +1,65 @@
+---
+import '../styles/global.css'
+import { loadDataset } from '../data/obligations.js'
+
+const { title, description, noindexReason } = Astro.props
+const { isFixture, schemaVersion, rowCount } = loadDataset()
+
+// One canonical per page, absolute, trailing slash, base path included.
+const canonical = new URL(Astro.url.pathname, Astro.site).href
+
+// Two reasons to refuse indexing: a fixture row is not a fact, and we do not want
+// search engines learning a working title that Odysseus has not signed off.
+// Flip SITE_INDEXABLE=true once the brand and domain are settled.
+const indexable = process.env.SITE_INDEXABLE === 'true'
+const noindex = isFixture || !indexable || Boolean(noindexReason)
+const base = import.meta.env.BASE_URL
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    {isFixture && (
+      <div class="alarm">
+        <strong>FIXTURE BUILD — NOT REAL DATA.</strong> Ledger&rsquo;s dataset
+        (<code>dataset/dist/obligations.json</code>) is not built yet, so this site is rendering
+        placeholder rows for a country that does not exist, with dates in 2099. Every page is
+        <code>noindex</code>. Do not quote anything on this site.
+      </div>
+    )}
+
+    <header class="site">
+      <a class="wordmark" href={base}>EU E-Invoicing Deadlines</a>
+      <nav>
+        <a href={`${base}countries/`}>Countries</a>
+        <a href={`${base}pricing/`}>Pricing</a>
+        <a href={`${base}docs/`}>API docs</a>
+      </nav>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="site">
+      <p>
+        Dataset schema <code>{schemaVersion}</code>, {rowCount} rows. Every date on this site links
+        to the primary source it was read from. We publish the source, the date we last checked it,
+        and our confidence in it — so you can check our work.
+      </p>
+      <p class="muted">
+        Working title pending brand sign-off. Not legal advice; it is a dated citation of a
+        published obligation.
+      </p>
+    </footer>
+  </body>
+</html>

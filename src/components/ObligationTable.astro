@@ -1,0 +1,31 @@
+---
+import { fmtDate, fmtThreshold } from '../data/obligations.js'
+const { rows } = Astro.props
+---
+<table>
+  <thead>
+    <tr>
+      <th>From</th>
+      <th>Who it binds</th>
+      <th>Size</th>
+      <th>Format</th>
+      <th>Confidence</th>
+      <th>Proof</th>
+    </tr>
+  </thead>
+  <tbody>
+    {rows.map((r) => (
+      <tr>
+        <td>{fmtDate(r.mandatory_from) ?? <span class="muted">not published</span>}</td>
+        <td>{r.bound_party}</td>
+        <td>{fmtThreshold(r)}</td>
+        <td>{r.format_name ? `${r.format_name} ${r.format_version}` : <span class="muted">not specified</span>}</td>
+        <td><span class={`badge ${r.confidence}`}>{r.confidence}</span></td>
+        <td>
+          <a href={r.source_url} rel="nofollow noopener">source</a><br />
+          <span class="muted">checked {fmtDate(r.checked_on)}</span>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>

@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro'
+import { listCountries, buildCheckerPages, loadDataset } from '../data/obligations.js'
+
+const countries = listCountries()
+const pageCount = buildCheckerPages().length
+const { rowCount } = loadDataset()
+const base = import.meta.env.BASE_URL
+---
+<Base
+  title="EU e-invoicing deadlines, by country and company size"
+  description="When does each EU member state oblige your company to issue or receive electronic invoices? One answer per country and size band, with the primary source and the date we last checked it."
+>
+  <h1>When does your company have to send electronic invoices?</h1>
+  <p class="lede">
+    Every EU member state is mid-migration, every one of them picked a different date, a different
+    format and a different size threshold. We track the matrix so you do not have to read
+    {' '}{countries.length === 0 ? '27' : countries.length} gazettes.
+  </p>
+
+  <h2>Check a country</h2>
+  {countries.length === 0 ? (
+    <p class="muted">No jurisdictions in the dataset yet.</p>
+  ) : (
+    <ul class="grid">
+      {countries.map((c) => (
+        <li><a href={`${base}e-invoicing/${c.slug}/issue/small/`}>{c.name}</a></li>
+      ))}
+    </ul>
+  )}
+
+  <h2>What makes this different from a blog post</h2>
+  <ul>
+    <li><strong>Every date carries its proof.</strong> A link to the gazette, tax authority or EU instrument it was read from — not a secondary summary of a summary.</li>
+    <li><strong>Every date carries a last-checked stamp.</strong> You can see how stale we are instead of guessing.</li>
+    <li><strong>We mark our own uncertainty.</strong> Rows are labelled verified, reported or unknown. A row we cannot confirm says so rather than quietly rounding itself up.</li>
+    <li><strong>One obligation per row.</strong> Issuing and receiving are separate duties with separate dates, and we never merge them to make a tidier table.</li>
+  </ul>
+
+  <h2>The same data as JSON</h2>
+  <p>
+    {rowCount} obligations, one keyed endpoint, free tier to try it.
+    See the <a href={`${base}docs/`}>API docs</a> or <a href={`${base}pricing/`}>what it costs</a>.
+  </p>
+  <p class="muted">{pageCount} checker pages generated from the dataset. Nothing on this site is typed by hand.</p>
+</Base>

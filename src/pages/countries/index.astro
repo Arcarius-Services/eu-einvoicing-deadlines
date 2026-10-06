@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro'
+import { buildCheckerPages, BANDS, DIRECTIONS } from '../../data/obligations.js'
+
+const pages = buildCheckerPages()
+const base = import.meta.env.BASE_URL
+
+// Which directions each country actually has rows for — we do not link a page that does not exist.
+const byCountry = new Map()
+for (const p of pages) {
+  if (!byCountry.has(p.country.iso2)) byCountry.set(p.country.iso2, { country: p.country, dirs: new Set() })
+  byCountry.get(p.country.iso2).dirs.add(p.direction.slug)
+}
+const entries = [...byCountry.values()].sort((a, b) => a.country.name.localeCompare(b.country.name))
+---
+<Base
+  title="EU e-invoicing obligations by country | EU E-Invoicing Deadlines"
+  description="Every jurisdiction in our dataset, with its issuing, receiving and reporting obligations broken out by company size band."
+>
+  <h1>Every country we cover</h1>
+  <p class="lede">
+    Pick a country and a direction. Each page then splits by company size, because most member
+    states phase the obligation in by turnover.
+  </p>
+
+  {entries.length === 0 ? (
+    <p class="muted">No jurisdictions in the dataset yet.</p>
+  ) : (
+    <table>
+      <thead>
+        <tr><th>Country</th>{Object.values(DIRECTIONS).map((d) => <th>{d.label}</th>)}</tr>
+      </thead>
+      <tbody>
+        {entries.map(({ country, dirs }) => (
+          <tr>
+            <td><strong>{country.name}</strong> <span class="muted">{country.iso2}</span></td>
+            {Object.values(DIRECTIONS).map((d) => (
+              <td>
+                {dirs.has(d.slug) ? (
+                  <>
+                    {Object.values(BANDS).map((b, i) => (
+                      <>
+                        {i > 0 && ' · '}
+                        <a href={`${base}e-invoicing/${country.slug}/${d.slug}/${b.slug}/`}>{b.label}</a>
+                      </>
+                    ))}
+                  </>
+                ) : (
+                  <span class="muted">no rows</span>
+                )}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</Base>
