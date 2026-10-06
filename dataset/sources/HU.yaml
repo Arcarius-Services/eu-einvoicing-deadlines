@@ -1,0 +1,279 @@
+jurisdiction: HU
+jurisdiction_name: Hungary
+obligations:
+
+  # Hungary is a real-time REPORTING regime, not an e-invoicing mandate. Nothing in Hungarian law
+  # obliges a taxable person to issue a structured electronic invoice to another business: paper
+  # and PDF invoices remain lawful. What is obliged is that the invoice DATA reaches NAV, in XML,
+  # immediately. Filing these rows under `e-invoicing-b2b` would tell a buyer to replace their
+  # invoice format when what they actually have to do is bolt a reporting interface onto it.
+
+  - obligation_id: HU-e-reporting-issue-all
+    jurisdiction: HU
+    jurisdiction_name: Hungary
+    regime: e-reporting
+    regime_label: HU Online Számla — real-time invoice data reporting (RTIR)
+    direction: issue
+    counterparty_scope: b2b-and-b2c
+    bound_party: >-
+      Every invoice issuer subject to the Hungarian VAT Act's invoicing rules, for every invoice,
+      corrective invoice and cancelling invoice to which those rules apply — including invoices to
+      private individuals, to foreign taxable persons, and invoices issued outside Hungary where
+      Hungarian VAT arises.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test, and no per-invoice value test. The HUF 100,000 VAT floor that existed in the
+      first phase was abolished on 2020-07-01 and the remaining customer-type restriction was
+      abolished on 2021-01-04. Since then every invoice in scope of the Áfa tv. invoicing rules is
+      reportable regardless of the issuer's size or the invoice's value.
+    format_name: NAV Online Számla invoice data XML (XSD)
+    format_version: '3.0'
+    format_note: >-
+      Version 3.0 of the Online Invoice schema set (API, Data, Annulment, Metrics, plus the shared
+      Common and invoiceBase XSDs) is the version the expanded reporting runs on; NAV's own
+      changelog states the 3.0 features "can only be used from 04.01.2021" and that earlier use is
+      rejected. Whether a 3.0.x point release is currently the one in force was not established —
+      see unknowns. This is an XML reporting schema, not an invoice format: it does not have to be
+      what the issuer sends the customer.
+    mandatory_from: '2021-01-04'
+    tolerance_ends: '2021-03-31'
+    tolerance_note: >-
+      Penalty tolerance only, and only for the newly in-scope invoices. NAV: for the period
+      2021-01-04 to 2021-03-31 it imposed no default fine (mulasztási bírság) on taxable persons
+      who failed to report, or misreported, the invoices that newly entered scope on 2021-01-04,
+      subject to stated conditions. The reporting duty itself ran from 2021-01-04; only the fine
+      was withheld. The tolerance did not extend to invoices already in scope before that date.
+    legal_instrument: >-
+      2007. évi CXXVII. törvény az általános forgalmi adóról (VAT Act) § 158/A and Annex 10
+      (10. számú melléklet), read with §§ 169–172 and § 176; default-fine power under
+      2017. évi CL. törvény (Art.) § 229.
+    source_url: https://nav.gov.hu/ado/afa/A_szamlakibocsatok_sz20201231
+    source_title: >-
+      NAV, "A számlakibocsátók számlaadat-szolgáltatásának 2021. január 4-től hatályos szabályai"
+      (nav.gov.hu), published 2021-01-04
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://github.com/nav-gov-hu/Online-Invoice/blob/master/src/schemas/nav/gov/hu/OSA/CHANGELOG_3.0.md
+      - https://onlineszamla.nav.gov.hu/api/files/container/download/Online%20Szamla_Interfesz%20specifik%C3%A1ci%C3%B3_EN_v3.0.pdf
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      NAV's own guidance page read on 2026-10-07. It cites Áfa tv. § 158/A and Annex 10, states
+      that from 2021-01-04 data must be reported not only for invoices to customers registered as
+      taxable persons in Hungary but for every invoice to which the Áfa tv. invoicing rules apply,
+      and states the 2021-01-04 to 2021-03-31 fine-free window for the newly in-scope invoices.
+      The 3.0 schema version and its 2021-01-04 activation were read from NAV's own schema
+      changelog in the nav-gov-hu GitHub organisation.
+    unknowns:
+      - >-
+        Whether a 3.0.x point release (rather than plain 3.0) is the version currently required was
+        not established. NAV's GitHub release tags stop at API-2.0 and the 3.0 changelog lists no
+        point releases, while secondary sources claim NAV withdrew 2.0 support on 2025-05-15 — a
+        date that cannot be reconciled with 3.0 being mandatory since 2021 and was not confirmed
+        against NAV.
+      - >-
+        Hungary's separate mandatory e-invoicing duty in the energy sector (electricity and gas
+        supplied to non-residential customers) is not yet a row. It is a genuine e-invoicing
+        mandate rather than reporting, so it needs its own regime row and its own source read.
+      - >-
+        Whether a non-established but Hungarian-VAT-registered supplier is inside the reporting
+        duty is not recorded at row level.
+    notes: >-
+      Submission deadline depends on how the invoice is produced. From invoicing software: in XML
+      over the machine-to-machine interface immediately on issue, without human intervention. From
+      a pre-printed invoice book: within one calendar day of issue if the VAT charged is HUF
+      500,000 or more, otherwise within four calendar days. Reporting counts as performed only
+      once the Online Számla system has received it and confirmed successful processing — a
+      submitted-but-rejected file is an unperformed obligation, which is the detail that catches
+      implementers out.
+
+  - obligation_id: HU-e-reporting-issue-domestic-taxable-customer
+    jurisdiction: HU
+    jurisdiction_name: Hungary
+    regime: e-reporting
+    regime_label: HU Online Számla — real-time invoice data reporting (RTIR)
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Invoice issuers, for invoices issued to customers registered as taxable persons in Hungary —
+      the scope of the regime between 2020-07-01 and 2021-01-03, retained as a historical row.
+    threshold_type: entity_type
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: Customer is a taxable person registered in Hungary (belföldön nyilvántartásba vett áfaalany)
+    threshold_period: null
+    threshold_definition: >-
+      The test in this phase was on the customer, not on the supplier's size. From 2020-07-01 the
+      HUF 100,000 VAT floor was removed and data had to be reported for every invoice issued to a
+      Hungarian-registered taxable person whatever the VAT amount, which pulled reverse-charge and
+      exempt supplies into scope for the first time. Invoices to private individuals and to foreign
+      customers stayed out of scope until 2021-01-04.
+    format_name: NAV Online Számla invoice data XML (XSD)
+    format_version: '2.0'
+    format_note: >-
+      This phase ran on schema 2.0; the 3.0 schema could not be used before 2021-01-04. Version
+      number taken from NAV's published interface specification v2.0 and its API-2.0 release tag.
+      Recorded for the audit trail — a buyer reconstructing a 2020 position needs the version that
+      was actually in force then, not today's.
+    mandatory_from: '2020-07-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      2007. évi CXXVII. törvény az általános forgalmi adóról, § 10. számú melléklet, in the wording
+      in force from 2020-07-01.
+    source_url: https://nav.gov.hu/ado/afa/A_szamlakibocsatok_sz20201231
+    source_title: >-
+      NAV, "A számlakibocsátók számlaadat-szolgáltatásának 2021. január 4-től hatályos szabályai"
+      (nav.gov.hu)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://onlineszamla.nav.gov.hu/api/files/container/download/Online%20Szamla_Interfesz%20specifik%C3%A1ci%C3%B3_EN_v2.0.pdf
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      The customer-type scope of this phase is established from the primary source — NAV's
+      2021-01-04 page states the pre-2021 position was that data were reported only for invoices
+      to customers registered as taxable persons in Hungary. The 2020-07-01 commencement date
+      itself is NOT in that page and was taken from secondary Hungarian practitioner coverage, so
+      the row is graded reported rather than verified. Confidence labelling is not something to
+      round up: the scope is primary, the date is not, and the lower of the two governs.
+    unknowns:
+      - >-
+        The 2020-07-01 commencement date has not been read from a primary source. The amending act
+        and the Annex 10 wording in force on that date were not retrieved.
+    notes: >-
+      Kept as a historical row rather than deleted. The change log is a product, and this is the
+      row that tells a buyer being audited for 2020 which invoices they should have reported.
+
+  - obligation_id: HU-e-reporting-issue-vat-100k-per-invoice
+    jurisdiction: HU
+    jurisdiction_name: Hungary
+    regime: e-reporting
+    regime_label: HU Online Számla — real-time invoice data reporting (RTIR)
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Invoice issuers, for invoices to Hungarian-registered taxable persons carrying HUF 100,000 or
+      more of charged VAT — the scope of the regime from 2018-07-01 to 2020-06-30, retained as a
+      historical row.
+    threshold_type: revenue_or_fees
+    threshold_value: 100000
+    threshold_currency: HUF
+    threshold_operator: gte
+    threshold_basis: VAT charged (áthárított adó) on the individual invoice
+    threshold_period: per invoice — not a period measure
+    threshold_definition: >-
+      A PER-INVOICE test, not a size band on the company: an invoice between Hungarian taxable
+      persons was reportable if the VAT charged on it reached HUF 100,000. Schema v1 has no
+      per-invoice threshold_type, so `revenue_or_fees` is used and `threshold_period` says
+      explicitly that this is not measured over a period. Do not band a company against this
+      figure. Abolished on 2020-07-01.
+    format_name: NAV Online Számla invoice data XML (XSD)
+    format_version: '1.1'
+    format_note: >-
+      The system went live on 2018-07-01 on schema 1.x; NAV's release tags record API-1.0 as the
+      "first production release since 01-07-2018" and API-1.1 as an upgrade, with API-2.0 arriving
+      later. Which of 1.0 / 1.1 applied on a given date in that phase was not pinned down.
+    mandatory_from: '2018-07-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      2007. évi CXXVII. törvény az általános forgalmi adóról, § 10. számú melléklet, in the wording
+      in force from 2018-07-01.
+    source_url: https://nav.gov.hu/ado/afa/A_szamlakibocsatok_sz20201231
+    source_title: >-
+      NAV, "A számlakibocsátók számlaadat-szolgáltatásának 2021. január 4-től hatályos szabályai"
+      (nav.gov.hu)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://github.com/nav-gov-hu/Online-Invoice/releases
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      Phase recorded from secondary Hungarian practitioner coverage of the 2018 go-live and of the
+      2020-07-01 removal of the HUF 100,000 floor. NAV's 2021-01-04 page, which is the primary
+      source held for this jurisdiction, describes the pre-2021 scope but does not state the 2018
+      date or the HUF 100,000 figure, so this row cannot be graded verified.
+    unknowns:
+      - >-
+        Neither the 2018-07-01 commencement date nor the HUF 100,000 VAT figure has been read from
+        a primary source.
+      - >-
+        The exact schema version in force at go-live (1.0 vs 1.1) is not established.
+    notes: >-
+      Historical row. Both this phase and the 2020-07-01 phase are closed, so neither binds anyone
+      today; they exist because an audit of an open earlier year is exactly when a buyer needs to
+      know what the rule was then.
+
+  - obligation_id: HU-e-invoicing-b2g-receive-all
+    jurisdiction: HU
+    jurisdiction_name: Hungary
+    regime: e-invoicing-b2g
+    regime_label: HU public procurement — contracting authorities must receive e-invoices
+    direction: receive
+    counterparty_scope: b2g
+    bound_party: >-
+      Hungarian contracting authorities and contracting entities, obliged to receive and process
+      electronic invoices conforming to the European standard in public procurement.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test. Directive 2014/55/EU binds contracting authorities irrespective of the
+      supplier's size. Hungary is reported not to have taken the extra year that the directive
+      allowed for sub-central authorities, so the 2019 date is reported to apply to all of them
+      rather than only to central bodies — that is the specific point the unknowns flag.
+    format_name: EN 16931 (European standard on electronic invoicing)
+    format_version: EN 16931-1:2017
+    format_note: >-
+      Core invoice semantic data model under EN 16931-1:2017, in one of the syntaxes on the list
+      published in the Official Journal. No Hungarian CIUS was identified; whether one exists was
+      not checked.
+    mandatory_from: '2019-04-18'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Directive 2014/55/EU on electronic invoicing in public procurement, art. 7 and art. 11;
+      reported to be transposed by 2018. évi LXXXIII. törvény amending 2015. évi CXLIII. törvény a
+      közbeszerzésekről (Kbt.). The transposing provision was not read.
+    source_url: https://ec.europa.eu/digital-building-blocks/sites/spaces/DIGITAL/pages/467108888/eInvoicing+in+Hungary
+    source_title: >-
+      European Commission, "eInvoicing in Hungary" (Digital Building Blocks country page)
+    source_type: secondary
+    secondary_source_urls:
+      - https://eur-lex.europa.eu/legal-content/HU/ALL/?uri=CELEX%3A32014L0055
+      - https://www.pwc.com/hu/en/pressroom/2019/electronic_invoicing.html
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      Taken from the European Commission's country page on 2026-10-07, which states that Hungarian
+      public bodies must receive and process EN 16931-compliant e-invoices and that Hungary did not
+      use the extra year available to sub-central authorities. The Commission's country page is a
+      description of national law, not the national instrument, so it is secondary for this purpose
+      and the row is graded reported. Primary source supremacy: this becomes verified when the Kbt.
+      amendment is read on njt.hu, not before.
+    unknowns:
+      - >-
+        The Hungarian transposing provision (the 2018. évi LXXXIII. törvény amendment to the Kbt.)
+        has not been read. Both the 2019-04-18 date and the claim that sub-central authorities were
+        not given until 2020-04-18 rest on secondary description.
+      - >-
+        Whether Hungarian contracting authorities are additionally obliged to receive via a
+        specific channel or network is not recorded.
+      - >-
+        Whether suppliers to Hungarian public bodies have a matching duty to ISSUE electronically
+        is not recorded; the directive imposes the receiving duty only.
+    notes: >-
+      Recorded as a separate regime from Online Számla on purpose. A Hungarian supplier invoicing a
+      public body is in both: it must report the invoice data to NAV under e-reporting, and it may
+      send an EN 16931 invoice that the authority must accept under this row. They are different
+      duties with different formats and different dates, and collapsing them would be wrong.

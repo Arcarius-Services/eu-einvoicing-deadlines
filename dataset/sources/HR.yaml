@@ -1,0 +1,468 @@
+jurisdiction: HR
+jurisdiction_name: Croatia
+obligations:
+
+  # "Fiskalizacija 2.0" is legislated, not announced. The Zakon o fiskalizaciji was passed by the
+  # Hrvatski sabor on 2025-06-06, published in Narodne novine 89/2025 on 2025-06-13 and entered
+  # into force on 2025-09-01. The B2B eRačun provisions were read verbatim from the gazette PDF on
+  # 2026-10-07, so these are `verified` rows, not `unknown` ones.
+  #
+  # Croatia is also two regimes at once, and conflating them would be wrong. Članak 38 and 41
+  # create an e-INVOICING duty (issue and receive a structured eRačun). Članak 47 separately
+  # creates an e-REPORTING duty: the issuer AND the recipient must each fiscalise every eRačun
+  # into the Sustav za fiskalizaciju. One invoice, two obligations, recorded as separate rows.
+
+  - obligation_id: HR-e-invoicing-b2b-issue-vat-registered
+    jurisdiction: HR
+    jurisdiction_name: Croatia
+    regime: e-invoicing-b2b
+    regime_label: HR Fiskalizacija 2.0 — eRačun in business between taxable persons
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Taxable persons with their seat, residence or habitual residence in Croatia who are entered
+      in the VAT register (registar obveznika PDV-a), for domestic transactions carried out to a
+      recipient of an eRačun — čl. 38(1)(1) and čl. 38(2).
+    threshold_type: entity_type
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: Entered in the Croatian VAT register (upisan u registar obveznika PDV-a)
+    threshold_period: null
+    threshold_definition: >-
+      No turnover or headcount test anywhere in the Act. The discriminator is entity class, and it
+      decides the DATE, not whether the duty applies at all: VAT-registered issuers are bound from
+      2026-01-01 (čl. 38(1)(1)), while non-VAT-registered income-tax and corporate-tax payers and
+      public bodies are bound to issue only from 2027-01-01 (čl. 38(1)(2) and (3), deferred by
+      čl. 80). This is a live discriminator — a Croatian business genuinely has to know whether it
+      is on the VAT register to know which of the two dates binds it.
+    format_name: EU norma (EN 16931-1:2017 with the Croatian Porezna uprava extensions)
+    format_version: EN 16931-1:2017
+    format_note: >-
+      Čl. 36: "Svaki eRačun mora biti u skladu s EU normom." Čl. 2(9) defines "EU norma" as EN
+      16931-1:2017 TOGETHER WITH the "Tehnička specifikacija osnovne uporabe eRačuna s
+      proširenjima" issued by the Porezna uprava, which describes how the EU norm is applied and
+      extended — i.e. a Croatian CIUS, and compliance with bare EN 16931 is not enough. The
+      version of that Croatian technical specification is not pinned by the Act and was not
+      established; see unknowns. Čl. 42 additionally requires every goods or services line to
+      carry the correct six-digit KPD classification code maintained by the Državni zavod za
+      statistiku, which is a Croatia-specific content requirement on top of the EU norm.
+    mandatory_from: '2026-01-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zakon o fiskalizaciji ("Narodne novine" br. 89/2025), čl. 38(1)(1), čl. 38(2), čl. 36,
+      čl. 2(9), čl. 42; commencement under čl. 80.
+    source_url: https://narodne-novine.nn.hr/eli/sluzbeni/2025/89/1233/pdf
+    source_title: >-
+      Zakon o fiskalizaciji, Narodne novine — Službeni list Republike Hrvatske, broj 89,
+      13 June 2025, act no. 1233 (official gazette PDF)
+    source_type: official_gazette
+    secondary_source_urls:
+      - https://narodne-novine.nn.hr/clanci/sluzbeni/full/2025_06_89_1233.html
+      - https://porezna.gov.hr/fiskalizacija/bezgotovinski-racuni/bezgotovinski-racuni-novosti/o/objavljen-zakon-o-fiskalizaciji
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Official gazette PDF retrieved and text-extracted on 2026-10-07, and čl. 38, čl. 36, čl. 41,
+      čl. 47 and čl. 80 read in the original Croatian. Čl. 38(1)(1) binds "porezni obveznik sa
+      sjedištem, prebivalištem ili uobičajenim boravištem u tuzemstvu koji je upisan u registar
+      obveznika PDV-a". Čl. 80 brings čl. 33–43 into force on 2026-01-01 and carves out only
+      čl. 38 st. 1 toč. 2. i 3. and čl. 54–56 to 2027-01-01, which is what puts category 1 on the
+      earlier date. The gazette was read directly because a first pass over the HTML rendering
+      returned a staging that the gazette text does not support.
+    unknowns:
+      - >-
+        The version of the Porezna uprava "Tehnička specifikacija osnovne uporabe eRačuna s
+        proširenjima" (the Croatian CIUS) is not pinned by the Act and was not established. Since
+        čl. 2(9) makes that specification part of the binding "EU norma", its version is a live
+        compliance variable that no gazette will announce.
+      - >-
+        Whether a taxable person not established in Croatia but registered for Croatian VAT is
+        inside čl. 38(1)(1) is not resolved: the provision requires both VAT registration AND a
+        domestic seat, residence or habitual residence, but the treatment of a non-established
+        VAT registrant is not spelled out.
+      - >-
+        The pravilnik under čl. 32 (ministerial implementing regulation, due within 90 days of
+        commencement per čl. 77) has not been read and may carry further format or process detail.
+    notes: >-
+      Scope limits worth knowing. Čl. 33(3): the eRačun provisions apply only to DOMESTIC
+      transactions. Čl. 33(2): they do not apply to supplies under contracts protected by a
+      prescribed degree of secrecy or requiring special security measures. Čl. 39: a transaction
+      paid in cash or by card for which a receipt was issued and fiscalised under čl. 15 may be
+      exempt from issuing an eRačun — and where that route is used an eRačun must NOT also be
+      issued. Čl. 38(3) closes the obvious gap: an issuer who is exempt but issues an invoice
+      anyway must issue it as an eRačun with all the duties attached. Čl. 35: issued and received
+      eRačuni must be kept in original form for six years from the end of the year of issue.
+
+  - obligation_id: HR-e-invoicing-b2b-issue-non-vat-registered
+    jurisdiction: HR
+    jurisdiction_name: Croatia
+    regime: e-invoicing-b2b
+    regime_label: HR Fiskalizacija 2.0 — eRačun in business between taxable persons
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Payers of income tax on self-employment and payers of corporate income tax who are NOT
+      entered in the VAT register but have their seat, residence or habitual residence in Croatia
+      (čl. 38(1)(2)); and bodies of state administration, local and regional self-government units
+      and budgetary and extra-budgetary users entered in the Register of budgetary and
+      extra-budgetary users who are not entered in the VAT register (čl. 38(1)(3)).
+    threshold_type: entity_type
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: >-
+      Not entered in the Croatian VAT register — income-tax or corporate-tax payer, or a public
+      body in the Register of budgetary and extra-budgetary users
+    threshold_period: null
+    threshold_definition: >-
+      Entity-class discriminator, no size test. These are the two categories that čl. 80 defers:
+      their duty to ISSUE starts 2027-01-01, a year after the VAT-registered cohort. Their duty to
+      RECEIVE is not deferred and starts 2026-01-01 — see HR-e-invoicing-b2b-receive-all. The
+      year's gap between having to accept eRačune and having to send them is the single most
+      misread fact about the Croatian mandate.
+    format_name: EU norma (EN 16931-1:2017 with the Croatian Porezna uprava extensions)
+    format_version: EN 16931-1:2017
+    format_note: >-
+      Same format duty as the VAT-registered cohort — see
+      HR-e-invoicing-b2b-issue-vat-registered. For this cohort čl. 54–56 additionally provide the
+      free MIKROeRAČUN application as an issuing route, and čl. 80 brings čl. 54–56 into force
+      (in the part concerning issuing eRačune via MIKROeRAČUN) on the same 2027-01-01 date.
+    mandatory_from: '2027-01-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zakon o fiskalizaciji ("Narodne novine" br. 89/2025), čl. 38(1)(2) and (3), čl. 38(2),
+      čl. 54–56; commencement under čl. 80.
+    source_url: https://narodne-novine.nn.hr/eli/sluzbeni/2025/89/1233/pdf
+    source_title: >-
+      Zakon o fiskalizaciji, Narodne novine br. 89, 13 June 2025, act no. 1233 (official gazette
+      PDF)
+    source_type: official_gazette
+    secondary_source_urls:
+      - https://narodne-novine.nn.hr/clanci/sluzbeni/full/2025_06_89_1233.html
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Read verbatim from the gazette on 2026-10-07. Čl. 80 provides that the Act enters into force
+      on 2025-09-01 except for listed provisions including "članaka 33. do 43., članka 45., članaka
+      47. do 57. ... koji stupaju na snagu 1. siječnja 2026. te članka 38. stavka 1. točaka 2. i 3.
+      i članaka 54. do 56. u dijelu koji se odnosi na izdavanje eRačuna putem aplikacije
+      MIKROeRAČUN koji stupaju na snagu 1. siječnja 2027." That carve-out is the whole basis of
+      this row's 2027-01-01 date.
+    unknowns:
+      - >-
+        Croatian CIUS version not established — same gap as the VAT-registered row.
+      - >-
+        Whether a non-VAT-registered entity that becomes VAT-registered between 2026-01-01 and
+        2027-01-01 is pulled onto the earlier issuing date from the moment of registration is not
+        addressed by the provisions read.
+    notes: >-
+      Public bodies sit in this cohort only when they are NOT VAT-registered. A VAT-registered
+      public body falls under čl. 38(1)(1) and is bound to issue from 2026-01-01. Note also that
+      this B2B/domestic regime is separate from Croatia's older public-procurement e-invoicing
+      duty, which has bound suppliers to public bodies since 2019 — see
+      HR-e-invoicing-b2g-issue-all.
+
+  - obligation_id: HR-e-invoicing-b2b-receive-all
+    jurisdiction: HR
+    jurisdiction_name: Croatia
+    regime: e-invoicing-b2b
+    regime_label: HR Fiskalizacija 2.0 — eRačun in business between taxable persons
+    direction: receive
+    counterparty_scope: b2b
+    bound_party: >-
+      Every "primatelj eRačuna" as defined in čl. 2(24): (a) a taxable person established in
+      Croatia and entered in the VAT register; (b) a non-VAT-registered payer of income tax on
+      self-employment or of corporate income tax established in Croatia; (c) bodies of state
+      administration, local and regional self-government units, and budgetary and
+      extra-budgetary users in the Register who are not VAT-registered.
+    threshold_type: entity_type
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: Any recipient of an eRačun under čl. 2(24) — VAT-registered or not
+    threshold_period: null
+    threshold_definition: >-
+      No size test and, critically, NO entity-class deferral on the receiving side. Čl. 41 falls
+      inside the čl. 33–43 block that čl. 80 brings into force on 2026-01-01, and the čl. 80
+      carve-out to 2027-01-01 names only čl. 38 st. 1 toč. 2. i 3. (issuing) and čl. 54–56. So all
+      three recipient categories must be able to receive from 2026-01-01, including the ones that
+      do not have to issue until 2027-01-01.
+    format_name: EU norma (EN 16931-1:2017 with the Croatian Porezna uprava extensions)
+    format_version: EN 16931-1:2017
+    format_note: >-
+      Čl. 41 requires receipt "na način propisan člankom 37. ovoga Zakona" — čl. 37(1) routes
+      exchange through access points (pristupne točke), which čl. 37(2) obliges to guarantee
+      standardised formats, protocols and interoperability. Čl. 37(3) permits exchange by other
+      technologies and procedures provided authenticity of origin, integrity of content and
+      legibility are preserved, so the access-point route is the default rather than the only
+      lawful channel. Čl. 38(4) requires the access point's identity to be proven by digital
+      certificate with a mandatory OIB signing the message.
+    mandatory_from: '2026-01-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zakon o fiskalizaciji ("Narodne novine" br. 89/2025), čl. 41, čl. 37, čl. 2(24), čl. 38(4);
+      commencement under čl. 80.
+    source_url: https://narodne-novine.nn.hr/eli/sluzbeni/2025/89/1233/pdf
+    source_title: >-
+      Zakon o fiskalizaciji, Narodne novine br. 89, 13 June 2025, act no. 1233 (official gazette
+      PDF)
+    source_type: official_gazette
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Čl. 41 read verbatim on 2026-10-07: "Primatelj eRačuna dužan je zaprimiti eRačun na način
+      propisan člankom 37. ovoga Zakona." The definition of primatelj eRačuna at čl. 2(24)(a)–(c)
+      was read and covers all three entity categories. The 2026-01-01 date follows from čl. 80
+      listing čl. 33–43 for that date with no receiving-side carve-out.
+    unknowns:
+      - >-
+        Croatian CIUS version not established — same gap as the issuing rows.
+      - >-
+        The list of authorised access points (pristupne točke) and whether a recipient must
+        register with one by a specific date was not established; čl. 46 makes publication on the
+        Lista identifikatora poreznih obveznika voluntary, which leaves open how an issuer
+        discovers a recipient's address.
+    notes: >-
+      This is the row that bites first and the one most likely to be missed. A small
+      non-VAT-registered Croatian trader has no duty to issue an eRačun until 2027-01-01 but must
+      already be able to receive and fiscalise one from 2026-01-01, because its VAT-registered
+      suppliers are obliged to send one from that date.
+
+  - obligation_id: HR-e-reporting-issue-all
+    jurisdiction: HR
+    jurisdiction_name: Croatia
+    regime: e-reporting
+    regime_label: HR Fiskalizacija 2.0 — fiscalisation of eRačuni to the Porezna uprava
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      The issuer of an eRačun, obliged under čl. 47 to carry out fiscalisation of the eRačun for
+      every eRačun issued, by transmitting the prescribed čl. 48 data into the Sustav za
+      fiskalizaciju.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test. Čl. 47 attaches to every issued eRačun. In practice the reporting duty is
+      reached only once a party is obliged to issue, so the entity-class dates on the e-invoicing
+      rows govern when this one starts to bite for a given business.
+    format_name: Sustav za fiskalizaciju eRačuna data set (čl. 48)
+    format_version: null
+    format_note: >-
+      The Act prescribes the data to be delivered (čl. 48) rather than naming a published format
+      with a version number, and the technical specification is left to the pravilnik under
+      čl. 32, which the Minister of Finance must adopt within 90 days of commencement (čl. 77) and
+      which has not been read. No version can honestly be recorded yet.
+    mandatory_from: '2026-01-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zakon o fiskalizaciji ("Narodne novine" br. 89/2025), čl. 47, čl. 48, čl. 2(10);
+      commencement under čl. 80.
+    source_url: https://narodne-novine.nn.hr/eli/sluzbeni/2025/89/1233/pdf
+    source_title: >-
+      Zakon o fiskalizaciji, Narodne novine br. 89, 13 June 2025, act no. 1233 (official gazette
+      PDF)
+    source_type: official_gazette
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Čl. 47 read verbatim on 2026-10-07: "Obvezu fiskalizacije eRačuna izdavatelj eRačuna i
+      primatelj eRačuna dužni su provoditi za svaki izdani i zaprimljeni eRačun." Čl. 2(10)
+      defines fiskalizacija eRačuna as delivering prescribed eRačun data into the Sustav za
+      fiskalizaciju, covering both issuing and receiving. Čl. 47 sits in the čl. 47–57 block that
+      čl. 80 brings into force on 2026-01-01.
+    unknowns:
+      - >-
+        The deadline for transmitting the fiscalisation data — real-time, same-day, or within a
+        stated window — was not established from the provisions read. For a reporting regime that
+        is the most commercially important single parameter, and it is probably in the čl. 32
+        pravilnik.
+      - >-
+        The technical format and its version are not established pending the čl. 32 pravilnik.
+    notes: >-
+      Recorded as e-reporting rather than e-invoicing deliberately, the same call as Hungary. The
+      duty here is to tell the Porezna uprava about the invoice, which is a different obligation
+      from the duty to render the invoice in the EU norm. Croatia is unusual in running both at
+      once from the same date, and in putting the reporting duty on the RECIPIENT as well as the
+      issuer — see HR-e-reporting-receive-all.
+
+  - obligation_id: HR-e-reporting-receive-all
+    jurisdiction: HR
+    jurisdiction_name: Croatia
+    regime: e-reporting
+    regime_label: HR Fiskalizacija 2.0 — fiscalisation of eRačuni to the Porezna uprava
+    direction: receive
+    counterparty_scope: b2b
+    bound_party: >-
+      The recipient of an eRačun, obliged under čl. 47 to carry out fiscalisation for every eRačun
+      received. Čl. 51–53 additionally cover reporting of rejected and of paid eRačuni.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test. Every recipient under čl. 2(24) — including non-VAT-registered traders and
+      public bodies that have no issuing duty until 2027-01-01 — must fiscalise what it receives
+      from 2026-01-01.
+    format_name: Sustav za fiskalizaciju eRačuna data set (čl. 48, čl. 51–53)
+    format_version: null
+    format_note: >-
+      As with the issuing side, the Act prescribes data rather than a versioned published format;
+      the čl. 32 pravilnik carries the technical detail and has not been read.
+    mandatory_from: '2026-01-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zakon o fiskalizaciji ("Narodne novine" br. 89/2025), čl. 47, čl. 48, čl. 51–53;
+      commencement under čl. 80.
+    source_url: https://narodne-novine.nn.hr/eli/sluzbeni/2025/89/1233/pdf
+    source_title: >-
+      Zakon o fiskalizaciji, Narodne novine br. 89, 13 June 2025, act no. 1233 (official gazette
+      PDF)
+    source_type: official_gazette
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Čl. 47 read verbatim on 2026-10-07 and names the primatelj eRačuna alongside the izdavatelj
+      as an obligor for every received eRačun. Čl. 80 places čl. 47–57 at 2026-01-01.
+    unknowns:
+      - >-
+        Transmission deadline for recipient-side fiscalisation not established — same gap as the
+        issuing row.
+      - >-
+        Whether rejection reporting under čl. 51–53 carries its own separate deadline was not
+        established.
+    notes: >-
+      A buyer-side reporting duty is rare and expensive to implement, which makes it worth its own
+      row rather than a footnote. A Croatian business that only receives invoices still has a
+      reporting obligation from 2026-01-01.
+
+  - obligation_id: HR-e-invoicing-b2g-issue-all
+    jurisdiction: HR
+    jurisdiction_name: Croatia
+    regime: e-invoicing-b2g
+    regime_label: HR public procurement — eRačun in javnoj nabavi
+    direction: issue
+    counterparty_scope: b2g
+    bound_party: >-
+      Suppliers and service providers issuing invoices in public procurement procedures to Croatian
+      contracting authorities and contracting entities.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test identified. Croatia went further than Directive 2014/55/EU requires: the
+      directive obliges only the contracting authority to RECEIVE, whereas Croatia also obliges
+      the supplier to ISSUE electronically, which is why this is recorded as a direction=issue row
+      rather than only a receiving duty.
+    format_name: EN 16931 (European standard on electronic invoicing)
+    format_version: EN 16931-1:2017
+    format_note: >-
+      Format recorded from the standard that Directive 2014/55/EU requires and that čl. 2(9) of
+      the 2025 Zakon o fiskalizaciji also adopts; the 2018 public-procurement act's own format
+      provision and any Croatian CIUS version for B2G were not read. Note čl. 33(1) of the 2025
+      Act: the rules on issuing eRačune in public procurement apply mutatis mutandis to the B2B
+      eRačun regime, so the two regimes are deliberately aligned.
+    mandatory_from: '2019-07-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zakon o elektroničkom izdavanju računa u javnoj nabavi ("Narodne novine" br. 94/2018),
+      transposing Directive 2014/55/EU. The gazette text was not read.
+    source_url: https://mingo.gov.hr/vijesti/objavljen-zakon-o-elektronickom-izdavanju-racuna-u-javnoj-nabavi/6406
+    source_title: >-
+      Ministarstvo gospodarstva (Croatian Ministry of Economy), "Objavljen Zakon o elektroničkom
+      izdavanju računa u javnoj nabavi"
+    source_type: secondary
+    secondary_source_urls:
+      - https://www.teb.hr/novosti/2018/zakon-o-elektronickom-izdavanju-racuna-u-javnoj-nabavi-nar-nov-br-9418/
+      - https://www.iusinfo.hr/aktualno/u-sredistu/51276
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      The Act's existence, its gazette reference (NN 94/2018), its entry into force on 2018-11-01
+      and the two operative dates (authorities receive from 2018-12-01, suppliers issue from
+      2019-07-01) are consistent across the Ministry of Economy's own announcement and Croatian
+      practitioner sources read on 2026-10-07. The gazette text itself was not retrieved, so this
+      is graded reported. Primary source supremacy: it becomes verified when NN 94/2018 is read,
+      not because several sources agree.
+    unknowns:
+      - >-
+        The gazette text of NN 94/2018 has not been read. The 2019-07-01 issuing date and the
+        2018-12-01 receiving date rest on the Ministry's announcement and secondary coverage, not
+        on the statute.
+      - >-
+        Article numbers for the issuing duty and the format provision are not recorded.
+      - >-
+        Whether the 2025 Zakon o fiskalizaciji amended or displaced any part of the 2018 act was
+        not checked; čl. 33(1) cross-refers to it rather than repealing it, and čl. 79 repeals
+        only the old cash-fiscalisation act.
+    notes: >-
+      Croatia has had a working national e-invoicing channel since 2019, which is why the 2026 B2B
+      mandate is a smaller step there than the same date would be elsewhere.
+
+  - obligation_id: HR-e-invoicing-b2g-receive-all
+    jurisdiction: HR
+    jurisdiction_name: Croatia
+    regime: e-invoicing-b2g
+    regime_label: HR public procurement — eRačun in javnoj nabavi
+    direction: receive
+    counterparty_scope: b2g
+    bound_party: >-
+      Croatian contracting authorities and contracting entities, obliged to receive electronic
+      invoices in public procurement.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: No size test. The duty attaches to the contracting authority.
+    format_name: EN 16931 (European standard on electronic invoicing)
+    format_version: EN 16931-1:2017
+    format_note: >-
+      Core invoice model under EN 16931-1:2017. The 2018 act's own format provision was not read;
+      no B2G Croatian CIUS version is recorded.
+    mandatory_from: '2018-12-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zakon o elektroničkom izdavanju računa u javnoj nabavi ("Narodne novine" br. 94/2018),
+      transposing Directive 2014/55/EU art. 7 and art. 11.
+    source_url: https://mingo.gov.hr/vijesti/objavljen-zakon-o-elektronickom-izdavanju-racuna-u-javnoj-nabavi/6406
+    source_title: >-
+      Ministarstvo gospodarstva, "Objavljen Zakon o elektroničkom izdavanju računa u javnoj nabavi"
+    source_type: secondary
+    secondary_source_urls:
+      - https://www.teb.hr/novosti/2018/zakon-o-elektronickom-izdavanju-racuna-u-javnoj-nabavi-nar-nov-br-9418/
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      Receiving date of 2018-12-01 taken from the Ministry of Economy announcement and Croatian
+      practitioner coverage read on 2026-10-07. Gazette text not read, so graded reported.
+    unknowns:
+      - >-
+        NN 94/2018 gazette text not read; the 2018-12-01 date rests on secondary description.
+      - >-
+        Whether the receiving duty was staged between central and sub-central authorities, as
+        Directive 2014/55/EU permits, is not recorded.
+    notes: >-
+      Recorded separately from the issuing duty because the dates differ by seven months, and a
+      supplier reconstructing its 2019 position needs to know that authorities could already
+      receive before suppliers were obliged to send.

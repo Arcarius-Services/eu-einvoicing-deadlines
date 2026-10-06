@@ -23,6 +23,9 @@
       "properties": {
         "jurisdictions": { "type": "array", "items": { "$ref": "#/$defs/country" } },
         "jurisdiction_count": { "type": "integer", "minimum": 0 },
+        "member_state_jurisdictions": { "type": "array", "items": { "$ref": "#/$defs/country" } },
+        "member_state_count": { "type": "integer", "minimum": 0 },
+        "supranational_jurisdictions": { "type": "array", "items": { "$ref": "#/$defs/country" } },
         "regimes": { "type": "array", "items": { "type": "string" } },
         "confidence_counts": {
           "type": "object",
@@ -87,7 +90,7 @@
         "jurisdiction_name": { "type": "string", "minLength": 1 },
         "regime": { "type": "string", "pattern": "^[a-z0-9-]+$" },
         "regime_label": { "type": "string", "minLength": 1 },
-        "direction": { "enum": ["issue", "receive"] },
+        "direction": { "enum": ["issue", "receive", "report"] },
         "counterparty_scope": {
           "enum": ["b2b", "b2c", "b2g", "b2b-and-b2c", "cross-border-b2b"]
         },
@@ -104,7 +107,11 @@
         "threshold_basis": { "type": ["string", "null"] },
         "threshold_period": { "type": ["string", "null"] },
         "threshold_definition": { "type": ["string", "null"] },
-        "format_name": { "type": "string", "minLength": 1 },
+        "format_name": {
+          "type": ["string", "null"],
+          "minLength": 1,
+          "description": "Null when the instrument mandates no format at all (Portugal) or when the format was not established in the pass (GR, RO). build.py requires format_note to say which; a null here is a recorded fact, not a missing value."
+        },
         "format_version": { "type": ["string", "null"] },
         "format_note": { "type": ["string", "null"] },
         "mandatory_from": { "$ref": "#/$defs/nullableDate" },

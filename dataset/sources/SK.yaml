@@ -1,0 +1,265 @@
+jurisdiction: SK
+jurisdiction_name: Slovakia
+obligations:
+
+  # Slovakia's B2B mandate is legislated, not announced. Zákon č. 385/2025 Z. z. amends the VAT Act
+  # (zákon č. 222/2004 Z. z.), inserting § 85o, and was published in the Zbierka zákonov. The
+  # consolidated text as in force from 2027-01-01 was read on slov-lex (the official legislative
+  # portal) on 2026-10-07, so the e-invoicing and reporting dates are `verified`.
+  #
+  # Slovakia couples e-invoicing with e-reporting in one provision but they are two duties with
+  # different obligors and different dates, so they get separate rows.
+
+  - obligation_id: SK-e-invoicing-b2b-issue-vat-payer
+    jurisdiction: SK
+    jurisdiction_name: Slovakia
+    regime: e-invoicing-b2b
+    regime_label: SK eFaktúra — mandatory structured e-invoicing under § 85o of the VAT Act
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      A VAT payer under § 4, § 4b or § 4c of the VAT Act (i.e. registered Slovak VAT payers,
+      including VAT groups) which, on or after 1 January 2027, supplies goods or services to a
+      person listed in § 85o(3) — § 85o(2).
+    threshold_type: entity_type
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: VAT payer registered under § 4, § 4b or § 4c of zákon č. 222/2004 Z. z.
+    threshold_period: null
+    threshold_definition: >-
+      No turnover or headcount threshold in § 85o. The test is VAT-payer status: registration under
+      § 4, § 4b or § 4c. A taxable person below the Slovak VAT registration threshold and not
+      voluntarily registered is therefore outside the issuing duty — which makes this a LIVE
+      entity-class test, not a dead one, and the reason the Slovak VAT registration threshold
+      itself becomes a compliance variable. That threshold figure was not read and is named in
+      unknowns rather than guessed.
+    format_name: Structured electronic format conforming to the European standard
+    format_version: null
+    format_note: >-
+      § 85o(4) requires the invoice to be in "formáte elektronického dokumentu, ktorý umožňuje jeho
+      automatizované a elektronické spracovanie" and "v dátovej štruktúre v súlade s technickou
+      normou", with the technical norm carried by a cross-reference ("osobitný predpis") rather
+      than named inline in the provision read. That cross-reference was not resolved to a specific
+      standard and version, so no version is recorded. Secondary sources state the standard is EN
+      16931 and that the exchange runs on a Peppol five-corner model via a "doručovacia služba"
+      (delivery service); the Peppol claim in particular is NOT confirmed against the Act or the
+      Financial Administration and is recorded only in unknowns.
+    mandatory_from: '2027-01-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zákon č. 222/2004 Z. z. o dani z pridanej hodnoty, § 85o(2) and § 85o(4), as inserted by
+      zákon č. 385/2025 Z. z.; effectiveness under čl. VIII of act 385/2025. Act 385/2025
+      transposes Council Directive (EU) 2025/516.
+    source_url: https://static.slov-lex.sk/static/SK/ZZ/2025/385/20270101.print.html
+    source_title: >-
+      Zákon č. 385/2025 Z. z., consolidated text as in force from 1 January 2027 — slov-lex,
+      the official legislative portal of the Slovak Republic
+    source_type: statute
+    secondary_source_urls:
+      - https://www.financnasprava.sk/_img/pfsedit/Dokumenty_PFS/Zverejnovanie_dok/Aktualne/DPH/2026/2026.05.25_009_DPH_2025_IM_FaQ_eFaktura.pdf
+      - https://www.skdp.sk/clanky/novela-zakona-o-dph-e-faktura-oznamovanie-udajov
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Consolidated statutory text read on slov-lex on 2026-10-07. § 85o(2) binds a "platiteľ podľa
+      § 4, 4b alebo § 4c, ktorý počnúc 1. januárom 2027 dodal osobe..." — the 2027-01-01 date is in
+      the operative provision itself, not only in the commencement article. Čl. VIII provides
+      "Tento zákon nadobúda účinnosť 1. januára 2026 okrem..." with the e-invoicing and reporting
+      provisions effective 2027-01-01 and the cross-border extension 2030-07-01.
+    unknowns:
+      - >-
+        The "osobitný predpis" technical-norm cross-reference in § 85o(4) was not resolved, so the
+        format standard and its version are not established. EN 16931 is the likely referent but
+        was not confirmed, and no version can be recorded.
+      - >-
+        Whether the exchange is legally required to run over Peppol, or whether Peppol is merely
+        the expected implementation of the "doručovacia služba", is not established.
+      - >-
+        Secondary sources report a Ministry of Finance grace period for the first quarter of 2027.
+        No such transitional provision was found in the text read, so tolerance_ends is left null
+        rather than recorded. A tolerance that cannot be located in the instrument must not be
+        sold as a date.
+      - >-
+        The Slovak VAT registration threshold — which decides who is inside this entity-class
+        test — was not read.
+      - >-
+        Slovakia's pre-existing B2G e-invoicing position (the IS EFA / Informačný systém
+        elektronickej fakturácie) is not yet a row.
+    notes: >-
+      § 85o(21)–(22) provide a voluntary on-ramp during 2026: e-invoicing via the delivery service
+      may be used before the mandate, and recipient consent is not required where the recipient
+      accepts the delivery service. That is the opposite of a tolerance — it is permission to start
+      early, and it is why 2026 is a migration year in Slovakia rather than a grace year.
+
+  - obligation_id: SK-e-invoicing-b2b-receive-established
+    jurisdiction: SK
+    jurisdiction_name: Slovakia
+    regime: e-invoicing-b2b
+    regime_label: SK eFaktúra — mandatory structured e-invoicing under § 85o of the VAT Act
+    direction: receive
+    counterparty_scope: b2b
+    bound_party: >-
+      Persons listed in § 85o(3): a taxable person with its seat, place of business or
+      establishment in Slovakia, and a non-taxable legal person with its seat in Slovakia.
+    threshold_type: entity_type
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: >-
+      Taxable person or non-taxable legal person with a seat, place of business or establishment in
+      Slovakia (§ 85o(3))
+    threshold_period: null
+    threshold_definition: >-
+      No size test. The receiving side is defined by establishment in Slovakia rather than by VAT
+      registration, so it is WIDER than the issuing side: a non-VAT-registered Slovak taxable
+      person, and a non-taxable Slovak legal person, must be able to receive an eFaktúra from
+      2027-01-01 even though neither has a duty to issue one. Same asymmetry as Croatia, and the
+      same trap.
+    format_name: Structured electronic format conforming to the European standard
+    format_version: null
+    format_note: >-
+      Same format duty and same unresolved technical-norm cross-reference as the issuing row — see
+      SK-e-invoicing-b2b-issue-vat-payer.
+    mandatory_from: '2027-01-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zákon č. 222/2004 Z. z., § 85o(3), as inserted by zákon č. 385/2025 Z. z.; effectiveness
+      under čl. VIII of act 385/2025.
+    source_url: https://static.slov-lex.sk/static/SK/ZZ/2025/385/20270101.print.html
+    source_title: >-
+      Zákon č. 385/2025 Z. z., consolidated text as in force from 1 January 2027 — slov-lex
+    source_type: statute
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      § 85o(3) read on slov-lex on 2026-10-07: "zdaniteľná osoba, ktorá má v tuzemsku sídlo, miesto
+      podnikania..." and "nezdaniteľná právnická osoba, ktorá má v tuzemsku sídlo...". The
+      2027-01-01 date comes from § 85o(2) and čl. VIII.
+    unknowns:
+      - >-
+        Format standard and version not established — same unresolved cross-reference as the
+        issuing row.
+      - >-
+        Whether a recipient must register with a delivery service by a specific date, and what
+        happens to an issuer whose recipient has not, is not recorded.
+    notes: >-
+      Recorded separately because the obligor population differs from the issuing row. Sizing the
+      Slovak market off the VAT-payer count alone would undercount the businesses that have to
+      implement something by 2027-01-01.
+
+  - obligation_id: SK-e-reporting-issue-domestic
+    jurisdiction: SK
+    jurisdiction_name: Slovakia
+    regime: e-reporting
+    regime_label: SK oznamovanie údajov — digital reporting of invoice data to the Financial Administration
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      The issuer of an electronic invoice, obliged to transmit the prescribed invoice data to the
+      Financial Administration via the delivery service (doručovacia služba) — § 85o(9) and
+      § 85o(11).
+    threshold_type: entity_type
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: VAT payer registered under § 4, § 4b or § 4c of zákon č. 222/2004 Z. z.
+    threshold_period: null
+    threshold_definition: >-
+      No size test beyond VAT-payer status, which is the same gate as the issuing duty it rides on.
+    format_name: § 74(1) and § 68d(4) invoice data set, transmitted via the doručovacia služba
+    format_version: null
+    format_note: >-
+      The Act prescribes the data by cross-reference to § 74(1) and § 68d(4) of the VAT Act rather
+      than naming a versioned published schema. The Financial Administration's technical
+      specification was not read, so no version is recorded.
+    mandatory_from: '2027-01-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zákon č. 222/2004 Z. z., § 85o(9) and § 85o(11), as inserted by zákon č. 385/2025 Z. z.
+    source_url: https://static.slov-lex.sk/static/SK/ZZ/2025/385/20270101.print.html
+    source_title: >-
+      Zákon č. 385/2025 Z. z., consolidated text as in force from 1 January 2027 — slov-lex
+    source_type: statute
+    secondary_source_urls:
+      - https://www.financnasprava.sk/_img/pfsedit/Dokumenty_PFS/Zverejnovanie_dok/Aktualne/DPH/2026/2026.05.25_009_DPH_2025_IM_FaQ_eFaktura.pdf
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      § 85o(9) read on slov-lex on 2026-10-07 and sets the reporting deadline as "do piatich dní
+      odo dňa vyhotovenia elektronickej faktúry" — five days from the date the electronic invoice
+      is drawn up. § 85o(11) routes it "prostredníctvom doručovacej služby". Data scope is
+      cross-referenced to § 74(1) and § 68d(4).
+    unknowns:
+      - >-
+        Whether the five-day deadline runs in calendar or working days was not established from the
+        text read. Romania changed exactly this parameter mid-mandate, so it matters.
+      - >-
+        The technical schema and version for the reported data set are not established.
+    notes: >-
+      Five days from drawing up the invoice is a reporting window, not real time — materially
+      easier to implement than Hungary's immediate RTIR or Italy's clearance model, and worth
+      saying plainly because buyers often assume every new mandate is real-time.
+
+  - obligation_id: SK-e-reporting-issue-cross-border
+    jurisdiction: SK
+    jurisdiction_name: Slovakia
+    regime: e-reporting
+    regime_label: SK oznamovanie údajov — digital reporting of invoice data to the Financial Administration
+    direction: issue
+    counterparty_scope: cross-border-b2b
+    bound_party: >-
+      All taxable persons, for cross-border supplies of goods and services, under the ViDA-aligned
+      extension of the e-invoicing and digital reporting duties.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test, and no VAT-payer gate: this phase reaches all taxable persons, which is wider
+      than the 2027 domestic phase. It follows the Council Directive (EU) 2025/516 timetable rather
+      than a Slovak policy choice.
+    format_name: Structured electronic format conforming to the European standard
+    format_version: null
+    format_note: >-
+      Same unresolved technical-norm cross-reference as the domestic rows. The consolidated text
+      read was the version in force 2027-01-01 to 2030-06-30, so the wording governing the
+      2030-07-01 phase was not itself read.
+    mandatory_from: '2030-07-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Zákon č. 222/2004 Z. z. as amended by zákon č. 385/2025 Z. z., effectiveness under
+      čl. VIII; Council Directive (EU) 2025/516.
+    source_url: https://static.slov-lex.sk/static/SK/ZZ/2025/385/20270101.print.html
+    source_title: >-
+      Zákon č. 385/2025 Z. z., consolidated text as in force from 1 January 2027 — slov-lex
+    source_type: statute
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      The 2030-07-01 cross-border date appears in the commencement structure of act 385/2025 (čl.
+      VIII) and in the slov-lex validity range of the text read, which is stated as 2027-01-01 to
+      2030-06-30. But the provisions that take effect on 2030-07-01 were NOT read — a consolidated
+      text in force from 2027 does not contain them. Graded reported rather than verified for that
+      reason: the date is sound, the obligation's wording is not yet sourced.
+    unknowns:
+      - >-
+        The operative provisions effective 2030-07-01 have not been read. The slov-lex consolidated
+        text for that date needs to be fetched separately before this row can be graded verified.
+      - >-
+        § 85o(18)–(19) defer some delivery-service-provider reporting under §§ 80–80a to
+        2030-06-30, and secondary sources describe a deferral of BUYER-side digital reporting to
+        July 2030. Whether there is a distinct recipient-side reporting obligation starting in 2030
+        was not established, so no receive-direction reporting row is recorded.
+    notes: >-
+      Recorded now because a 2030 date four years out is exactly what a compliance buyer is trying
+      to budget for, but graded honestly: this is a commencement date read from the amending act,
+      not an obligation read from the text that will be in force.

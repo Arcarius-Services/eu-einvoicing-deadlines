@@ -28,7 +28,11 @@ from pathlib import Path
 
 import yaml
 
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
+
+# Jurisdiction codes that are not member states. An EU-level instrument is a real row — every
+# national row sits on top of one — but it must never be counted toward member-state coverage.
+SUPRANATIONAL = {"EU"}
 
 ROOT = Path(__file__).resolve().parent
 SOURCES = ROOT / "sources"
@@ -50,7 +54,7 @@ COLUMNS = [
 ]
 
 ENUMS = {
-    "direction": {"issue", "receive"},
+    "direction": {"issue", "receive", "report"},
     "counterparty_scope": {"b2b", "b2c", "b2g", "b2b-and-b2c", "cross-border-b2b"},
     "threshold_type": {"none", "turnover", "revenue_or_fees", "headcount", "entity_type"},
     "threshold_operator": {"gt", "gte", "lt", "lte", "between", None},
@@ -62,9 +66,15 @@ ENUMS = {
 PRIMARY = ENUMS["source_type"] - {"secondary"}
 SIZED = {"turnover", "revenue_or_fees", "headcount"}
 
-# Columns on which two rows would be claiming the same obligation.
-OBLIGATION_KEY = ("jurisdiction", "regime", "direction", "threshold_type",
-                  "threshold_operator", "threshold_value")
+# Columns on which two rows would be claiming the same obligation. counterparty_scope is part of
+# the key: a domestic duty and an intra-Community duty under the same regime and direction are
+# different obligations and may legitimately carry different dates. threshold_basis is in the key
+# for the same reason: a phased mandate can discriminate on entity class rather than on a number.
+# Croatia binds VAT-registered issuers from 2026-01-01 and non-VAT-registered ones from
+# 2027-01-01 — both threshold_type=entity_type with no value and no operator, so without the
+# basis in the key two genuinely different obligations read as a contradiction.
+OBLIGATION_KEY = ("jurisdiction", "regime", "direction", "counterparty_scope", "threshold_type",
+                  "threshold_operator", "threshold_value", "threshold_basis")
 
 LIST_FIELDS = ("secondary_source_urls", "unknowns")
 
@@ -193,9 +203,15 @@ def normalise(row):
 def build_coverage(rows, note):
     checks = sorted(r["checked_on"] for r in rows)
     counts = Counter(r["confidence"] for r in rows)
+    codes = {r["jurisdiction"] for r in rows}
     return {
-        "jurisdictions": sorted({r["jurisdiction"] for r in rows}),
-        "jurisdiction_count": len({r["jurisdiction"] for r in rows}),
+        "jurisdictions": sorted(codes),
+        "jurisdiction_count": len(codes),
+        # Member-state coverage is the number a buyer and a marketing claim actually mean.
+        # jurisdiction_count includes the EU-level layer; these two do not.
+        "member_state_jurisdictions": sorted(codes - SUPRANATIONAL),
+        "member_state_count": len(codes - SUPRANATIONAL),
+        "supranational_jurisdictions": sorted(codes & SUPRANATIONAL),
         "regimes": sorted({r["regime"] for r in rows}),
         "confidence_counts": {
             "verified": counts.get("verified", 0),
@@ -219,8 +235,12 @@ def coverage_markdown(rows, coverage):
         "",
         f"- Schema version: **{SCHEMA_VERSION}**",
         f"- Rows: **{len(rows)}**",
-        f"- Jurisdictions: **{coverage['jurisdiction_count']}** "
-        f"({', '.join(coverage['jurisdictions'])})",
+        f"- Member states: **{coverage['member_state_count']}** "
+        f"({', '.join(coverage['member_state_jurisdictions']) or 'none'}) "
+        "— this is the coverage number, out of 27 EU member states plus UK and Norway",
+        f"- EU-level jurisdiction codes: **{len(coverage['supranational_jurisdictions'])}** "
+        f"({', '.join(coverage['supranational_jurisdictions']) or 'none'}) "
+        "— supranational instruments, never counted as a member state",
         f"- Confidence: **{c['verified']} verified**, **{c['reported']} reported**, "
         f"**{c['unknown']} unknown**",
         f"- Oldest `checked_on` in the set: **{coverage['oldest_checked_on']}** "
@@ -298,17 +318,24 @@ def main():
 
     rows = sorted((normalise(r) for r in raw), key=lambda r: r["obligation_id"])
     jurisdictions = sorted({r["jurisdiction"] for r in rows})
+    members = sorted(set(jurisdictions) - SUPRANATIONAL)
+    supra = sorted(set(jurisdictions) & SUPRANATIONAL)
+    eu_layer = (
+        f" Plus {len(supra)} EU-level jurisdiction code ({', '.join(supra)}) carrying the "
+        "supranational instruments national rows sit on top of; it is not a member state and is "
+        "not counted above." if supra else ""
+    )
     note = args.note or (
-        f"Partial dataset. {len(jurisdictions)} jurisdictions recorded of 27 EU member states "
-        "plus UK and Norway in scope for v1. This is not a completeness claim: a jurisdiction "
+        f"Partial dataset. {len(members)} member states recorded of 27 EU member states plus UK "
+        f"and Norway in scope for v1.{eu_layer} This is not a completeness claim: a jurisdiction "
         "absent from rows means not yet recorded, never 'no obligation'. See "
         "dataset/dist/coverage.md and dataset/CHANGELOG.md."
     )
     coverage = build_coverage(rows, note)
 
     if args.check:
-        print(f"OK    {len(rows)} rows · {coverage['jurisdiction_count']} jurisdictions "
-              f"({', '.join(jurisdictions)}) · "
+        print(f"OK    {len(rows)} rows · {coverage['member_state_count']} member states "
+              f"+ {len(supra)} EU-level ({', '.join(jurisdictions)}) · "
               f"verified {coverage['confidence_counts']['verified']}, "
               f"reported {coverage['confidence_counts']['reported']}, "
               f"unknown {coverage['confidence_counts']['unknown']} · "
@@ -344,8 +371,8 @@ def main():
 
     (DIST / "coverage.md").write_text(coverage_markdown(rows, coverage), encoding="utf-8")
 
-    print(f"OK    {len(rows)} rows · {coverage['jurisdiction_count']} jurisdictions "
-          f"({', '.join(jurisdictions)}) · "
+    print(f"OK    {len(rows)} rows · {coverage['member_state_count']} member states "
+          f"+ {len(supra)} EU-level ({', '.join(jurisdictions)}) · "
           f"verified {coverage['confidence_counts']['verified']}, "
           f"reported {coverage['confidence_counts']['reported']}, "
           f"unknown {coverage['confidence_counts']['unknown']} · "

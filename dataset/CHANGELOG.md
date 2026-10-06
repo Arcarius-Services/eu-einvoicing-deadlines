@@ -8,6 +8,198 @@ moved, old value → new value, and the source that justified the move.
 
 ---
 
+## 2026-10-07 — Portugal, closing the priority band ([ARC-3](/ARC/issues/ARC-3))
+
+Portugal was the last of the eight jurisdictions in the priority band set on
+[ARC-3](/ARC/issues/ARC-3) (PL, BE, FR, DE, IT, ES, RO, PT). With this row the band is covered.
+
+### added — 1 row, 1 member state
+
+| obligation_id | regime | direction | scope | mandatory_from | tolerance_ends | confidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| `PT-e-invoicing-b2b-issue-electronic-issuers` | `e-invoicing-b2b` | issue | b2b-and-b2c | 2027-01-01 | 2026-12-31 | `verified` |
+
+### the finding: Portugal has no B2B e-invoicing mandate, and that is the product
+
+Every secondary source describes Portugal with a 2027 date, which reads like a mandate. It is not
+one, and selling it as one would be the confidently-wrong row that kills this product. Read from
+the gazette, art. 12.º n.º 1 of **Decreto-Lei n.º 28/2019** is permissive:
+
+> "As faturas e demais documentos fiscalmente relevantes **podem**, mediante aceitação pelo
+> destinatário, ser emitidos por via eletrónica."
+
+Electronic issuing is optional *and* conditional on the recipient agreeing. Paper stays lawful.
+There is therefore also no receiving obligation to record for Portugal, which is why this
+jurisdiction has one row and not the usual two or three.
+
+What **is** dated is narrower: the conditions on an invoice once it is issued electronically.
+Art. 12.º n.º 2 requires one of three authenticity-and-integrity procedures — a qualified
+electronic signature, a qualified electronic seal under Regulation (EU) No 910/2014, or an EDI
+system under the European model EDI agreement. A plain PDF file satisfies none of them, and is
+accepted only under the annual transitional rule. **Lei n.º 73-A/2025** (Orçamento do Estado para
+2026), art. 95.º n.º 3, verbatim:
+
+> "Até 31 de dezembro de 2026 são aceites faturas em ficheiro PDF, sendo consideradas como faturas
+> eletrónicas para todos os efeitos previstos na legislação fiscal."
+
+So `tolerance_ends` is 2026-12-31 and `mandatory_from` is 2027-01-01. The obligation a buyer must
+act on is: *if you send PDF invoices to Portuguese customers, 2026-12-31 is the last day a bare PDF
+counts as an electronic invoice.*
+
+### why this is `verified` where Spain's computed dates are not
+
+`mandatory_from` here is the day after a cut-off the statute prints in words. That is the
+complement of an explicit end-date, with no competing reading — unlike Spain, where the date is the
+end of a period expressed in months and the day it lands is a live question under art. 30 of Ley
+39/2015. Same discipline, different facts.
+
+### sources read on 2026-10-07
+
+Both retrieved as the official Diário da República PDFs and text-extracted. Quotes in
+[`sources/verification-log.md`](sources/verification-log.md).
+
+- Lei n.º 73-A/2025, de 30 de dezembro — DR 1.ª série, n.º 250, **2.º Suplemento**, 30-12-2025:
+  `https://files.dre.pt/gratuitos/1s/2025/12/25002.pdf`. Art. 95.º n.os 2 and 3, art. 260.º n.os 1,
+  2 and 4.
+- Decreto-Lei n.º 28/2019, de 15 de fevereiro — DR 1.ª série, n.º 33, 15-02-2019:
+  `https://files.dre.pt/gratuitos/1s/2019/02/03300.pdf`. Art. 12.º n.os 1 and 2.
+- AT Ofício Circulado n.º 25120 de 2026-07-28 — retrieved and read, and it does **not** address
+  PDF invoices or the 2027 cut-off. Recorded because a negative read is still a read.
+
+### a lead that did not survive
+
+`diariodarepublica.pt` is fully client-rendered (OutSystems); the detail, ELI and
+`legislacao-consolidada` routes all return the SPA shell with no text, and the site serves no
+`robots.txt`. The gazette PDFs under `files.dre.pt/gratuitos/1s/{year}/{month}/{nnnss}.pdf` carry
+the same official text and are what these rows cite — worth knowing for every future PT pass.
+
+Secondary sources also pointed at **art. 240.º of Lei n.º 82/2023** as the PDF-invoice rule, via
+art. 260.º n.º 4(b) of OE2026 prorogating it. That is wrong: art. 240.º of Lei n.º 82/2023 was read
+and is an agricultural input-cost relief. The PDF rule lives in art. 95.º n.º 3 of the budget law
+itself, re-enacted each year with a new date, not in a prorogated cross-reference. A vendor blog
+chain would have put the wrong citation on the row.
+
+### known gaps, deliberately not rows yet
+
+- **Portugal's B2G mandate.** Art. 260.º n.º 2 of Lei n.º 73-A/2025 was read and prorogues "o
+  regime previsto no n.º 4 do artigo 9.º do Decreto-Lei n.º 111-B/2017, de 31 de agosto" to
+  31 de dezembro de 2026 — which puts the remaining B2G cohort at 2027-01-01. The text of that
+  art. 9.º n.º 4 was **not** retrieved (it sits in the Código dos Contratos Públicos gazette and
+  was not located in the pass), so which cohort it covers is unconfirmed and no row was written.
+  Now that 1.1.0 carries an `e-invoicing-b2g` regime this is cheap to finish.
+- The extension history of the PDF rule through earlier budget laws was not traced, so how many
+  times 31 December has already moved is not established.
+- Certified billing software, ATCUD, QR code and the SAF-T (PT) billing file: reported to apply to
+  every Portuguese invoice regardless of medium, verified for none of them, no rows.
+
+## 2026-10-07 — schema v1.1.0, EU-level layer ([ARC-8](/ARC/issues/ARC-8))
+
+The two supranational instruments every national row in this dataset sits on top of. Additive
+release: nothing published under 1.0.0 changed value, and no field was renamed or removed.
+
+### added — 5 rows under the new `EU` jurisdiction code
+
+| obligation_id | regime | direction | scope | mandatory_from | tolerance_ends | confidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| `EU-e-invoicing-b2g-receive-contracting-authorities` | `e-invoicing-b2g` | receive | b2g | 2019-04-18 | 2020-04-18 | `verified` |
+| `EU-e-invoicing-b2b-issue-member-state-option` | `e-invoicing-b2b` | issue | b2b | 2025-04-14 | — | `verified` |
+| `EU-e-invoicing-b2b-issue-intra-community-structured` | `e-invoicing-b2b` | issue | cross-border-b2b | 2030-07-01 | — | `verified` |
+| `EU-e-reporting-report-intra-community` | `e-reporting` | report | cross-border-b2b | 2030-07-01 | — | `verified` |
+| `EU-e-reporting-report-domestic-convergence` | `e-reporting` | report | b2b | 2030-07-01 | 2035-01-01 | `verified` |
+
+`jurisdiction: "EU"` is **not a country**. These rows bind Member States, not a reader's company,
+and two of them record an enabling date rather than a duty. Rule 6 in
+[`dataset/schema/v1.md`](schema/v1.md) is the contract; the site already routes `EU` to context
+rather than to a checker answer.
+
+### the access barrier, and how it was cleared
+
+[ARC-8](/ARC/issues/ARC-8) was opened as blocked on access, not on research: on 2026-10-07
+`eur-lex.europa.eu` answered this host with **HTTP 202 and an empty body** on every route — CELEX,
+ELI, PDF — which is a bot challenge. It still does, including for `/robots.txt`. Circumventing it
+would breach the access terms and was not attempted.
+
+The Publications Office **cellar** serves the same primary text with no challenge, and that is
+where these rows come from:
+
+```
+curl -H 'Accept: application/xhtml+xml' -H 'Accept-Language: eng' \
+  http://publications.europa.eu/resource/celex/32014L0055
+```
+
+Same publisher, same act, full English text as adopted. `source_url` on each row carries the
+canonical ELI (what a buyer should cite, and what resolves in a normal browser); `confidence_note`
+records the cellar URL actually read. Acts read in full this way: `32014L0055` (Directive
+2014/55/EU), `32017D1870` (Commission Implementing Decision (EU) 2017/1870), `32025L0516`
+(Council Directive (EU) 2025/516). No consultancy summary was used, and nothing was written from
+memory — the `confidence: unknown` fallback in the brief was not needed.
+
+### the dates, and where each one is written
+
+- **2019-04-18** is quoted, not computed. Art. 2 of Decision (EU) 2017/1870: "18 April 2019 is the
+  final date for bringing into force of the measures referred to in the first subparagraph of
+  Article 11(2) of Directive 2014/55/EU."
+- **2020-04-18** is *derived* and flagged as such in that row's `unknowns`. Art. 11(2) second
+  subparagraph expresses the sub-central postponement as "30 months after publication of the
+  reference", not as a date, and no instrument read prints 18 April 2020. It is the 30-month point
+  under the same day-count the Commission used for the 18-month point (OJ publication 17.10.2017,
+  entry into force 18.10.2017). An arithmetic ceiling, not a published date.
+- **27 November 2018** (Art. 11(1)) is deliberately *not* `mandatory_from`. Art. 11(2) carves the
+  Art. 7 receive-and-process duty out of the general transposition deadline and dates it later.
+- **2025-04-14** is quoted. Art. 6(1) of 2025/516: "Member States may apply the laws, regulations
+  and administrative provisions regarding Article 1, points 2 and 3 from 14 April 2025."
+- **2030-07-01** is quoted. Art. 6(5): "They shall apply those measures from 1 July 2030."
+- **2035-01-01** is quoted, and conditional. Art. 6(5) second subparagraph, for Member States with
+  a domestic real-time reporting obligation in place on 1 January 2024; the same subparagraph and
+  recital (24) allow it to be postponed if the Art. 271c interim report (due 31 March 2033) finds
+  shortcomings. Recorded as `tolerance_ends`, with the condition in `tolerance_note`.
+
+### what the brief asked for that the text does not say
+
+The brief asked for "the date from which Member States may mandate domestic e-invoicing **without
+an Article 395 derogation**". The date is 14 April 2025 and it is recorded. But the directive text
+never states that an Art. 395 authorisation ceases to be required — it grants the enabling
+provisions (new paragraphs in Arts. 218 and 232) and dates them. The only Art. 395 references in
+the text read are recital (24) and Art. 6(5), both about pre-existing *domestic reporting* systems.
+That gap is written into the row's `unknowns` rather than smoothed over.
+
+### changed — schema, all additive
+
+- `direction` gains **`report`**. A duty to transmit transaction data to a tax authority is
+  neither issuing nor receiving an invoice, and ViDA's digital reporting requirements are the
+  first rows that need it. The site's `DIRECTIONS` map already carried `report`, so this closes a
+  gap between the contract and the consumer rather than opening one.
+- `coverage` gains **`member_state_count`**, **`member_state_jurisdictions`** and
+  **`supranational_jurisdictions`**. Required by the `EU` code, not cosmetic: without them the
+  generated note read "N jurisdictions recorded of 27 EU member states" with the EU layer counted
+  inside N, which overstates member-state coverage by one. `member_state_count` is now the only
+  number any coverage claim may use. `jurisdiction_count` keeps its 1.0.0 meaning — every code
+  present — and is no longer the coverage number.
+- `OBLIGATION_KEY` in `dataset/build.py` gains **`counterparty_scope`**. A domestic duty and an
+  intra-Community duty under the same regime and direction are different obligations and may
+  legitimately carry different dates; the old key called that pair a contradiction. Strictly a
+  precision improvement — `obligation_id` uniqueness still catches genuine duplicates.
+- **`format_name` is now `["string", "null"]`** in `obligations.v1.schema.json`. A contract bug,
+  not a data change: 1.0.0 declared it `type: string` while five already-published rows
+  (`GR-e-invoicing-b2b-issue-revenue-gt-1m-eur`, `GR-…-lte-1m-eur`,
+  `PT-e-invoicing-b2b-issue-electronic-issuers`, `RO-e-invoicing-b2b-issue-all`,
+  `RO-…-issue-reporting-phase`) carried null, so `dist/obligations.json` did not validate against
+  its own schema. Null is the right value for those rows — Portugal mandates no format at all, and
+  for GR/RO it was not established in the pass — so the schema was corrected to match the data
+  rather than the rows being given a fabricated format name. `build.py` already required
+  `format_note` to explain any null, and that check is unchanged. No row value moved.
+
+### still open after this release
+
+- No per-country determination of **which** Member States qualify for the 1 January 2035
+  convergence window. It needs the three alternative tests in Art. 6(5) applied to each state's
+  position as at 1 January 2024, against national instruments. Not done for any country yet.
+- No `format_version` for the intra-Community reporting message: the new Art. 263(4) defers the
+  common electronic message to an Art. 58(2) Regulation (EU) No 904/2010 procedure, with no
+  deadline in the directive. Re-check before 2030.
+- The replacement Art. 264 (the reported data set itself) was not read field by field.
+- Whether Art. 395 authorisations granted before 2025/516 remain in force, and on what terms.
+
 ## 2026-10-07 — schema v1.0.0, first release
 
 Schema `1.0.0` published; contract in [`dataset/schema/v1.md`](schema/v1.md), machine-checkable at

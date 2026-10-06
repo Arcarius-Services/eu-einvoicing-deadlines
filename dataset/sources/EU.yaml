@@ -1,0 +1,432 @@
+jurisdiction: EU
+jurisdiction_name: European Union (EU-level instrument)
+
+# The supranational layer every national row sits on top of. These rows are NOT member-state
+# obligations and must never be counted as one: `jurisdiction: EU` is in Forge's NON_COUNTRY set,
+# so the site routes them to the docs page as context, never to a country checker answer.
+#
+# eur-lex.europa.eu answers this host with HTTP 202 and an empty body (a bot challenge), on the
+# CELEX, ELI and PDF routes alike. Working around that would breach the access terms, so it was
+# not attempted. The Publications Office cellar serves the same primary text without a challenge:
+#   curl -H 'Accept: application/xhtml+xml' -H 'Accept-Language: eng' \
+#     http://publications.europa.eu/resource/celex/32014L0055
+# `source_url` carries the canonical ELI (what a buyer should cite and what resolves in a browser);
+# `confidence_note` records the cellar URL that was actually read. Same publisher, same act.
+
+obligations:
+  - obligation_id: EU-e-invoicing-b2g-receive-contracting-authorities
+    jurisdiction: EU
+    jurisdiction_name: European Union (EU-level instrument)
+    regime: e-invoicing-b2g
+    regime_label: Public-procurement electronic invoicing (Directive 2014/55/EU)
+    direction: receive
+    counterparty_scope: b2g
+    bound_party: >-
+      Member States, which must ensure that contracting authorities and contracting entities
+      receive and process electronic invoices (Art. 7). The duty lands on the public buyer, not
+      on the supplier: the directive creates no obligation on an economic operator to invoice
+      electronically. "Contracting authorities", "sub-central contracting authorities", "central
+      purchasing body" and "contracting entities" take their Art. 2 meanings by reference to
+      Directives 2009/81/EC, 2014/23/EU, 2014/24/EU and 2014/25/EU. Scope is electronic invoices
+      issued under contracts to which those four directives apply (Art. 1), excluding contracts
+      declared secret or requiring special security measures under Directive 2009/81/EC.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test of any kind. The obligation attaches to the status of the buyer as a
+      contracting authority or contracting entity, not to turnover, headcount or contract value.
+      Art. 3(1) and recitals 41-42 require that SMEs' and smaller authorities' needs be taken
+      into account when the standard is drawn up and when support is offered; that is a design
+      criterion, not an exemption.
+    format_name: EN 16931-1 semantic data model, carried in a syntax from the published list
+    format_version: EN 16931-1:2017
+    format_note: >-
+      The Art. 3(2) reference was published by Commission Implementing Decision (EU) 2017/1870,
+      OJ L 266, 17.10.2017, p. 19. Its Art. 1 publishes "EN 16931-1:2017, Electronic invoicing -
+      Part 1: Semantic data model of the core elements of an electronic invoice" together with
+      the syntax list "CEN/TS 16931-2:2017, Part 2". The Annex names exactly two syntaxes:
+      UN/CEFACT Cross Industry Invoice XML as specified in XML Schemas 16B (SCRDM - CII), and
+      UBL invoice and credit note messages as defined in ISO/IEC 19845:2015. CEN issued both
+      deliverables on 28 June 2017. Any later CEN amendment to EN 16931-1:2017 was not read.
+    mandatory_from: '2019-04-18'
+    tolerance_ends: '2020-04-18'
+    tolerance_note: >-
+      Art. 11(2) second subparagraph lets a Member State postpone the Art. 7 receive-and-process
+      duty for its sub-central contracting authorities and contracting entities, by no more than
+      30 months after the OJ publication of the standard reference. It is a Member-State option
+      exercisable for sub-central bodies only, not an EU-wide grace period: whether a state took
+      it, and for which bodies, is a question of national law and belongs on that country's rows.
+      Central-level bodies got no postponement beyond 18 April 2019.
+    legal_instrument: >-
+      Directive 2014/55/EU of the European Parliament and of the Council of 16 April 2014 on
+      electronic invoicing in public procurement, Arts. 1, 2, 7 and 11; the calendar date is
+      fixed by Art. 2 of Commission Implementing Decision (EU) 2017/1870
+    source_url: http://data.europa.eu/eli/dir/2014/55/oj
+    source_title: Directive 2014/55/EU on electronic invoicing in public procurement (OJ L 133, 6.5.2014, p. 1)
+    source_type: eu_legal_act
+    secondary_source_urls:
+      - http://data.europa.eu/eli/dec_impl/2017/1870/oj
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Full English text of Directive 2014/55/EU as adopted read on 2026-10-07 from the
+      Publications Office cellar, http://publications.europa.eu/resource/celex/32014L0055 with
+      Accept: application/xhtml+xml and Accept-Language: eng. Arts. 1, 2, 3(2), 7, 11 and 13 read
+      verbatim. Commission Implementing Decision (EU) 2017/1870 read the same day from
+      http://publications.europa.eu/resource/celex/32017D1870; its Art. 2 reads "18 April 2019 is
+      the final date for bringing into force of the measures referred to in the first
+      subparagraph of Article 11(2) of Directive 2014/55/EU", which is the value in
+      mandatory_from. Art. 7 reads "Member States shall ensure that contracting authorities and
+      contracting entities receive and process electronic invoices which comply with the European
+      standard on electronic invoicing ... and with any of the syntaxes on the list published
+      pursuant to Article 3(2)."
+    unknowns:
+      - >-
+        tolerance_ends is derived, not quoted. Art. 11(2) expresses the sub-central maximum as a
+        period ("30 months after publication of the reference"), not a calendar date, and no
+        instrument read prints 18 April 2020. 2020-04-18 is the 30-month point under the same
+        day-count the Commission itself used for the 18-month point in Art. 2 of Decision
+        2017/1870 (OJ publication 17.10.2017, entry into force 18.10.2017, 18 months =
+        18 April 2019). Treat the date as an arithmetic ceiling, not as a published date.
+      - >-
+        Whether each Member State used the sub-central postponement, for which bodies, and to what
+        date, is national law and is not established by this row.
+      - >-
+        Art. 11(1)'s general transposition deadline of 27 November 2018 is deliberately not in
+        mandatory_from. It is the deadline for the directive's other provisions; Art. 11(2)
+        carves the Art. 7 receive-and-process duty out of it and dates it separately and later.
+      - >-
+        Whether any Member State extended the Art. 7 duty beyond the directive's scope - to
+        contracts below the procurement thresholds, or to supplier-side issuing - is a national
+        question not answered here.
+    notes: >-
+      This is the floor under every B2G row in the dataset: since 18 April 2019 a public buyer
+      anywhere in the EU must be able to receive and process an EN 16931-compliant invoice in one
+      of the two listed syntaxes. It says nothing about whether a supplier must send one - several
+      member states added that themselves, and those duties are recorded on their own rows.
+      Art. 9 leaves Directive 2006/112/EC untouched, so this row creates no VAT-invoicing
+      obligation. The URL in secondary_source_urls is Commission Implementing Decision (EU)
+      2017/1870, itself a primary EU act; it sits there only because a v1 row has one source_url.
+
+  - obligation_id: EU-e-invoicing-b2b-issue-member-state-option
+    jurisdiction: EU
+    jurisdiction_name: European Union (EU-level instrument)
+    regime: e-invoicing-b2b
+    regime_label: Domestic B2B electronic invoicing - Member-State option (ViDA)
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Member States, not taxable persons. Art. 1(2) of Directive (EU) 2025/516 adds to Art. 218 of
+      Directive 2006/112/EC: "By way of derogation from the first paragraph of this Article,
+      Member States may, in accordance with the conditions they lay down, require taxable persons
+      established within their territory to issue electronic invoices for supplies of goods and
+      services within their territory, other than those referred to in Article 262." Art. 1(3)
+      adds to Art. 232 that a Member State exercising that option may provide that use of such
+      invoices is not subject to the recipient's acceptance. This row records the EU-level
+      enabling date only. A duty on a business arises solely from the national act that uses it.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      The EU provision sets no size test. Art. 1(2) hands the Member State the conditions
+      ("in accordance with the conditions they lay down"), which is where every national
+      turnover and headcount band in this dataset comes from.
+    format_name: Set by the Member State
+    format_version: null
+    format_note: >-
+      Arts. 1(2) and 1(3) impose no format: the Member State lays down the conditions. The EN
+      16931 requirement arrives later, with the Art. 5 replacement of Art. 218 from 1 July 2030
+      (see EU-e-invoicing-b2b-issue-intra-community-structured), and even then the new Art. 218(3)
+      lets Member States allow other standards for domestic supplies.
+    mandatory_from: '2025-04-14'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Council Directive (EU) 2025/516 of 11 March 2025 amending Directive 2006/112/EC as regards
+      VAT rules for the digital age, Arts. 1(2), 1(3), 6(1) and 7
+    source_url: http://data.europa.eu/eli/dir/2025/516/oj
+    source_title: Council Directive (EU) 2025/516 on VAT rules for the digital age (OJ L series, 2025/516, 25.3.2025)
+    source_type: eu_legal_act
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Full English text of Council Directive (EU) 2025/516 read on 2026-10-07 from the
+      Publications Office cellar, http://publications.europa.eu/resource/celex/32025L0516 with
+      Accept: application/xhtml+xml and Accept-Language: eng. Art. 6(1) reads "Member States may
+      apply the laws, regulations and administrative provisions regarding Article 1, points 2 and
+      3 from 14 April 2025", which is the value in mandatory_from. Arts. 1(2), 1(3) and 7 read
+      verbatim; the OJ masthead on the text read is "L series, 2025/516, 25.3.2025".
+    unknowns:
+      - >-
+        This is an enabling date for Member States, not a date on which any taxable person must
+        issue an electronic invoice. Do not render it as a company obligation or as an answer on
+        a size-band page.
+      - >-
+        The directive text does not itself state that an Art. 395 authorisation ceases to be
+        required in order to mandate domestic e-invoicing. What the text establishes is the
+        enabling provisions and their date. The only Art. 395 references in the text read are
+        recital (24) and Art. 6(5), both about pre-existing domestic real-time reporting systems.
+      - >-
+        Whether Art. 395 authorisations granted to individual Member States before this directive
+        remain in force, and on what terms, was not established from the text read.
+      - >-
+        What happens to the EU enabling date in a Member State that has not legislated is outside
+        this row: absence of a national row in this dataset means not yet recorded, not "no duty".
+    notes: >-
+      The hinge under every national domestic B2B mandate in this dataset. Art. 232 of Directive
+      2006/112/EC made the use of an electronic invoice subject to the recipient's acceptance;
+      Art. 1(3) of 2025/516 lets a Member State that exercises the new Art. 218 option disapply
+      that acceptance requirement for recipients established in its territory. Art. 7 sets entry
+      into force at the twentieth day after OJ publication, and the OJ carrying the text is dated
+      25 March 2025, which is consistent with the 14 April 2025 date Art. 6(1) prints.
+
+  - obligation_id: EU-e-invoicing-b2b-issue-intra-community-structured
+    jurisdiction: EU
+    jurisdiction_name: European Union (EU-level instrument)
+    regime: e-invoicing-b2b
+    regime_label: Structured electronic invoicing for intra-Community supplies (ViDA)
+    direction: issue
+    counterparty_scope: cross-border-b2b
+    bound_party: >-
+      Taxable persons obliged to issue an invoice for a transaction caught by the reporting
+      obligations in Title XI, Chapter 6 of Directive 2006/112/EC - in substance the intra-
+      Community transactions listed in the new Art. 262(1). The new Art. 218(2) reads "For the
+      purposes of this Directive, invoices shall be issued as electronic invoices. However,
+      Member States may accept documents or messages on paper or in electronic formats other than
+      electronic invoices for transactions not subject to the reporting obligations laid down in
+      Chapter 6." So the paper option survives only outside Chapter 6; for reportable
+      intra-Community transactions the structured electronic invoice becomes the only invoice.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test. The trigger is the transaction type, not the size of the business: any
+      taxable person identified for VAT purposes making a transaction listed in the new
+      Art. 262(1) is in scope regardless of turnover or headcount.
+    format_name: EN 16931-1 semantic data model, carried in a syntax from the published list
+    format_version: EN 16931-1:2017
+    format_note: >-
+      The new Art. 218(3) reads "Electronic invoices shall comply with the European standard on
+      electronic invoicing and the list of its syntaxes pursuant to Directive 2014/55/EU. Member
+      States may allow the use of other standards for electronic invoices relating to supplies of
+      goods and services within their territory, other than those referred to in Article 262 of
+      this Directive." The other-standards latitude is therefore domestic only - it is not
+      available for the intra-Community transactions this row covers. The standard and syntax list
+      are those published by Commission Implementing Decision (EU) 2017/1870: EN 16931-1:2017 and
+      CEN/TS 16931-2:2017. The new definition in Art. 217 requires a structured electronic format
+      allowing automated processing at least for the data referred to in Arts. 262 and 271b, which
+      is what makes a hybrid invoice acceptable if the reportable data are in the structured part.
+    mandatory_from: '2030-07-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Council Directive (EU) 2025/516, Art. 5 points (4) and (5) (replacing Arts. 217 and 218 of
+      Directive 2006/112/EC) and Art. 6(5)
+    source_url: http://data.europa.eu/eli/dir/2025/516/oj
+    source_title: Council Directive (EU) 2025/516 on VAT rules for the digital age (OJ L series, 2025/516, 25.3.2025)
+    source_type: eu_legal_act
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Read on 2026-10-07 from http://publications.europa.eu/resource/celex/32025L0516 (Accept:
+      application/xhtml+xml, Accept-Language: eng). Art. 6(5) reads "Member States shall adopt and
+      publish, by 30 June 2030, the laws, regulations and administrative provisions necessary to
+      comply with Article 5 ... They shall apply those measures from 1 July 2030", which is the
+      value in mandatory_from. The replacement Arts. 217 and 218 at Art. 5 points (4) and (5), and
+      the replacement Art. 222 first paragraph at Art. 5 point (8), were read verbatim.
+    unknowns:
+      - >-
+        No format cutover date is fixed for a future revision of EN 16931-1. Art. 218(3) cites
+        the standard by reference to Directive 2014/55/EU, so a CEN revision published before
+        2030 would change what compliance means without any date appearing in this directive.
+      - >-
+        Art. 5 point (3) lets Member States make possession of a compliant electronic invoice a
+        substantive condition for deducting or reclaiming VAT. Whether a given Member State takes
+        that option is national law and is not recorded here.
+      - >-
+        The accreditation or assurance measures the new Art. 218(4) requires of Member States, and
+        whether they will fall on issuers or on service providers, are not fixed by the directive.
+    notes: >-
+      Paired with Art. 5 point (8), which replaces the first paragraph of Art. 222: for supplies
+      under Art. 138 and for supplies where VAT is payable by the customer under Arts. 194-197,
+      "an invoice shall be issued no later than 10 days following the chargeable event" (also 10
+      days from receipt of a payment on account, and summary invoices no later than 10 days after
+      the end of the month they cover). That 10-day clock is the operational change most small
+      vendors will feel, and it starts on the same date as this row.
+
+  - obligation_id: EU-e-reporting-report-intra-community
+    jurisdiction: EU
+    jurisdiction_name: European Union (EU-level instrument)
+    regime: e-reporting
+    regime_label: Intra-Community digital reporting requirements (ViDA)
+    direction: report
+    counterparty_scope: cross-border-b2b
+    bound_party: >-
+      Every taxable person identified for VAT purposes, for the transactions listed in the new
+      Art. 262(1): Art. 138(1) and 138(2)(c) supplies and transfers of goods; intra-Community
+      acquisitions under Art. 20 and transactions treated as such under Arts. 21-22; and non-
+      exempt supplies and acquisitions where the customer is liable for VAT under Arts. 194-197 or
+      204. Reporting runs per transaction, not per period: data go in at the time the invoice is
+      issued or should have been issued (new Art. 263(1)), within 5 days where the customer
+      self-bills, and within 5 days of receiving the invoice on the acquisition side (new
+      Art. 263(2)). Member States may waive the acquisition-side legs under Art. 262(4), and
+      taxable persons in the Title XII Chapter 6 Section 5 special scheme are carved out of the
+      own-goods transfer legs by Art. 262(3).
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test. Identification for VAT purposes plus a listed transaction is the whole test;
+      the Art. 262(3) and 262(4) carve-outs turn on scheme and Member-State choice, not on size.
+    format_name: Common electronic message to be determined under Art. 58(2) of Regulation (EU) No 904/2010
+    format_version: null
+    format_note: >-
+      The directive does not name the reporting format. The new Art. 263(4) leaves the common
+      electronic message to the Art. 58(2) Regulation 904/2010 comitology procedure, so no
+      version exists to record yet. The new Art. 263(3) does require Member States to allow
+      transmission of data that comply with the EN 16931 standard and syntax list under Directive
+      2014/55/EU, so an EN 16931 invoice must be an accepted carrier whatever the message becomes.
+    mandatory_from: '2030-07-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Council Directive (EU) 2025/516, Art. 5 points (14)-(18) (replacing Arts. 262-264 and
+      deleting Arts. 265-271 of Directive 2006/112/EC) and Art. 6(5)
+    source_url: http://data.europa.eu/eli/dir/2025/516/oj
+    source_title: Council Directive (EU) 2025/516 on VAT rules for the digital age (OJ L series, 2025/516, 25.3.2025)
+    source_type: eu_legal_act
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Read on 2026-10-07 from http://publications.europa.eu/resource/celex/32025L0516 (Accept:
+      application/xhtml+xml, Accept-Language: eng). The replacement Arts. 262 and 263 at Art. 5
+      points (15) and (16) were read verbatim, as was Art. 5 point (18) deleting Arts. 265 to 271,
+      and the new Chapter 6 Section 1 heading "DIGITAL REPORTING REQUIREMENTS FOR CROSS-BORDER
+      SUPPLIES OF GOODS AND SERVICES WITHIN THE COMMUNITY MADE BETWEEN TAXABLE PERSONS". Art. 6(5)
+      supplies the 1 July 2030 application date.
+    unknowns:
+      - >-
+        format_version is null because the common electronic message does not exist yet: the new
+        Art. 263(4) defers it to an Art. 58(2) Regulation (EU) No 904/2010 procedure with no
+        deadline in the directive. Re-check before 2030.
+      - >-
+        The data set itself sits in the replacement Art. 264 (Art. 5 point (17)), which was not
+        read field by field for this row. Recital (8) flags that additional data including bank
+        details are required beyond what recapitulative statements carried.
+      - >-
+        Which Member States will exercise the Art. 262(4) option to drop the acquisition-side
+        reporting legs is not established.
+    notes: >-
+      This replaces the recapitulative statement, it does not sit alongside it: Art. 5 point (18)
+      deletes Arts. 265 to 271 outright. Recital (14) states the obligation to submit
+      recapitulative statements is removed because those transactions move under the digital
+      reporting requirements with more detailed and timelier information. Art. 271c requires the
+      Commission to present an interim evaluation report to the Council by 31 March 2033, which is
+      the hook the convergence deadline on
+      EU-e-reporting-report-domestic-convergence can be extended through.
+
+  - obligation_id: EU-e-reporting-report-domestic-convergence
+    jurisdiction: EU
+    jurisdiction_name: European Union (EU-level instrument)
+    regime: e-reporting
+    regime_label: Domestic digital reporting - convergence of pre-existing national systems (ViDA)
+    direction: report
+    counterparty_scope: b2b
+    bound_party: >-
+      Member States operating a domestic transaction-based reporting system, and through them the
+      taxable persons established or identified for VAT purposes in their territory. Domestic
+      reporting stays optional for the Member State: the new Art. 271a reads "Member States may
+      require that taxable persons established or identified for VAT purposes in their territory
+      send electronically to their tax authorities data on the supplies of goods and services,
+      other than those referred to in Article 262, made within their territory" to themselves or
+      to other taxable persons, and Art. 271a(4) lets a Member State limit the obligation to
+      certain categories of taxable person or types of transaction. What stops being optional is
+      the shape: a state that requires domestic reporting must run it on the harmonised
+      Art. 271b model - per transaction, at invoice issuance, or within 5 days for self-billing
+      and for the acquisition side.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      The EU provision sets no size test, but explicitly permits one: Art. 271b(4) lets a Member
+      State limit the scope to certain categories of taxable person. National thresholds for
+      domestic reporting are therefore lawful and belong on that country's rows, not here.
+    format_name: Member State's choice, constrained to interoperate with EN 16931
+    format_version: null
+    format_note: >-
+      No single format. The new Art. 271b(3) requires Member States to allow transmission of data
+      from EN 16931-compliant electronic invoices, and permits other data formats "provided that
+      the other data formats ensure interoperability with that standard". So the national format
+      is open but EN 16931-tethered; there is no EU version or cutover date to record.
+    mandatory_from: '2030-07-01'
+    tolerance_ends: '2035-01-01'
+    tolerance_note: >-
+      Art. 6(5) second subparagraph: a Member State that, on 1 January 2024, already had a
+      domestic digital real-time transaction-based reporting obligation in place - or had been
+      granted an Art. 395 authorisation before that date allowing one, or, where no authorisation
+      was needed, had adopted national legislation before that date providing for one - need only
+      apply the Art. 5 point (5) measures on Art. 218 and the Art. 5 point (19) measures on
+      Arts. 271a and 271b "by 1 January 2035, in so far as domestic electronic invoicing and
+      reporting are concerned". It is a grandfathering window for the state's existing system, not
+      a grace period for businesses: the national duty keeps running in its current form
+      throughout. The window can be pushed further - if the Art. 271c interim report (due by
+      31 March 2033) finds shortcomings, the Commission is to assess the need for further measures
+      and may propose postponing the deadline.
+    legal_instrument: >-
+      Council Directive (EU) 2025/516, Art. 5 point (19) (new Title XI, Chapter 6, Section 2,
+      Arts. 271a-271c of Directive 2006/112/EC) and Art. 6(5)
+    source_url: http://data.europa.eu/eli/dir/2025/516/oj
+    source_title: Council Directive (EU) 2025/516 on VAT rules for the digital age (OJ L series, 2025/516, 25.3.2025)
+    source_type: eu_legal_act
+    secondary_source_urls: []
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Read on 2026-10-07 from http://publications.europa.eu/resource/celex/32025L0516 (Accept:
+      application/xhtml+xml, Accept-Language: eng). The new Arts. 271a, 271b and 271c at Art. 5
+      point (19) were read verbatim, as were both subparagraphs of Art. 6(5) and recital (24),
+      which explains the 2035 window as an exceptional accommodation for states and taxable
+      persons that have "recently made significant investments" in existing systems.
+    unknowns:
+      - >-
+        Which Member States qualify for the 1 January 2035 window is not listed anywhere in the
+        directive. It has to be established state by state against the three alternative tests in
+        Art. 6(5) as they stood on 1 January 2024, and that determination has not been made for
+        any country in this dataset yet.
+      - >-
+        The 2035 date is conditional. Art. 6(5) and recital (24) both allow it to be postponed if
+        the Art. 271c interim report (due 31 March 2033) reveals shortcomings, so it is the
+        current ceiling rather than a settled date.
+      - >-
+        Art. 5 point (20) amends Art. 273 to bar new additional general transaction-based
+        reporting obligations beyond Chapter 6, while letting pre-2024 systems run "until they
+        implement" a compliant system. How that interacts with the 2035 date for a state that
+        converges early was not resolved from the text read.
+      - >-
+        format_version is null by nature, not by omission: the directive sets an interoperability
+        requirement rather than naming a format, so there is no EU-level version to track.
+    notes: >-
+      Why this row matters commercially: it is the reason a vendor cannot assume that a national
+      e-reporting system they integrate against today will look the same in 2031. Italy's SdI and
+      comparable pre-2024 systems sit inside this window. The row records the EU-level date and
+      the window only; the per-country consequence has to be sourced from each national
+      instrument, and none of those determinations are in the dataset yet.

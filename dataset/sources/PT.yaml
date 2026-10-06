@@ -1,0 +1,108 @@
+jurisdiction: PT
+jurisdiction_name: Portugal
+obligations:
+
+  - obligation_id: PT-e-invoicing-b2b-issue-electronic-issuers
+    jurisdiction: PT
+    jurisdiction_name: Portugal
+    regime: e-invoicing-b2b
+    regime_label: PT electronic invoicing — authenticity and integrity conditions
+    direction: issue
+    counterparty_scope: b2b-and-b2c
+    bound_party: >-
+      Taxable persons who issue invoices or other fiscally relevant documents by electronic means.
+      Electronic issuing is itself optional in Portugal and requires the recipient's acceptance
+      (art. 12.º n.º 1 of Decreto-Lei n.º 28/2019: the documents "podem, mediante aceitação pelo
+      destinatário, ser emitidos por via eletrónica"). This row records the conditions that attach
+      to an invoice once it IS issued electronically — not an obligation to stop using paper.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test of any kind. Portugal does not band this rule by turnover, headcount or entity
+      type: it binds any taxable person who issues electronically, from a sole trader upwards. The
+      condition is on HOW the invoice is issued, not on how big the issuer is. (Portugal's one
+      size-banded e-invoicing rule is the B2G mandate under Decreto-Lei n.º 111-B/2017, which is
+      a different counterparty scope and is not recorded as a row in v1 — see unknowns.)
+    format_name: null
+    format_version: null
+    format_note: >-
+      No structured format is mandated for B2B invoicing in Portugal — there is no CIUS, no UBL
+      profile and no Peppol requirement on the B2B side. What art. 12.º n.º 2 of Decreto-Lei
+      n.º 28/2019 requires instead is one of three authenticity-and-integrity procedures, read
+      verbatim from the gazette: (a) "aposição de uma assinatura eletrónica qualificada nos termos
+      legais"; (b) "aposição de um selo eletrónico qualificado, nos termos do Regulamento (UE)
+      n.º 910/2014"; (c) "utilização de um sistema de intercâmbio eletrónico de dados" under an
+      agreement following the European model EDI agreement (Recomendação n.º 1994/820/CE). A plain
+      PDF file satisfies none of those three and is accepted only under the transitional rule in
+      tolerance_ends. CIUS-PT and UBL 2.1 belong to the B2G regime, not to this row.
+    mandatory_from: '2027-01-01'
+    tolerance_ends: '2026-12-31'
+    tolerance_note: >-
+      Lei n.º 73-A/2025 (Orçamento do Estado para 2026), art. 95.º n.º 3, verbatim: "Até 31 de
+      dezembro de 2026 são aceites faturas em ficheiro PDF, sendo consideradas como faturas
+      eletrónicas para todos os efeitos previstos na legislação fiscal." So until 2026-12-31 a
+      plain PDF counts as an electronic invoice for every tax purpose, with none of the art. 12.º
+      n.º 2 procedures applied. The tolerance is the PDF file itself, not a penalty holiday.
+    legal_instrument: >-
+      Lei n.º 73-A/2025, de 30 de dezembro (Orçamento do Estado para 2026), artigo 95.º n.º 3
+      ("Disposições transitórias relativas a obrigações fiscais"); Decreto-Lei n.º 28/2019, de 15
+      de fevereiro, artigos 6.º e 12.º ("Emissão de fatura por via eletrónica").
+    source_url: https://files.dre.pt/gratuitos/1s/2025/12/25002.pdf
+    source_title: >-
+      Lei n.º 73-A/2025, de 30 de dezembro — Orçamento do Estado para 2026, Diário da República,
+      1.ª série, n.º 250, 2.º Suplemento, 30-12-2025 (files.dre.pt)
+    source_type: official_gazette
+    secondary_source_urls:
+      - https://files.dre.pt/gratuitos/1s/2019/02/03300.pdf
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      Both instruments retrieved as the official Diário da República PDFs from files.dre.pt on
+      2026-10-07 and text-extracted. Art. 95.º n.º 3 of Lei n.º 73-A/2025 was read verbatim (see
+      tolerance_note) in the 2.º Suplemento to DR n.º 250 of 30-12-2025. Art. 12.º n.os 1 and 2 of
+      Decreto-Lei n.º 28/2019 were read verbatim in DR 1.ª série n.º 33 of 15-02-2019. The
+      2026-12-31 end of PDF acceptance is printed in the statute. The 2027-01-01 mandatory_from is
+      the day after that printed cut-off — the complement of an explicit end-date, not a computed
+      period, which is why this is graded verified where Spain's computed dates are not. What the
+      statute does NOT say anywhere is that electronic invoicing becomes compulsory: see notes.
+    unknowns:
+      - >-
+        Whether the PDF cut-off will be extended again. It sits in the annual budget law as a
+        transitional provision, and art. 260.º of the same law prorogues a long list of other
+        regimes by one year, so annual extension is clearly the mechanism. The extension history
+        was not traced back through earlier budget laws this cycle, so how many times it has
+        already moved is not established here. Treat 2027-01-01 as the current statutory position,
+        not a settled one.
+      - >-
+        The AT's own administrative view on an invoice issued electronically on or after
+        2027-01-01 as a plain PDF — whether it is void, merely not an "electronic invoice", or
+        treated some third way — was not read. No ofício circulado on the point was located this
+        cycle. Ofício Circulado n.º 25120 of 2026-07-28 was retrieved and read and does not
+        address it.
+      - >-
+        Portugal's B2G e-invoicing mandate is NOT recorded as a row. Art. 260.º n.º 2 of Lei
+        n.º 73-A/2025 was read and prorogues "o regime previsto no n.º 4 do artigo 9.º do
+        Decreto-Lei n.º 111-B/2017, de 31 de agosto" to 31 de dezembro de 2026 — which puts the
+        remaining B2G cohort at 2027-01-01 — but the text of that art. 9.º n.º 4 was not itself
+        retrieved, so exactly which cohort it covers is not confirmed here. v1 carries only the
+        `e-invoicing-b2b` regime, so there is no slug for it either. Absence is not "no
+        obligation".
+      - >-
+        Portugal's non-medium-specific invoicing duties — AT-certified billing software, the ATCUD
+        unique document code, the QR code, and the SAF-T (PT) billing file — are reported by
+        secondary sources to apply to every invoice whether paper, PDF or structured. None of them
+        was verified this cycle and none is recorded as a row.
+    notes: >-
+      Read this row as a conditions row, not a mandate row. Portugal has no B2B obligation to issue
+      electronic invoices at all: art. 12.º n.º 1 of Decreto-Lei n.º 28/2019 makes electronic
+      issuing permissive and conditions it on the recipient's acceptance, so paper stays lawful and
+      there is no receiving obligation to record either. The dated thing a buyer must act on is
+      narrower and easy to miss: if you send PDF invoices to Portuguese customers, 2026-12-31 is
+      the last day a bare PDF counts as an electronic invoice, and from 2027-01-01 it needs a
+      qualified electronic signature, a qualified electronic seal, or an EDI arrangement. One
+      adjacent date was read in the same article and is worth knowing: art. 95.º n.º 2 defers the
+      SAF-T (PT) accounting file to tax periods from 2027 onwards, filed in 2028 or later.
