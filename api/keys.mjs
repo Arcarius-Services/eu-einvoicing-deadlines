@@ -46,6 +46,17 @@ export function openDb() {
       count   INTEGER NOT NULL DEFAULT 0,
       PRIMARY KEY (key_id, day)
     );
+    -- The pricing page's request-access capture. This is the willingness-to-pay
+    -- test from the ARC-2 pivot, so losing a row loses the experiment.
+    CREATE TABLE IF NOT EXISTS access_requests (
+      id            TEXT PRIMARY KEY,
+      email         TEXT NOT NULL UNIQUE,
+      company       TEXT,
+      use_case      TEXT,
+      plan_interest TEXT NOT NULL,
+      created_at    TEXT NOT NULL,
+      updated_at    TEXT NOT NULL
+    );
   `)
   return db
 }
@@ -101,6 +112,44 @@ export function findLiveKey(plaintext) {
   if (a.length !== b.length || !timingSafeEqual(a, b)) return null
 
   return { ...row, scopes: row.scopes.split(',') }
+}
+
+/**
+ * Stores a request for API access, keyed on email so a double-submit updates the
+ * row instead of creating a duplicate. Returns `repeat: true` when we had already
+ * heard from that address — the caller reports success either way, because
+ * telling a stranger "you already asked" leaks who is on the list.
+ */
+export function recordAccessRequest({ email, company, useCase, planInterest }) {
+  const d = openDb()
+  const now = new Date().toISOString()
+  const existing = d.prepare(`SELECT id FROM access_requests WHERE email = ?`).get(email)
+
+  if (existing) {
+    d.prepare(
+      `UPDATE access_requests
+         SET company = COALESCE(?, company),
+             use_case = COALESCE(?, use_case),
+             plan_interest = ?,
+             updated_at = ?
+       WHERE id = ?`
+    ).run(company, useCase, planInterest, now, existing.id)
+    return { id: existing.id, repeat: true }
+  }
+
+  const id = randomBytes(8).toString('hex')
+  d.prepare(
+    `INSERT INTO access_requests (id, email, company, use_case, plan_interest, created_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
+  ).run(id, email, company, useCase, planInterest, now, now)
+  return { id, repeat: false }
+}
+
+/** Operator view of the capture. Used by keyctl, never exposed over HTTP. */
+export function listAccessRequests() {
+  return openDb()
+    .prepare(`SELECT id, email, company, plan_interest, use_case, created_at FROM access_requests ORDER BY created_at DESC`)
+    .all()
 }
 
 export function utcDay(now = new Date()) {

@@ -5,8 +5,9 @@
 //   node api/keyctl.mjs mint "Acme Invoicing" free
 //   node api/keyctl.mjs list
 //   node api/keyctl.mjs revoke <key-id>
+//   node api/keyctl.mjs requests
 
-import { mintKey, revokeKey, listKeys, PLANS } from './keys.mjs'
+import { mintKey, revokeKey, listKeys, listAccessRequests, PLANS } from './keys.mjs'
 
 const [cmd, ...args] = process.argv.slice(2)
 
@@ -36,8 +37,18 @@ try {
       }
       break
     }
+    case 'requests': {
+      const rows = listAccessRequests()
+      if (rows.length === 0) { console.log('No access requests yet.'); break }
+      for (const r of rows) {
+        console.log(`${r.created_at.slice(0, 10)}  ${r.plan_interest.padEnd(9)} ${r.email}${r.company ? `  (${r.company})` : ''}`)
+        if (r.use_case) console.log(`            ${r.use_case}`)
+      }
+      console.log(`\n${rows.length} request(s).`)
+      break
+    }
     default:
-      console.log(`Usage: keyctl <mint|list|revoke>\nPlans: ${Object.keys(PLANS).join(', ')}`)
+      console.log(`Usage: keyctl <mint|list|revoke|requests>\nPlans: ${Object.keys(PLANS).join(', ')}`)
       process.exit(cmd ? 1 : 0)
   }
 } catch (err) {

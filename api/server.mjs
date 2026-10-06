@@ -5,16 +5,44 @@
 // Node standard library.
 
 import { createServer } from 'node:http'
-import { findLiveKey, consumeQuota, peekQuota } from './keys.mjs'
+import { findLiveKey, consumeQuota, peekQuota, recordAccessRequest } from './keys.mjs'
 import { loadDataset } from '../src/data/obligations.js'
+import { BRAND, DISCLAIMER } from '../src/brand.mjs'
 
 const PORT = Number(process.env.PORT ?? 8787)
 
+// Browser origins allowed to POST the access-request form. The site is static and
+// on a different origin from this API, so the form needs an explicit allowlist —
+// not a wildcard.
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ?? '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean)
+
 // Loaded once. The dataset is a build artifact; a change means a redeploy.
 const dataset = loadDataset()
-const byId = new Map(dataset.rows.map((r) => [r.obligation_id, r]))
+
+// Odysseus's rule, enforced here and not only in the build guard: a row without
+// its own source URL and checked-on date does not get served. The deploy guard
+// should already have failed the build, so anything dropped here is a bug — say
+// so loudly at boot rather than quietly serving an uncitable fact.
+const servable = dataset.rows.filter((r) => r.source_url && r.checked_on)
+const withheld = dataset.rows.length - servable.length
+if (withheld > 0) {
+  console.error(`WARNING withholding ${withheld} row(s) with no source_url/checked_on. The deploy guard should have caught this.`)
+}
+
+const byId = new Map(servable.map((r) => [r.obligation_id, r]))
 
 const ROUTE_SCOPE = 'obligations:read'
+
+// Travels with the data into whatever app consumes it, so the caveat does not get
+// stripped off by living only in our footer.
+const ENVELOPE = {
+  source: BRAND,
+  disclaimer: DISCLAIMER,
+  schema_version: dataset.schemaVersion,
+}
 
 function send(res, status, body, headers = {}) {
   const payload = JSON.stringify(body, null, 2)
@@ -75,7 +103,7 @@ function queryObligations(url) {
   const sp = url.searchParams
   const eq = (field, value) => (r) => String(r[field] ?? '').toLowerCase() === value.toLowerCase()
 
-  let rows = dataset.rows
+  let rows = servable
   for (const field of ['jurisdiction', 'direction', 'regime', 'confidence']) {
     const v = sp.get(field)
     if (v) rows = rows.filter(eq(field, v))
@@ -85,6 +113,78 @@ function queryObligations(url) {
   const offset = Math.max(Number(sp.get('offset') ?? 0) || 0, 0)
 
   return { total: rows.length, limit, offset, rows: rows.slice(offset, offset + limit) }
+}
+
+const MAX_BODY = 4096
+
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let size = 0
+    const chunks = []
+    req.on('data', (c) => {
+      size += c.length
+      if (size > MAX_BODY) {
+        reject(Object.assign(new Error('body_too_large'), { code: 'body_too_large' }))
+        req.destroy()
+        return
+      }
+      chunks.push(c)
+    })
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
+    req.on('error', reject)
+  })
+}
+
+// Deliberately permissive: this validates that a reply is possible, not that the
+// address is real. Bouncing a prospect off our signup form over a regex is a worse
+// outcome than storing one undeliverable row.
+const looksLikeEmail = (s) => typeof s === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim())
+
+const PLAN_INTEREST = new Set(['free', 'starter', 'vendor', 'undecided'])
+
+/**
+ * Records a request for API access. This is the willingness-to-pay test from the
+ * ARC-2 pivot, so it has to land somewhere durable — it writes to the same SQLite
+ * file as the keys, and returns 201 whether or not the address is new.
+ */
+async function handleAccessRequest(req, res, cors) {
+  let raw
+  try {
+    raw = await readBody(req)
+  } catch {
+    return fail(res, 413, 'body_too_large', `Keep the request under ${MAX_BODY} bytes.`, cors)
+  }
+
+  let body
+  try {
+    body = JSON.parse(raw || '{}')
+  } catch {
+    return fail(res, 400, 'invalid_json', 'Send a JSON object.', cors)
+  }
+
+  if (!looksLikeEmail(body.email)) {
+    return fail(res, 400, 'invalid_email', 'An email address we can reply to is the one field we need.', cors)
+  }
+
+  const plan = PLAN_INTEREST.has(body.plan_interest) ? body.plan_interest : 'undecided'
+  const trim = (v, n) => (typeof v === 'string' ? v.trim().slice(0, n) : null)
+
+  const result = recordAccessRequest({
+    email: body.email.trim().slice(0, 320),
+    company: trim(body.company, 200),
+    useCase: trim(body.use_case, 1000),
+    planInterest: plan,
+  })
+
+  // The email is a customer identifier, so it is not in the access log — only the
+  // row id and whether it was new.
+  console.log(JSON.stringify({ t: new Date().toISOString(), event: 'access_request', id: result.id, repeat: result.repeat, plan }))
+
+  return send(res, 201, {
+    status: 'recorded',
+    id: result.id,
+    message: 'Thanks — we have your request and will reply with a free-tier key.',
+  }, cors)
 }
 
 const server = createServer((req, res) => {
@@ -106,11 +206,28 @@ const server = createServer((req, res) => {
     }))
   })
 
-  if (req.method !== 'GET') return fail(res, 405, 'method_not_allowed', 'This API is read-only.')
+  const origin = typeof req.headers.origin === 'string' ? req.headers.origin : null
+  const cors = origin && ALLOWED_ORIGINS.includes(origin)
+    ? { 'access-control-allow-origin': origin, 'vary': 'origin' }
+    : {}
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, { ...cors, 'access-control-allow-methods': 'GET, POST', 'access-control-allow-headers': 'content-type', 'access-control-max-age': '86400' })
+    return res.end()
+  }
+
+  // The only write route. It is the pricing page's request-access form: no key,
+  // because the whole point is that a stranger who has no key can ask for one.
+  if (path === '/v1/access-requests') {
+    if (req.method !== 'POST') return fail(res, 405, 'method_not_allowed', 'Send this as POST.', cors)
+    return handleAccessRequest(req, res, cors)
+  }
+
+  if (req.method !== 'GET') return fail(res, 405, 'method_not_allowed', 'This API is read-only.', cors)
 
   // Unkeyed, uncounted: deploy checks must not need a customer key.
   if (path === '/v1/health') {
-    return send(res, 200, { status: 'ok', schema_version: dataset.schemaVersion, row_count: dataset.rowCount, fixture: dataset.isFixture })
+    return send(res, 200, { status: 'ok', schema_version: dataset.schemaVersion, row_count: servable.length, fixture: dataset.isFixture })
   }
 
   const key = authenticate(req, url, res)
@@ -129,8 +246,8 @@ const server = createServer((req, res) => {
 
   if (path === '/v1/meta') {
     return send(res, 200, {
-      schema_version: dataset.schemaVersion,
-      row_count: dataset.rowCount,
+      ...ENVELOPE,
+      row_count: servable.length,
       fixture: dataset.isFixture,
       key: { id: key.id, plan: key.plan, scopes: key.scopes },
       quota: peekQuota(key.id, key.daily_limit),
@@ -139,14 +256,14 @@ const server = createServer((req, res) => {
 
   if (path === '/v1/obligations') {
     const result = queryObligations(url)
-    return send(res, 200, { schema_version: dataset.schemaVersion, ...result }, h)
+    return send(res, 200, { ...ENVELOPE, ...result }, h)
   }
 
   const one = path.match(/^\/v1\/obligations\/(.+)$/)
   if (one) {
     const row = byId.get(decodeURIComponent(one[1]))
     if (!row) return fail(res, 404, 'not_found', 'No obligation with that id.', h)
-    return send(res, 200, { schema_version: dataset.schemaVersion, row }, h)
+    return send(res, 200, { ...ENVELOPE, row }, h)
   }
 
   return fail(res, 404, 'not_found', `No route for ${path}.`, h)
