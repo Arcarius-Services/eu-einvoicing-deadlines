@@ -34,6 +34,11 @@ jobs:
       - name: Guard the dataset
         run: node scripts/check-dataset.mjs
 
+      # Band resolution decides which date each page prints. A bug here does not
+      # crash the build, it publishes the wrong deadline — so it gates the deploy.
+      - name: Test band resolution against the live dataset
+        run: npm test
+
       - name: Build
         env:
           SITE_URL: ${{ vars.SITE_URL || 'https://arcarius-services.github.io' }}

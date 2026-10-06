@@ -2,28 +2,31 @@
   "schema_version": "1.0.0",
   "generated_from": "dataset/sources/*.yaml (source of truth; dataset/build.py validates and generates this file, the CSV and coverage.md)",
   "generated_on": "2026-10-07",
-  "row_count": 12,
+  "row_count": 19,
   "coverage": {
     "jurisdictions": [
       "BE",
       "DE",
+      "ES",
       "FR",
+      "GR",
       "IT",
-      "PL"
+      "PL",
+      "RO"
     ],
-    "jurisdiction_count": 5,
+    "jurisdiction_count": 8,
     "regimes": [
       "e-invoicing-b2b"
     ],
     "confidence_counts": {
-      "verified": 12,
-      "reported": 0,
-      "unknown": 0
+      "verified": 14,
+      "reported": 4,
+      "unknown": 1
     },
     "oldest_checked_on": "2026-10-07",
     "newest_checked_on": "2026-10-07",
-    "rows_with_open_unknowns": 10,
-    "note": "Partial dataset. 5 jurisdictions recorded of 27 EU member states plus UK and Norway in scope for v1. This is not a completeness claim: a jurisdiction absent from rows means not yet recorded, never 'no obligation'. See dataset/dist/coverage.md and dataset/CHANGELOG.md."
+    "rows_with_open_unknowns": 17,
+    "note": "Partial dataset. 8 jurisdictions recorded of 27 EU member states plus UK and Norway in scope for v1. This is not a completeness claim: a jurisdiction absent from rows means not yet recorded, never 'no obligation'. See dataset/dist/coverage.md and dataset/CHANGELOG.md."
   },
   "rows": [
     {
@@ -213,6 +216,125 @@
       "notes": "This is the row most German small vendors get wrong: they are not obliged to issue until 2027 or 2028, but they have been obliged to be able to receive since 1 January 2025, with no grace period."
     },
     {
+      "obligation_id": "ES-e-invoicing-b2b-issue-turnover-gt-8m-eur",
+      "jurisdiction": "ES",
+      "jurisdiction_name": "Spain",
+      "regime": "e-invoicing-b2b",
+      "regime_label": "Facturación electrónica obligatoria entre empresarios y profesionales",
+      "direction": "issue",
+      "counterparty_scope": "b2b",
+      "bound_party": "Empresarios y profesionales whose volume of operations exceeded EUR 8,000,000 in the immediately preceding calendar year.",
+      "threshold_type": "turnover",
+      "threshold_value": 8000000,
+      "threshold_currency": "EUR",
+      "threshold_operator": "gt",
+      "threshold_basis": "Volumen de operaciones calculated in accordance with article 121 of Ley 37/1992 (the Spanish VAT Act)",
+      "threshold_period": "el año natural inmediato anterior — the immediately preceding calendar year",
+      "threshold_definition": "Disposición final cuarta of Real Decreto 238/2026 phases the regime from the entry into force of the ministerial order developing the public invoicing solution: 12 months for empresarios y profesionales whose volume of operations, calculated per article 121 of Ley 37/1992, exceeded EUR 8,000,000 in the immediately preceding calendar year; 24 months for everyone else. Unlike Poland's fixed 2024 reference year, this is a rolling prior-year test.",
+      "format_name": "UBL (reference syntax for the public solution)",
+      "format_version": null,
+      "format_note": "Real Decreto 238/2026 permits CII, UBL, EDIFACT and Facturae. For the public invoicing solution specifically, UBL is the reference syntax: Anexo I of Orden HAC/1028/2026 is titled \"Contenido y estructura de los campos de la factura electrónica conforme al modelo UBL y la EN 16931\". No UBL version number is stated in the order's Anexo I heading as read, so the version is an open unknown rather than an omission.",
+      "mandatory_from": "2027-10-06",
+      "tolerance_ends": null,
+      "tolerance_note": null,
+      "legal_instrument": "Ley 18/2022, de 28 de septiembre, de creación y crecimiento de empresas, art. 12 (amending art. 2 bis of Ley 56/2007); Real Decreto 238/2026, de 25 de marzo (BOE-A-2026-7295), disposición final cuarta; Orden HAC/1028/2026, de 2 de octubre (BOE-A-2026-20587), disposición final única.",
+      "source_url": "https://www.boe.es/boe/dias/2026/10/05/pdfs/BOE-A-2026-20587.pdf",
+      "source_title": "Orden HAC/1028/2026, de 2 de octubre, por la que se regula la solución pública de facturación electrónica — BOE núm. 247, 5 October 2026, disposición núm. 20587 (boe.es)",
+      "source_type": "official_gazette",
+      "secondary_source_urls": [
+        "https://www.boe.es/buscar/act.php?id=BOE-A-2026-7295",
+        "https://www.boe.es/buscar/act.php?id=BOE-A-2022-15818",
+        "https://sede.agenciatributaria.gob.es/Sede/iva/novedades-iva/novedades-normativa-2026/real-decreto-238-2026-25-marzo.html"
+      ],
+      "checked_on": "2026-10-07",
+      "confidence": "reported",
+      "confidence_note": "Two primary sources read on 2026-10-07. Orden HAC/1028/2026 retrieved as the BOE PDF and its text extracted: disposición final única states the order \"entrará en vigor el día siguiente al de su publicación en el Boletín Oficial del Estado, dándose inicio al cómputo de los plazos previstos en la disposición final octava de la Ley 18/2022 ... y en las disposiciones transitorias primera a tercera y disposición final cuarta, del Real Decreto 238/2026\". Published 5 October 2026, so in force 6 October 2026. Real Decreto 238/2026 read on boe.es for the 12/24-month periods, the EUR 8,000,000 threshold and the article 121 Ley 37/1992 basis. The row is `reported` and not `verified` because mandatory_from is OUR arithmetic (6 October 2026 + 12 months), not a date either instrument prints.",
+      "unknowns": [
+        "Whether the 12-month period expires on 2027-10-06 or 2027-10-05 depends on how article 30 of Ley 39/2015 computes a period expressed in months from the date of entry into force. This is a legal-interpretation question, not a sourcing question — escalated to Odysseus. The date here is the later of the two readings.",
+        "No UBL version number was found in Anexo I of the order as read.",
+        "Whether the receiving obligation starts on the same dates as issuing is not established — see ES-e-invoicing-b2b-receive-all."
+      ],
+      "notes": "Commercially the freshest row in the dataset: before 6 October 2026 the Spanish dates could not be computed at all, because the phase-in was expressed as a period running from a ministerial order that had not been published. Any competitor snapshot taken before 5 October 2026 still shows Spain as undated."
+    },
+    {
+      "obligation_id": "ES-e-invoicing-b2b-issue-turnover-lte-8m-eur",
+      "jurisdiction": "ES",
+      "jurisdiction_name": "Spain",
+      "regime": "e-invoicing-b2b",
+      "regime_label": "Facturación electrónica obligatoria entre empresarios y profesionales",
+      "direction": "issue",
+      "counterparty_scope": "b2b",
+      "bound_party": "All remaining empresarios y profesionales — those whose volume of operations did not exceed EUR 8,000,000 in the immediately preceding calendar year.",
+      "threshold_type": "turnover",
+      "threshold_value": 8000000,
+      "threshold_currency": "EUR",
+      "threshold_operator": "lte",
+      "threshold_basis": "Volumen de operaciones calculated in accordance with article 121 of Ley 37/1992",
+      "threshold_period": "el año natural inmediato anterior — the immediately preceding calendar year",
+      "threshold_definition": "The residual cohort under disposición final cuarta of Real Decreto 238/2026: \"a los veinticuatro meses de la entrada en vigor de la orden, para el resto de los empresarios y profesionales.\"",
+      "format_name": "UBL (reference syntax for the public solution)",
+      "format_version": null,
+      "format_note": "CII, UBL, EDIFACT and Facturae are permitted under RD 238/2026; UBL is the reference syntax for the public solution per Anexo I of Orden HAC/1028/2026, which references the UBL model and EN 16931. No version number stated in the text read.",
+      "mandatory_from": "2028-10-06",
+      "tolerance_ends": null,
+      "tolerance_note": null,
+      "legal_instrument": "Ley 18/2022, de 28 de septiembre, art. 12; Real Decreto 238/2026, de 25 de marzo (BOE-A-2026-7295), disposición final cuarta; Orden HAC/1028/2026, de 2 de octubre (BOE-A-2026-20587), disposición final única.",
+      "source_url": "https://www.boe.es/boe/dias/2026/10/05/pdfs/BOE-A-2026-20587.pdf",
+      "source_title": "Orden HAC/1028/2026, de 2 de octubre — BOE núm. 247, 5 October 2026, disposición núm. 20587 (boe.es)",
+      "source_type": "official_gazette",
+      "secondary_source_urls": [
+        "https://www.boe.es/buscar/act.php?id=BOE-A-2026-7295",
+        "https://sede.agenciatributaria.gob.es/Sede/todas-noticias/2026/marzo/31/facturacion-electronica-obligatoria.html"
+      ],
+      "checked_on": "2026-10-07",
+      "confidence": "reported",
+      "confidence_note": "Same two primary sources read on 2026-10-07 as the >EUR 8m row. `reported` rather than `verified` because mandatory_from is our arithmetic on the order's entry into force (6 October 2026 + 24 months), not a date printed in either instrument.",
+      "unknowns": [
+        "Exact expiry day of the 24-month period under article 30 of Ley 39/2015 — same interpretation question as the 12-month cohort. Escalated to Odysseus.",
+        "No UBL version number found in Anexo I of the order as read."
+      ],
+      "notes": "RD 238/2026 also requires the public invoicing solution to be available to obliged businesses at least two months before the regime's first effective application, which implies an AEAT readiness date around August 2027. That is a derived expectation, not an obligation on taxpayers, so it is not a row."
+    },
+    {
+      "obligation_id": "ES-e-invoicing-b2b-receive-all",
+      "jurisdiction": "ES",
+      "jurisdiction_name": "Spain",
+      "regime": "e-invoicing-b2b",
+      "regime_label": "Facturación electrónica obligatoria entre empresarios y profesionales",
+      "direction": "receive",
+      "counterparty_scope": "b2b",
+      "bound_party": "Empresarios y profesionales obliged to receive electronic invoices under art. 2 bis of Ley 56/2007 as amended by Ley 18/2022. The commencement date for the receiving leg specifically is not established.",
+      "threshold_type": "none",
+      "threshold_value": null,
+      "threshold_currency": null,
+      "threshold_operator": null,
+      "threshold_basis": null,
+      "threshold_period": null,
+      "threshold_definition": "Ley 18/2022 art. 12 obliges empresarios y profesionales to \"expedir, remitir y recibir\" electronic invoices, and Orden HAC/1028/2026 refers to those \"obligados a emitir y recibir facturas electrónicas\". Whether the receiving duty commences on the same 12/24-month phased dates as issuing, or earlier and uniformly for everyone, is not stated in the provisions read.",
+      "format_name": "UBL (reference syntax for the public solution)",
+      "format_version": null,
+      "format_note": "Expected to mirror the issuing formats (CII, UBL, EDIFACT, Facturae; UBL for the public solution), but not separately established for the receiving leg.",
+      "mandatory_from": null,
+      "tolerance_ends": null,
+      "tolerance_note": null,
+      "legal_instrument": "Ley 18/2022, de 28 de septiembre, art. 12 (amending art. 2 bis of Ley 56/2007); Real Decreto 238/2026, de 25 de marzo; Orden HAC/1028/2026, de 2 de octubre.",
+      "source_url": "https://www.boe.es/buscar/act.php?id=BOE-A-2026-7295",
+      "source_title": "Real Decreto 238/2026, de 25 de marzo — consolidated text, BOE-A-2026-7295 (boe.es)",
+      "source_type": "official_gazette",
+      "secondary_source_urls": [
+        "https://www.boe.es/boe/dias/2026/10/05/pdfs/BOE-A-2026-20587.pdf",
+        "https://www.boe.es/buscar/act.php?id=BOE-A-2022-15818"
+      ],
+      "checked_on": "2026-10-07",
+      "confidence": "unknown",
+      "confidence_note": "Recorded as unknown deliberately. RD 238/2026 and Orden HAC/1028/2026 were both read on 2026-10-07 and neither, in the provisions read, separates a commencement date for the receiving obligation from the phased issuing dates. Poland and France both run receiving ahead of small-company issuing, so assuming Spain mirrors its own issuing phases would be a guess dressed as a fact.",
+      "unknowns": [
+        "Commencement date of the receiving obligation. Needs disposiciones transitorias primera a tercera of RD 238/2026 read in full, which was not done this cycle.",
+        "Whether a small company must be able to receive from the large-company date (2027-10-06) — the pattern in Poland and France — or only from its own issuing date."
+      ],
+      "notes": "This is the highest-value unresolved row in the dataset. It is the single question a Spanish SME will ask first, and the honest answer today is that the instruments read do not say."
+    },
+    {
       "obligation_id": "FR-e-invoicing-b2b-issue-grandes-entreprises-et-eti",
       "jurisdiction": "FR",
       "jurisdiction_name": "France",
@@ -327,6 +449,89 @@
         "The e-reporting (transmission de données de transaction) obligation that accompanies the reform is not yet recorded as its own row."
       ],
       "notes": "impots.gouv.fr/facturation-electronique 302-redirects to collectivites-locales.gouv.fr and economie.gouv.fr returned HTTP 403 to this host, so the DGFiP guide PDF was the usable primary source."
+    },
+    {
+      "obligation_id": "GR-e-invoicing-b2b-issue-revenue-gt-1m-eur",
+      "jurisdiction": "GR",
+      "jurisdiction_name": "Greece",
+      "regime": "e-invoicing-b2b",
+      "regime_label": "Mandatory electronic invoicing (myDATA / ηλεκτρονική τιμολόγηση)",
+      "direction": "issue",
+      "counterparty_scope": "b2b",
+      "bound_party": "Businesses in Greece with gross revenue exceeding EUR 1,000,000, for sales of goods and provision of services to other businesses.",
+      "threshold_type": "revenue_or_fees",
+      "threshold_value": 1000000,
+      "threshold_currency": "EUR",
+      "threshold_operator": "gt",
+      "threshold_basis": "Gross revenue (ακαθάριστα έσοδα)",
+      "threshold_period": "tax year 2023 — a fixed historical year, not a rolling period",
+      "threshold_definition": "First-phase cohort: businesses whose gross revenue for tax year 2023 exceeded EUR 1,000,000. As with Poland's PLN 200m test, the reference year is fixed, so a business above the line in 2023 stays in the first phase regardless of later contraction.",
+      "format_name": null,
+      "format_version": null,
+      "format_note": "Format not recorded. Compliance is by using a certified Electronic Invoicing Provider or AADE's free applications (timologio, myDATAapp), but the required document schema and its version were not established from a source read. The myDATA REST API documentation (v2.0.2) is published by AADE but was not retrieved.",
+      "mandatory_from": "2026-03-02",
+      "tolerance_ends": "2026-05-03",
+      "tolerance_note": "Transitional period reported as running 2 March – 3 May 2026, during which parallel use of existing business-management software, or a special registration form, was permitted alongside the new obligation. Whether this suspends penalties or permits non-compliant issuing outright is not established from a source read.",
+      "legal_instrument": "Joint decision of the Deputy Minister of National Economy and Finance and the Governor of AADE, A.1044/17-02-2026, which postponed the first-period dates; underlying mandatory e-invoicing framework under the myDATA legislation.",
+      "source_url": "https://www.aade.gr/egkyklioi-kai-apofaseis/mydata-diataxeis/1044-17-02-2026",
+      "source_title": "AADE decision A.1044/17-02-2026 — myDATA provisions, Independent Authority for Public Revenue (aade.gr). NOT READ: returned HTTP 403 to this host on 2026-10-07.",
+      "source_type": "secondary",
+      "secondary_source_urls": [
+        "https://www.aade.gr/sites/default/files/2026-02/dt_17.02.2026.pdf",
+        "https://www.aade.gr/sites/default/files/2025-09/dt_16.09.2025..pdf",
+        "https://www.aade.gr/en/mandatory-electronic-invoicing-digital-goods-movement-documents-frequently-asked-questions-answers"
+      ],
+      "checked_on": "2026-10-07",
+      "confidence": "reported",
+      "confidence_note": "Not verified. Every aade.gr URL above returned HTTP 403 to this host on 2026-10-07, so no AADE text was read. The dates, the EUR 1,000,000 threshold, the 2023 reference year and the 2 March – 3 May 2026 transitional window all come from search-index extractions of AADE's own press releases (dt_17.02.2026.pdf and dt_16.09.2025.pdf) rather than from the documents themselves. Treat as a credible secondary report pending re-verification.",
+      "unknowns": [
+        "Nothing on this row has been read from a primary source. All of it needs re-verification from an unblocked network path.",
+        "Original first-phase date was reported as 2 February 2026 and postponed to 2 March 2026 by A.1044/17-02-2026. The postponement is reported, not confirmed.",
+        "Required document format and schema version not established.",
+        "Whether the transitional period suspends penalties or permits non-compliant issuing is not established."
+      ],
+      "notes": "Scope is reported as covering sales of goods and services between businesses in Greece and businesses in third countries outside the EU. A separate digital goods-movement document obligation runs alongside the invoicing one and is not yet a row."
+    },
+    {
+      "obligation_id": "GR-e-invoicing-b2b-issue-revenue-lte-1m-eur",
+      "jurisdiction": "GR",
+      "jurisdiction_name": "Greece",
+      "regime": "e-invoicing-b2b",
+      "regime_label": "Mandatory electronic invoicing (myDATA / ηλεκτρονική τιμολόγηση)",
+      "direction": "issue",
+      "counterparty_scope": "b2b",
+      "bound_party": "All remaining businesses in Greece — those whose gross revenue did not exceed EUR 1,000,000 in the reference year.",
+      "threshold_type": "revenue_or_fees",
+      "threshold_value": 1000000,
+      "threshold_currency": "EUR",
+      "threshold_operator": "lte",
+      "threshold_basis": "Gross revenue (ακαθάριστα έσοδα)",
+      "threshold_period": "tax year 2023 — a fixed historical year, not a rolling period",
+      "threshold_definition": "The residual cohort, reported as becoming subject to mandatory electronic invoicing on 1 October 2026.",
+      "format_name": null,
+      "format_version": null,
+      "format_note": "Format not recorded. Compliance by certified Electronic Invoicing Provider or AADE's free timologio / myDATAapp applications; schema and version not established.",
+      "mandatory_from": "2026-10-01",
+      "tolerance_ends": null,
+      "tolerance_note": null,
+      "legal_instrument": "Joint decision of the Deputy Minister of National Economy and Finance and the Governor of AADE, A.1044/17-02-2026; underlying myDATA mandatory e-invoicing framework.",
+      "source_url": "https://www.aade.gr/egkyklioi-kai-apofaseis/mydata-diataxeis/1044-17-02-2026",
+      "source_title": "AADE decision A.1044/17-02-2026 — myDATA provisions (aade.gr). NOT READ: returned HTTP 403 to this host on 2026-10-07.",
+      "source_type": "secondary",
+      "secondary_source_urls": [
+        "https://www.aade.gr/sites/default/files/2026-02/dt_17.02.2026.pdf",
+        "https://www.aade.gr/sites/default/files/2026-09/DT_22.09.2026.pdf"
+      ],
+      "checked_on": "2026-10-07",
+      "confidence": "reported",
+      "confidence_note": "Not verified — aade.gr returned HTTP 403 to this host on 2026-10-07 for every URL tried. The 1 October 2026 date comes from a search-index extraction of AADE press material, not from a document read. An AADE press release dated 22 September 2026 exists and may carry a further change to this date; it could not be retrieved.",
+      "unknowns": [
+        "Nothing on this row has been read from a primary source.",
+        "An AADE press release dated 22 September 2026 (DT_22.09.2026.pdf) was identified but not retrieved. It is dated nine days before this obligation's reported start and could amend it. This is the specific reason the row must not be sold as verified.",
+        "No transitional or penalty-tolerance window was identified for this cohort; absence of a found tolerance is not evidence none exists.",
+        "Required document format and schema version not established."
+      ],
+      "notes": "This date has already passed as at 2026-10-07, which raises rather than lowers the cost of getting it wrong: a buyer reading this row is asking whether they are currently non-compliant. Until re-verified, any consumer must render it as reported and attributed."
     },
     {
       "obligation_id": "IT-e-invoicing-b2b-issue-forfetario-residual",
@@ -479,6 +684,83 @@
         "Whether a taxpayer relying on the PLN 10,000/month small-invoice transition for ISSUING is nonetheless obliged to receive via KSeF from 1 February 2026 is not stated in terms. Read literally the receiving duty is unconditional, but the interaction is not spelled out on the portal."
       ],
       "notes": "The asymmetry here is the commercially important fact: a small Polish company is in scope for receiving on 1 February 2026, two months before the headline \"April 2026\" issuing date that most summaries lead with."
+    },
+    {
+      "obligation_id": "RO-e-invoicing-b2b-issue-all",
+      "jurisdiction": "RO",
+      "jurisdiction_name": "Romania",
+      "regime": "e-invoicing-b2b",
+      "regime_label": "RO e-Factura — national electronic invoicing system",
+      "direction": "issue",
+      "counterparty_scope": "b2b",
+      "bound_party": "Economic operators established in Romania issuing invoices in B2B relationships to taxable persons established in Romania under art. 266(2) of the Fiscal Code.",
+      "threshold_type": "none",
+      "threshold_value": null,
+      "threshold_currency": null,
+      "threshold_operator": null,
+      "threshold_basis": null,
+      "threshold_period": null,
+      "threshold_definition": "No size test on the obligation itself. Size only affects the penalty tariff: ANAF sets fines of RON 5,000–10,000 for large taxpayers, RON 2,500–5,000 for medium taxpayers and RON 1,000–2,500 for other legal persons and for individuals.",
+      "format_name": null,
+      "format_version": null,
+      "format_note": "Format not recorded. Romania uses a national CIUS of EN 16931 (commonly cited as RO_CIUS), but neither the format name nor its version was confirmed from a source read this cycle: the OUG 120/2021 PDF on mfinante.gov.ro reset the connection and the ANAF schema PDF was not retrieved. Recording a format name without having read it would be exactly the half-fact this dataset exists to avoid.",
+      "mandatory_from": "2024-07-01",
+      "tolerance_ends": null,
+      "tolerance_note": null,
+      "legal_instrument": "OUG nr. 120/2021 privind administrarea, funcționarea și implementarea sistemului național privind factura electronică RO e-Factura, as amended and supplemented by OUG nr. 115/2023, art. 10(1), art. 13^1 and art. 13^2; Legea nr. 296/2023 art. LIX(7); Legea nr. 227/2015 (Codul Fiscal) art. 319(16).",
+      "source_url": "https://static.anaf.ro/static/10/Galati/Vrancea/termene-E-factura.pdf",
+      "source_title": "ANAF, \"Termenele legale de transmitere a facturii electronice în sistemul național RO e-factura\" — Administrația Județeană a Finanțelor Publice Vrancea, DGRFP Galați (anaf.ro)",
+      "source_type": "tax_authority",
+      "secondary_source_urls": [
+        "https://mfinante.gov.ro/documents/35673/1120722/OUG120_MO96007102021.pdf",
+        "https://static.anaf.ro/static/3/Ploiesti/20240312115819_comunicat_ghidul_ro_e-factura.pdf"
+      ],
+      "checked_on": "2026-10-07",
+      "confidence": "verified",
+      "confidence_note": "ANAF notice retrieved as PDF and text-extracted on 2026-10-07. It states that from 01.07.2024 an issuer's failure to transmit the invoice into RO e-Factura, and a recipient's receipt and recording of a B2B invoice from a Romanian-established operator without compliance with art. 10(1), is penalised at 15% of the total invoice value. That 15% sanction on non-transmission from 1 July 2024 is what makes the system mandatory rather than merely available, which is why this row's mandatory_from is 2024-07-01.",
+      "unknowns": [
+        "Invoice format name and version (RO_CIUS / EN 16931) not confirmed from a source read.",
+        "Whether the obligation extends to non-established but Romanian-VAT-registered suppliers is not recorded.",
+        "B2G e-invoicing in Romania predates the B2B regime and is not yet a row."
+      ],
+      "notes": "Transmission deadline: 5 working days from invoice issue and no later than 5 working days from the art. 319(16) Fiscal Code issuing deadline; from 1 July 2024 this became 5 CALENDAR days rather than working days. The working-day to calendar-day switch on the same date as the mandate is an easy detail to miss and materially tightens the duty."
+    },
+    {
+      "obligation_id": "RO-e-invoicing-b2b-issue-reporting-phase",
+      "jurisdiction": "RO",
+      "jurisdiction_name": "Romania",
+      "regime": "e-invoicing-b2b",
+      "regime_label": "RO e-Factura — national electronic invoicing system",
+      "direction": "issue",
+      "counterparty_scope": "cross-border-b2b",
+      "bound_party": "Economic operators — taxable persons established in Romania — during the initial reporting phase, required to report all invoices into the RO e-Factura system.",
+      "threshold_type": "entity_type",
+      "threshold_value": null,
+      "threshold_currency": null,
+      "threshold_operator": null,
+      "threshold_basis": "Taxable persons established in Romania",
+      "threshold_period": null,
+      "threshold_definition": "The transitional phase of the Romanian mandate: from 1 January 2024 all invoices had to be reported into RO e-Factura, ahead of the full 1 July 2024 mandate under which non-transmission itself became a 15%-of-invoice-value offence.",
+      "format_name": null,
+      "format_version": null,
+      "format_note": "Format not recorded — see RO-e-invoicing-b2b-issue-all.",
+      "mandatory_from": "2024-01-01",
+      "tolerance_ends": "2024-03-31",
+      "tolerance_note": "Penalty tolerance only. ANAF: failure to meet the transmission deadline in the B2B relationship was not sanctioned as a contravention in the period 1 January – 31 March 2024. The reporting duty itself ran from 1 January 2024; only the fine was withheld.",
+      "legal_instrument": "OUG nr. 120/2021, as amended by OUG nr. 115/2023; Legea nr. 296/2023 art. LIX(7); Legea nr. 227/2015 (Codul Fiscal) art. 319(16).",
+      "source_url": "https://static.anaf.ro/static/10/Galati/Vrancea/termene-E-factura.pdf",
+      "source_title": "ANAF, \"Termenele legale de transmitere a facturii electronice în sistemul național RO e-factura\" — DGRFP Galați / AJFP Vrancea (anaf.ro)",
+      "source_type": "tax_authority",
+      "secondary_source_urls": [
+        "https://static.anaf.ro/static/10/Brasov/Brasov/oug_115_factura.pdf"
+      ],
+      "checked_on": "2026-10-07",
+      "confidence": "verified",
+      "confidence_note": "ANAF notice read on 2026-10-07, which states the contravention tolerance for the B2B relationship over 1 January – 31 March 2024 and the 5-working-day then 5-calendar-day transmission deadlines.",
+      "unknowns": [
+        "The exact commencement instrument and date for the reporting phase were taken from the tolerance window's framing rather than from the ordinance text, which was not retrieved (mfinante.gov.ro connection reset)."
+      ],
+      "notes": "Retained as a historical row rather than deleted. The change log is a product: a buyer reconstructing what was required of them in Q1 2024 needs this row, and it is also the cleanest worked example in the dataset of a tolerance that withheld penalties without postponing the duty."
     }
   ]
 }

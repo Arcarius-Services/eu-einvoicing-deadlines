@@ -10,7 +10,7 @@ export function getStaticPaths() {
   }))
 }
 
-const { country, direction, band, binding, partial, unresolved, answer, all } = Astro.props
+const { country, direction, band, binding, partial, unresolved, undated, answer, all } = Astro.props
 const base = import.meta.env.BASE_URL
 
 // The national threshold cuts through this band, so there is more than one answer
@@ -79,6 +79,27 @@ const other = Object.values(BANDS)
       <p class="muted">
         Measured against {(partial[0].row.threshold_basis ?? 'the basis named in the source').replace(/\.\s*$/, '')}.
       </p>
+    </div>
+  ) : undated.length > 0 ? (
+    <div class="answer unknown">
+      <span class="date">Announced, no start date published</span>
+      <p>
+        The obligation applies to you, but {country.name} has not published the date it begins.
+        We checked the primary source rather than guess, and this is what it says.
+      </p>
+      {undated.map((r) => (
+        <p>
+          <strong>{r.bound_party}</strong>
+          {r.notes && <><br />{r.notes}</>}
+          <br />
+          <span class="muted">
+            {r.legal_instrument} &middot;
+            <a href={r.source_url} rel="nofollow noopener">primary source</a> &middot;
+            last checked {fmtDate(r.checked_on)} &middot;
+          </span>
+          {' '}<span class={`badge ${r.confidence}`}>{r.confidence}</span>
+        </p>
+      ))}
     </div>
   ) : (
     <div class="answer unknown">

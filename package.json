@@ -11,7 +11,7 @@
     "preview": "astro preview",
     "api": "node api/server.mjs",
     "keyctl": "node api/keyctl.mjs",
-    "test:api": "node --test api/*.test.mjs"
+    "test": "node --test src/data/*.test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

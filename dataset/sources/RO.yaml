@@ -1,0 +1,126 @@
+jurisdiction: RO
+jurisdiction_name: Romania
+obligations:
+
+  - obligation_id: RO-e-invoicing-b2b-issue-all
+    jurisdiction: RO
+    jurisdiction_name: Romania
+    regime: e-invoicing-b2b
+    regime_label: RO e-Factura — national electronic invoicing system
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Economic operators established in Romania issuing invoices in B2B relationships to taxable
+      persons established in Romania under art. 266(2) of the Fiscal Code.
+    threshold_type: none
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: null
+    threshold_period: null
+    threshold_definition: >-
+      No size test on the obligation itself. Size only affects the penalty tariff: ANAF sets fines
+      of RON 5,000–10,000 for large taxpayers, RON 2,500–5,000 for medium taxpayers and
+      RON 1,000–2,500 for other legal persons and for individuals.
+    format_name: null
+    format_version: null
+    format_note: >-
+      Format not recorded. Romania uses a national CIUS of EN 16931 (commonly cited as RO_CIUS),
+      but neither the format name nor its version was confirmed from a source read this cycle:
+      the OUG 120/2021 PDF on mfinante.gov.ro reset the connection and the ANAF schema PDF was not
+      retrieved. Recording a format name without having read it would be exactly the half-fact
+      this dataset exists to avoid.
+    mandatory_from: '2024-07-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      OUG nr. 120/2021 privind administrarea, funcționarea și implementarea sistemului național
+      privind factura electronică RO e-Factura, as amended and supplemented by OUG nr. 115/2023,
+      art. 10(1), art. 13^1 and art. 13^2; Legea nr. 296/2023 art. LIX(7); Legea nr. 227/2015
+      (Codul Fiscal) art. 319(16).
+    source_url: https://static.anaf.ro/static/10/Galati/Vrancea/termene-E-factura.pdf
+    source_title: >-
+      ANAF, "Termenele legale de transmitere a facturii electronice în sistemul național RO
+      e-factura" — Administrația Județeană a Finanțelor Publice Vrancea, DGRFP Galați (anaf.ro)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://mfinante.gov.ro/documents/35673/1120722/OUG120_MO96007102021.pdf
+      - https://static.anaf.ro/static/3/Ploiesti/20240312115819_comunicat_ghidul_ro_e-factura.pdf
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      ANAF notice retrieved as PDF and text-extracted on 2026-10-07. It states that from
+      01.07.2024 an issuer's failure to transmit the invoice into RO e-Factura, and a recipient's
+      receipt and recording of a B2B invoice from a Romanian-established operator without
+      compliance with art. 10(1), is penalised at 15% of the total invoice value. That 15%
+      sanction on non-transmission from 1 July 2024 is what makes the system mandatory rather than
+      merely available, which is why this row's mandatory_from is 2024-07-01.
+    unknowns:
+      - >-
+        Invoice format name and version (RO_CIUS / EN 16931) not confirmed from a source read.
+      - >-
+        Whether the obligation extends to non-established but Romanian-VAT-registered suppliers is
+        not recorded.
+      - >-
+        B2G e-invoicing in Romania predates the B2B regime and is not yet a row.
+    notes: >-
+      Transmission deadline: 5 working days from invoice issue and no later than 5 working days
+      from the art. 319(16) Fiscal Code issuing deadline; from 1 July 2024 this became 5 CALENDAR
+      days rather than working days. The working-day to calendar-day switch on the same date as
+      the mandate is an easy detail to miss and materially tightens the duty.
+
+  - obligation_id: RO-e-invoicing-b2b-issue-reporting-phase
+    jurisdiction: RO
+    jurisdiction_name: Romania
+    regime: e-invoicing-b2b
+    regime_label: RO e-Factura — national electronic invoicing system
+    direction: issue
+    counterparty_scope: cross-border-b2b
+    bound_party: >-
+      Economic operators — taxable persons established in Romania — during the initial reporting
+      phase, required to report all invoices into the RO e-Factura system.
+    threshold_type: entity_type
+    threshold_value: null
+    threshold_currency: null
+    threshold_operator: null
+    threshold_basis: Taxable persons established in Romania
+    threshold_period: null
+    threshold_definition: >-
+      The transitional phase of the Romanian mandate: from 1 January 2024 all invoices had to be
+      reported into RO e-Factura, ahead of the full 1 July 2024 mandate under which non-transmission
+      itself became a 15%-of-invoice-value offence.
+    format_name: null
+    format_version: null
+    format_note: Format not recorded — see RO-e-invoicing-b2b-issue-all.
+    mandatory_from: '2024-01-01'
+    tolerance_ends: '2024-03-31'
+    tolerance_note: >-
+      Penalty tolerance only. ANAF: failure to meet the transmission deadline in the B2B
+      relationship was not sanctioned as a contravention in the period 1 January – 31 March 2024.
+      The reporting duty itself ran from 1 January 2024; only the fine was withheld.
+    legal_instrument: >-
+      OUG nr. 120/2021, as amended by OUG nr. 115/2023; Legea nr. 296/2023 art. LIX(7);
+      Legea nr. 227/2015 (Codul Fiscal) art. 319(16).
+    source_url: https://static.anaf.ro/static/10/Galati/Vrancea/termene-E-factura.pdf
+    source_title: >-
+      ANAF, "Termenele legale de transmitere a facturii electronice în sistemul național RO
+      e-factura" — DGRFP Galați / AJFP Vrancea (anaf.ro)
+    source_type: tax_authority
+    secondary_source_urls:
+      - https://static.anaf.ro/static/10/Brasov/Brasov/oug_115_factura.pdf
+    checked_on: '2026-10-07'
+    confidence: verified
+    confidence_note: >-
+      ANAF notice read on 2026-10-07, which states the contravention tolerance for the B2B
+      relationship over 1 January – 31 March 2024 and the 5-working-day then 5-calendar-day
+      transmission deadlines.
+    unknowns:
+      - >-
+        The exact commencement instrument and date for the reporting phase were taken from the
+        tolerance window's framing rather than from the ordinance text, which was not retrieved
+        (mfinante.gov.ro connection reset).
+    notes: >-
+      Retained as a historical row rather than deleted. The change log is a product: a buyer
+      reconstructing what was required of them in Q1 2024 needs this row, and it is also the
+      cleanest worked example in the dataset of a tolerance that withheld penalties without
+      postponing the duty.

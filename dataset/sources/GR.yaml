@@ -1,0 +1,145 @@
+jurisdiction: GR
+jurisdiction_name: Greece
+# Every Greek row here is `reported`, never `verified`, for one reason: aade.gr returned HTTP 403
+# to this host on every attempt on 2026-10-07 — the English FAQ page, the Greek press-release page
+# and the press-release PDFs, with and without browser headers. The underlying documents are
+# genuinely primary (AADE is the tax authority), but we did not read them. The dates below come
+# from search-index extractions of those AADE documents. Confidence is capped accordingly and
+# source_type is `secondary` to describe the quality of OUR ACCESS, not the publisher's standing.
+# Re-verification from an unblocked network path is the single highest-priority follow-up for
+# Greece, because the second phase is already live as of 2026-10-01.
+obligations:
+
+  - obligation_id: GR-e-invoicing-b2b-issue-revenue-gt-1m-eur
+    jurisdiction: GR
+    jurisdiction_name: Greece
+    regime: e-invoicing-b2b
+    regime_label: Mandatory electronic invoicing (myDATA / ηλεκτρονική τιμολόγηση)
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      Businesses in Greece with gross revenue exceeding EUR 1,000,000, for sales of goods and
+      provision of services to other businesses.
+    threshold_type: revenue_or_fees
+    threshold_value: 1000000
+    threshold_currency: EUR
+    threshold_operator: gt
+    threshold_basis: Gross revenue (ακαθάριστα έσοδα)
+    threshold_period: tax year 2023 — a fixed historical year, not a rolling period
+    threshold_definition: >-
+      First-phase cohort: businesses whose gross revenue for tax year 2023 exceeded
+      EUR 1,000,000. As with Poland's PLN 200m test, the reference year is fixed, so a business
+      above the line in 2023 stays in the first phase regardless of later contraction.
+    format_name: null
+    format_version: null
+    format_note: >-
+      Format not recorded. Compliance is by using a certified Electronic Invoicing Provider or
+      AADE's free applications (timologio, myDATAapp), but the required document schema and its
+      version were not established from a source read. The myDATA REST API documentation
+      (v2.0.2) is published by AADE but was not retrieved.
+    mandatory_from: '2026-03-02'
+    tolerance_ends: '2026-05-03'
+    tolerance_note: >-
+      Transitional period reported as running 2 March – 3 May 2026, during which parallel use of
+      existing business-management software, or a special registration form, was permitted
+      alongside the new obligation. Whether this suspends penalties or permits non-compliant
+      issuing outright is not established from a source read.
+    legal_instrument: >-
+      Joint decision of the Deputy Minister of National Economy and Finance and the Governor of
+      AADE, A.1044/17-02-2026, which postponed the first-period dates; underlying mandatory
+      e-invoicing framework under the myDATA legislation.
+    source_url: https://www.aade.gr/egkyklioi-kai-apofaseis/mydata-diataxeis/1044-17-02-2026
+    source_title: >-
+      AADE decision A.1044/17-02-2026 — myDATA provisions, Independent Authority for Public
+      Revenue (aade.gr). NOT READ: returned HTTP 403 to this host on 2026-10-07.
+    source_type: secondary
+    secondary_source_urls:
+      - https://www.aade.gr/sites/default/files/2026-02/dt_17.02.2026.pdf
+      - https://www.aade.gr/sites/default/files/2025-09/dt_16.09.2025..pdf
+      - https://www.aade.gr/en/mandatory-electronic-invoicing-digital-goods-movement-documents-frequently-asked-questions-answers
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      Not verified. Every aade.gr URL above returned HTTP 403 to this host on 2026-10-07, so no
+      AADE text was read. The dates, the EUR 1,000,000 threshold, the 2023 reference year and the
+      2 March – 3 May 2026 transitional window all come from search-index extractions of AADE's
+      own press releases (dt_17.02.2026.pdf and dt_16.09.2025.pdf) rather than from the documents
+      themselves. Treat as a credible secondary report pending re-verification.
+    unknowns:
+      - >-
+        Nothing on this row has been read from a primary source. All of it needs re-verification
+        from an unblocked network path.
+      - >-
+        Original first-phase date was reported as 2 February 2026 and postponed to 2 March 2026 by
+        A.1044/17-02-2026. The postponement is reported, not confirmed.
+      - >-
+        Required document format and schema version not established.
+      - >-
+        Whether the transitional period suspends penalties or permits non-compliant issuing is not
+        established.
+    notes: >-
+      Scope is reported as covering sales of goods and services between businesses in Greece and
+      businesses in third countries outside the EU. A separate digital goods-movement document
+      obligation runs alongside the invoicing one and is not yet a row.
+
+  - obligation_id: GR-e-invoicing-b2b-issue-revenue-lte-1m-eur
+    jurisdiction: GR
+    jurisdiction_name: Greece
+    regime: e-invoicing-b2b
+    regime_label: Mandatory electronic invoicing (myDATA / ηλεκτρονική τιμολόγηση)
+    direction: issue
+    counterparty_scope: b2b
+    bound_party: >-
+      All remaining businesses in Greece — those whose gross revenue did not exceed
+      EUR 1,000,000 in the reference year.
+    threshold_type: revenue_or_fees
+    threshold_value: 1000000
+    threshold_currency: EUR
+    threshold_operator: lte
+    threshold_basis: Gross revenue (ακαθάριστα έσοδα)
+    threshold_period: tax year 2023 — a fixed historical year, not a rolling period
+    threshold_definition: >-
+      The residual cohort, reported as becoming subject to mandatory electronic invoicing on
+      1 October 2026.
+    format_name: null
+    format_version: null
+    format_note: >-
+      Format not recorded. Compliance by certified Electronic Invoicing Provider or AADE's free
+      timologio / myDATAapp applications; schema and version not established.
+    mandatory_from: '2026-10-01'
+    tolerance_ends: null
+    tolerance_note: null
+    legal_instrument: >-
+      Joint decision of the Deputy Minister of National Economy and Finance and the Governor of
+      AADE, A.1044/17-02-2026; underlying myDATA mandatory e-invoicing framework.
+    source_url: https://www.aade.gr/egkyklioi-kai-apofaseis/mydata-diataxeis/1044-17-02-2026
+    source_title: >-
+      AADE decision A.1044/17-02-2026 — myDATA provisions (aade.gr). NOT READ: returned HTTP 403
+      to this host on 2026-10-07.
+    source_type: secondary
+    secondary_source_urls:
+      - https://www.aade.gr/sites/default/files/2026-02/dt_17.02.2026.pdf
+      - https://www.aade.gr/sites/default/files/2026-09/DT_22.09.2026.pdf
+    checked_on: '2026-10-07'
+    confidence: reported
+    confidence_note: >-
+      Not verified — aade.gr returned HTTP 403 to this host on 2026-10-07 for every URL tried. The
+      1 October 2026 date comes from a search-index extraction of AADE press material, not from a
+      document read. An AADE press release dated 22 September 2026 exists and may carry a further
+      change to this date; it could not be retrieved.
+    unknowns:
+      - >-
+        Nothing on this row has been read from a primary source.
+      - >-
+        An AADE press release dated 22 September 2026 (DT_22.09.2026.pdf) was identified but not
+        retrieved. It is dated nine days before this obligation's reported start and could amend
+        it. This is the specific reason the row must not be sold as verified.
+      - >-
+        No transitional or penalty-tolerance window was identified for this cohort; absence of a
+        found tolerance is not evidence none exists.
+      - >-
+        Required document format and schema version not established.
+    notes: >-
+      This date has already passed as at 2026-10-07, which raises rather than lowers the cost of
+      getting it wrong: a buyer reading this row is asking whether they are currently
+      non-compliant. Until re-verified, any consumer must render it as reported and attributed.

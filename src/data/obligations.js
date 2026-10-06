@@ -197,7 +197,13 @@ export function buildCheckerPages() {
         // The answer is the first dated duty that binds the whole band.
         const answer = binding.find((r) => r.mandatory_from) ?? null
 
-        pages.push({ country, direction, band, binding, partial, unresolved, answer, all: inScope, isFixture })
+        // Binds the band, but no start date is published. Ledger files these as
+        // confidence: unknown, and they are a real answer — "we looked and it is
+        // not published" is what a buyer is paying us to establish. Dropping them
+        // would leave the page a dead end.
+        const undated = binding.filter((r) => !r.mandatory_from)
+
+        pages.push({ country, direction, band, binding, partial, unresolved, undated, answer, all: inScope, isFixture })
       }
     }
   }
