@@ -1,0 +1,58 @@
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time. Never cancel a running one — a half-finished deploy of a
+# compliance site is worse than a slightly stale one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Refuses to continue if Ledger's dataset is missing, empty, or holds a row
+      # without a source URL, a checked-on date or a confidence level.
+      - name: Guard the dataset
+        run: node scripts/check-dataset.mjs
+
+      - name: Build
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://arcarius-services.github.io' }}
+          SITE_BASE: ${{ vars.SITE_BASE || '/eu-einvoicing-deadlines' }}
+          # Stays unset until the brand and domain are signed off, which keeps
+          # every page noindex and robots.txt Disallow.
+          SITE_INDEXABLE: ${{ vars.SITE_INDEXABLE }}
+        run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
